@@ -27,7 +27,12 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Flex style={{ minHeight: "100vh" }}>
+      <Flex
+        ml={"10%"}
+        mr={"10%"}
+        flexDirection="column"
+        style={{ minHeight: "100vh" }}
+      >
         <Nav />
         <Box
           style={{
@@ -37,7 +42,7 @@ const Layout = ({ children }) => {
             paddingTop: 0,
           }}
         >
-          <main>{children}</main>
+          {children}
         </Box>
       </Flex>
     </>

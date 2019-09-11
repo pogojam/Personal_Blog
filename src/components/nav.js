@@ -1,36 +1,39 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
 import { Button, Flex, Card, Box } from "rebass"
+import { useSprings, animated } from "react-spring"
+import { TiHome } from "react-icons/ti"
 
-const pages = ["index", "blog", "projects"]
+const pages = [
+  { path: "/", name: "Home" },
+  { path: "/blog", name: "Blog" },
+  { path: "/projects", name: "Projects" },
+]
 
-const NaveButton = ({ name, index }) => (
-  <Link to={"/" + name}>
-    <Button>{name}</Button>
+const NavButton = ({ name, path, ...props }) => (
+  <Link to={path}>
+    <Button {...props}>{path !== "/" ? name : <TiHome />}</Button>
   </Link>
 )
 
-const Container = ({ children }) => (
-  <Flex
-    flexDirection="column"
-    mt="auto"
-    mb="auto"
-    style={{ minHeight: "100%" }}
-    width={[1 / 6]}
-  >
-    {children}
-  </Flex>
-)
+const Container = ({ children, ...props }) => <Flex {...props}>{children}</Flex>
 
-const buildButtons = (pages, handleClick) =>
-  pages.map((e, i) => (
-    <Button index={i} key={e + i}>
-      {e}
-    </Button>
+const buildButtons = (pages, handleClick) => {
+  const [springs, set, stop] = useSprings(pages.length, index => ({
+    opacity: 1,
+  }))
+  console.log(springs)
+  return pages.map((e, i) => (
+    <NavButton
+      bg="transparent"
+      color="black"
+      style={{ ...springs[i] }}
+      key={e.name + i}
+      {...e}
+    />
   ))
+}
 
-const buttons = []
-
-const Nav = () => <Container>{buildButtons(pages)}</Container>
+const Nav = () => <Container p="1em">{buildButtons(pages)}</Container>
 
 export default Nav

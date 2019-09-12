@@ -7,7 +7,7 @@ import { TiHome } from "react-icons/ti"
 const pages = [
   { path: "/", name: "Home" },
   { path: "/blog", name: "Blog" },
-  { path: "/projects", name: "Projects" },
+  { path: "/stack", name: "Stack" },
 ]
 
 const NavButton = ({ name, path, ...props }) => (

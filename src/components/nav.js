@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef } from "react"
 import { Link } from "gatsby"
 import { Button, Flex, Card, Box } from "rebass"
 import { useSprings, animated } from "react-spring"
 import { TiHome } from "react-icons/ti"
+import useSpace from "./spacer"
 
 const pages = [
   { path: "/", name: "Home" },
@@ -34,6 +35,23 @@ const buildButtons = (pages, handleClick) => {
   ))
 }
 
-const Nav = () => <Container p="1em">{buildButtons(pages)}</Container>
+const Nav = () => {
+  const navRef = useRef(null)
+
+  const [setSpace, sizes] = useSpace()
+
+  useEffect(() => {
+    setSpace("nav", navRef)
+    console.log(navRef)
+  })
+
+  return (
+    <div ref={navRef}>
+      <Container ref={navRef} p="1em">
+        {buildButtons(pages)}
+      </Container>
+    </div>
+  )
+}
 
 export default Nav

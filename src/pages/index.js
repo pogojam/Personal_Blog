@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import styled from "styled-components"
 import projectData from "../static/projects"
 import { IoLogoFacebook, IoLogoGithub, IoLogoLinkedin } from "react-icons/io"
+import useSpace from "../components/spacer"
 
 const About = styled(Box)`
   h2 {
@@ -13,8 +14,16 @@ const About = styled(Box)`
 `
 
 const IndexPage = ({ data }) => {
+  const headingRef = useRef(null)
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { frontmatter, html } = markdownRemark
+  const [setSpace, sizes] = useSpace()
+
+  useEffect(() => {
+    setSpace("index", headingRef)
+    sizes("nav")
+  })
+
   return (
     <Layout>
       <SEO title="Home" />
@@ -25,6 +34,7 @@ const IndexPage = ({ data }) => {
         p="2em"
         mt="auto"
         mb="auto"
+        ref={headingRef}
       >
         <About mt="10vh" dangerouslySetInnerHTML={{ __html: html }} />
         <Social />
@@ -93,7 +103,7 @@ const Projects = params => {
 
 export const query = graphql`
   query {
-    markdownRemark {
+    markdownRemark(frontmatter: { path: { eq: "/page/index" } }) {
       html
       frontmatter {
         title

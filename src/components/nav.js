@@ -23,7 +23,6 @@ const buildButtons = (pages, handleClick) => {
   const [springs, set, stop] = useSprings(pages.length, index => ({
     opacity: 1,
   }))
-  console.log(springs)
   return pages.map((e, i) => (
     <NavButton
       bg="transparent"
@@ -42,14 +41,13 @@ const Nav = () => {
 
   useEffect(() => {
     setSpace("nav", navRef)
-    console.log(navRef)
   })
 
   return (
     <div ref={navRef}>
-      <Container ref={navRef} p="1em">
+      <Flex ref={navRef} p="1em">
         {buildButtons(pages)}
-      </Container>
+      </Flex>
     </div>
   )
 }

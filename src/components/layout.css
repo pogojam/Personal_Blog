@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Abel|Jomhuria&display=swap");
+@import "../../node_modules/sal.js/dist/sal.css";
 * {
   font-family: "Abel", sans-serif;
 }

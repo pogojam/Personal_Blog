@@ -1,5 +1,5 @@
 import { Card, Flex, Box } from "rebass"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import { useSpring, animated } from "react-spring"
 
@@ -12,25 +12,29 @@ const attachRef = (Element, props) =>
 
 const setBaseElement = type => {
   const keys = Object.keys(types)
-  return keys.reduce((acc, k, i) => {
+  const BaseEl = keys.reduce((acc, k, i) => {
     if (k === type) {
       return (acc = types[k])
     } else {
       return acc
     }
   }, Box)
+
+  return BaseEl
 }
 
-const Container = ({ animate, type, children, ...props }) => {
-  let Output = setBaseElement(type)
+const Container = React.forwardRef(
+  ({ animate, type, children, ...props }, ref) => {
+    const [Output, setOutput] = useState(setBaseElement(type, props))
 
-  if (animate) {
-    Output = animated(Output)
+    useEffect(() => {
+      if (animate) {
+        setOutput(animated(Output))
+      }
+    }, [])
+
+    return <Output ref={ref} children={children} {...props} />
   }
-
-  Output = attachRef(Output, props)
-
-  return <Output children={children} {...props} />
-}
+)
 
 export default Container

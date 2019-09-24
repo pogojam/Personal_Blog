@@ -13,9 +13,6 @@ import Header from "./header"
 import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
-import sal from "sal.js"
-
-sal()
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`

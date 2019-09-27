@@ -27,3 +27,18 @@ export const useObserver = ({ root = null, rootMargin, threshold = 0 }) => {
 
   return [setNode, entry]
 }
+
+export const useSceanState = state => {
+  const [list, setList] = useState([])
+  const [current, setCurrentScean] = useState(null)
+
+  useEffect(() => {
+    state && setList(state)
+  }, [])
+
+  const setScean = input => {
+    setCurrentScean(input)
+  }
+
+  return [setScean, current]
+}

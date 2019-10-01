@@ -1,14 +1,22 @@
-import React, { useState, useEffect, useRef, forwardRef } from "react"
+import React, { useState, useEffect, useRef, forwardRef, Children } from "react"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import Container from "../components/container"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import styled from "styled-components"
 import projectData from "../static/projects"
-import { IoLogoFacebook, IoLogoGithub, IoLogoLinkedin } from "react-icons/io"
+import _ from "lodash"
 import useSpace from "../components/spacer"
-import { useSprings, config, animated, useSpring, useTrail } from "react-spring"
+import {
+  useSprings,
+  useTransition,
+  config,
+  animated,
+  useSpring,
+  useTrail,
+} from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
+import { Social, Button } from "../components/elements"
 import useCustom from "../components/useCustom"
 
 //SCEAN Panels
@@ -17,7 +25,11 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
   return (
     <Container
       className="heading"
-      style={{ height: "80vh", ...animation.slideIn(-1, 0) }}
+      style={{
+        height: "80vh",
+        ...animation.fadeIn(7),
+        ...animation.slideIn(0),
+      }}
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
@@ -28,18 +40,22 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       type="Flex"
       ref={ref}
     >
-      <About style={animation.scean1} mt="10vh">
-        <h1>Ryan Breaux</h1>
-        <animated.div style={(animation.slideIn(-1, 0), animation.expand)}>
+      <About mt="10vh">
+        <animated.div style={animation.slideIn(-1)}>
+          <h1>Ryan Breaux</h1>
+        </animated.div>
+        <animated.div style={(animation.slideIn(1), animation.rotate)}>
           <Heading m="1em" style={{ fontSize: ".9em", whiteSpace: "nowrap" }}>
             {" "}
             Front-End/Back-End Developer
           </Heading>
         </animated.div>
-        <animated.div style={animation.slideIn(1, 0)}>
-          <Box style={{ borderTop: "1px solid black", ...animation.size }} />
+        <animated.div
+          style={{ ...animation.fadeIn(14), ...animation.size([0, 30, "vw"]) }}
+        >
+          <Box style={{ borderTop: "1px solid black" }} />
         </animated.div>
-        <animated.div style={(animation.slideIn(1, 0), animation.expand)}>
+        <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
           <Text p="1em">
             Curious and humble , full stack developer and entrepreneur. Big on
             design and lightning fast code. Found my love for JS developing on
@@ -52,9 +68,9 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           </Text>
         </animated.div>
       </About>
-      <animated.div style={animation.slideIn(1, 0)}>
+      <animated.div style={animation.slideIn()}>
         <animated.div style={animation.expand}>
-          <Social mt="10em" />
+          <Social linkedin github size="1.3em" mt="10em" />
         </animated.div>
       </animated.div>
     </Container>
@@ -62,20 +78,95 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
 }
 
 const Scean2 = (props, ref) => {
-  const anim = props.animation.slideIn(1, 3)
-
   return (
-    <Projects
-      pt="4em"
-      animation={anim}
-      ref={ref}
-      {...props}
-      className="projects"
-      show={true}
-    />
+    <Projects pt="4em" ref={ref} {...props} className="projects" show={true} />
   )
 }
-const sceans = [forwardRef(Scean1), forwardRef(Scean2)]
+
+const Scean3 = ({ animation }, ref) => {
+  const choices = [
+    {
+      text: "Desktop",
+    },
+    {
+      text: "Mobile",
+    },
+    {
+      text: "DevOps",
+    },
+  ]
+  const [form, showForm] = useState()
+  const [isActive, setButton] = useState([false, false, false])
+  const transition = useTransition(form, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  })
+
+  const handleClick = i => e => {
+    setButton(prevArr => {
+      prevArr[i] = !prevArr[i]
+      return [...prevArr]
+    })
+    showForm(true)
+  }
+
+  return (
+    <Container
+      type="Flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      p="5em"
+      style={{
+        minHeight: "90vh",
+        position: "relative",
+        ...animation.fadeIn(1),
+      }}
+      ref={ref}
+      animate
+    >
+      <animated.div style={animation.slideIn(1)}>
+        <h1>let me build you something.</h1>
+      </animated.div>
+      <Container type="Flex">
+        <Container type="Flex">
+          {choices.map((data, i) => (
+            <animated.div>
+              <Button
+                style={{
+                  border: "1px solid",
+                  transition: "background .3s",
+                  borderRadius: "3px",
+                }}
+                onClick={handleClick(i)}
+                bg={isActive[i] ? "#6cfba59e" : "transparent"}
+                p=".7em"
+                m=".2em"
+                {...data}
+              />
+            </animated.div>
+          ))}
+        </Container>
+      </Container>
+      {transition.map(({ item, key, props }) =>
+        item ? (
+          <Container
+            animate
+            style={{ position: "absolute", bottom: 0, ...props }}
+          >
+            <form style={{ display: "flex" }}>
+              <input placeholder="Phone" type="phone" />
+              <textarea name="Message" id="" cols="50" rows="5"></textarea>
+              <button>Submit</button>
+            </form>
+          </Container>
+        ) : null
+      )}
+    </Container>
+  )
+}
+const sceans = [forwardRef(Scean1), forwardRef(Scean2), forwardRef(Scean3)]
 
 // SCEAN INTERFACE
 
@@ -93,22 +184,31 @@ const Scean_Interface = ({ index, ...props }) => {
     return [x, 0]
   }
 
+  const calcRotation = inr => {
+    const xyz = [1, 1, 0]
+
+    const rotation = 180 - inr * 180
+
+    return [...xyz, rotation]
+  }
+
   const [animations, set] = useSpring(() => ({
     config: config.molasses,
+    rotate: [1, 1, 1, 0],
     expand: 1,
-    opacity: 1,
-    size: 0,
+    fadeIn: [1],
+    size: [1],
     transform: [0, 0],
-    h1: [0, 0],
     proj: [3],
   }))
 
   if (entries.intersectionRatio) {
     const inr = entries.intersectionRatio
     set({
-      opacity: inr,
+      fadeIn: inr,
+      rotate: calcRotation(inr),
       transform: calcXY(inr),
-      size: 400 * inr,
+      size: inr,
       expand: inr,
       h1: calcXY(inr / 2),
       proj: calcXY(-inr),
@@ -116,21 +216,29 @@ const Scean_Interface = ({ index, ...props }) => {
   }
 
   const setAnimation = anim => {
-    const { transform, opacity, expand, proj, size } = anim
+    const { transform, rotate, fadeIn, expand, proj, size } = anim
     return {
-      slideIn: (skewX, skewY) => {
+      slideIn: (directionX = 1, directionY = 1) => {
         return {
           transform: transform.interpolate((x, y) => {
-            return `translate3d(${x}px,${y}px,0px)`
+            return `translate3d(${x * directionX}px,${y * directionY}px,0px)`
           }),
-          opacity,
         }
+      },
+      fadeIn: speed => ({
+        opacity: fadeIn.interpolate(e => Math.pow(e, speed)),
+      }),
+      rotate: {
+        transform: rotate.interpolate((x, y, z, e) => {
+          return `rotate3d(${x},${Math.pow(y, 2)},${z},${e}deg)`
+        }),
       },
       expand: {
         transform: expand.interpolate(e => `scale(${e})`),
       },
-      size: {
-        maxWidth: size.interpolate(e => e + "px"),
+      size: ([min, max, unit]) => {
+        console.log(min, max)
+        return { maxWidth: size.interpolate(e => min + e * max + unit) }
       },
       proj: proj.interpolate(x => {
         return x
@@ -139,7 +247,6 @@ const Scean_Interface = ({ index, ...props }) => {
   }
 
   const Component = sceans[index]
-  // const animation = animations[index]
 
   return <Component animation={setAnimation(animations)} ref={ref} {...props} />
 }
@@ -163,16 +270,6 @@ const IndexPage = ({ data, ...props }) => {
   )
 }
 
-const Social = props => {
-  return (
-    <Box {...props}>
-      <IoLogoFacebook />
-      <IoLogoGithub />
-      <IoLogoLinkedin />
-    </Box>
-  )
-}
-
 const About = animated(styled(Box)`
   h2 {
     font-size: 3em;
@@ -187,7 +284,6 @@ const ProjectCard = ({
   animation,
   ...props
 }) => {
-  const [scean, setSean] = useCustom()
   const textRef = useRef(null)
   const [textAnimation, set] = useSpring(() => {
     return { scale: [1], opacity: [0.01], height: [0] }
@@ -209,7 +305,6 @@ const ProjectCard = ({
       const area = dis / zone
       const scaledArea = 1 - area
       set({ scale: scaledArea, opacity: scaledArea, height: area })
-      console.log(1 - area)
     }
     toggle(true)
   }
@@ -259,10 +354,10 @@ const Projects = React.forwardRef(({ animation, setScean, ...props }, ref) => {
       width={[1]}
       data-sal="slide-up"
       ref={ref}
-      style={animation.slideIn(1, 0)}
+      style={(animation.slideIn(0), animation.fadeIn(5))}
       {...props}
     >
-      <animated.div style={animation.slideIn(-1, 0)}>
+      <animated.div style={animation.slideIn(0)}>
         <Heading
           style={{
             width: "40%",
@@ -291,6 +386,8 @@ const Projects = React.forwardRef(({ animation, setScean, ...props }, ref) => {
     </Container>
   )
 })
+
+// Page Querys
 
 export const query = graphql`
   query {

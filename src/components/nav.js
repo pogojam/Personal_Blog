@@ -12,10 +12,8 @@ const pages = [
   { path: "/stack", name: "Stack" },
 ]
 
-
-
 const hover = {
-  projects:[]
+  projects: [],
 }
 
 const NavButton = ({ name, path, ...props }) => (
@@ -45,6 +43,7 @@ const Nav = () => {
   const navRef = useRef(null)
   const [scean, setScean] = useCustom()
 
+  console.log(scean)
 
   const [animation, setAnim] = useSpring(() => {
     return {

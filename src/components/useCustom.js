@@ -15,7 +15,6 @@ const useCustom = () => {
   useEffect(() => {
     listeners.push(newListener)
   }, [])
-  console.log(state)
   return [state, setState]
 }
 

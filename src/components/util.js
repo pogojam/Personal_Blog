@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 
+export const pipe = input => (...args) =>
+  args.reduce((acc, func) => func(acc), input)
+
 export const generateKey = pre => {
   return `${pre}_${new Date().getTime()}`
 }

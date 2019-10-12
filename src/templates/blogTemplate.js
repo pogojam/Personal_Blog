@@ -9,7 +9,7 @@ const Container = styled(Card)``
 const Template = ({ data }) => {
   const { html, frontmatter } = data.markdownRemark
   return (
-    <Layout>
+    <Layout my="6em">
       <Flex
         style={{ borderBottom: "1px solid black" }}
         mb="1em"

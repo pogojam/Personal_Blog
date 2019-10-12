@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, forwardRef, Children } from "react"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
+import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import styled from "styled-components"
 import projectData from "../static/projects"
 import _ from "lodash"
-import useSpace from "../components/spacer"
 import {
   useSprings,
   useTransition,
@@ -16,8 +16,10 @@ import {
   useTrail,
 } from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
-import { Social, Button } from "../components/elements"
+import { Icon, Button } from "../components/elements"
+import { setAnimation } from "../components/animations"
 import useCustom from "../components/useCustom"
+import { Viewer } from "../components/interface/withViewer"
 
 //SCEAN Panels
 
@@ -26,16 +28,13 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
     <Container
       className="heading"
       style={{
-        height: "80vh",
         ...animation.fadeIn(7),
-        ...animation.slideIn(0),
+        ...animation.slideIn(-1),
       }}
+      mt={["15vh"]}
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
-      p="2em"
-      mt="auto"
-      mb="auto"
       animate
       type="Flex"
       ref={ref}
@@ -56,7 +55,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           <Box style={{ borderTop: "1px solid black" }} />
         </animated.div>
         <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
-          <Text p="1em">
+          <Text p="1em" style={{ maxWidth: "95vh" }}>
             Curious and humble , full stack developer and entrepreneur. Big on
             design and lightning fast code. Found my love for JS developing on
             Node , leveraging the power of Non-Blocking I/O and npm’s rich
@@ -70,16 +69,69 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       </About>
       <animated.div style={animation.slideIn()}>
         <animated.div style={animation.expand}>
-          <Social linkedin github size="1.3em" mt="10em" />
+          <Icon
+            linkedin="linkedin.com/in/ryan-breaux-4603396a"
+            github="https://github.com/pogojam"
+            size="1.3em"
+            mt="10em"
+          />
         </animated.div>
       </animated.div>
     </Container>
   )
 }
 
-const Scean2 = (props, ref) => {
+const Scean2 = ({ animation, isActive, ...props }, ref) => {
+  const setView = useCustom()[1]
+
+  const handleViewer = data => {
+    isActive && setView(data)
+  }
+
+  useEffect(() => {
+    if (!isActive) {
+      setView({})
+    }
+  }, [isActive])
+
   return (
-    <Projects pt="4em" ref={ref} {...props} className="projects" show={true} />
+    <Container
+      animate
+      flexDirection="column"
+      pt="4em"
+      mt="5em"
+      width={[1]}
+      ref={ref}
+      style={animation.fadeIn(5)}
+      {...props}
+    >
+      <animated.div
+        style={{ willChange: "transfrom", ...animation.slideIn(1) }}
+      >
+        <Heading
+          style={{
+            width: "40%",
+            textAlign: "center",
+            fontSize: "4.25rem",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Projects
+        </Heading>
+      </animated.div>
+      <animated.div style={animation.slideIn(0.8)}>
+        <Flex flexWrap="wrap">
+          {projectData.map((data, i) => (
+            <ProjectCard
+              handleMouseEnter={handleViewer}
+              key={generateKey(i)}
+              isActive={props.isActive}
+              data={{ index: i, ...data }}
+            />
+          ))}
+        </Flex>
+      </animated.div>
+    </Container>
   )
 }
 
@@ -121,12 +173,13 @@ const Scean3 = ({ animation }, ref) => {
       style={{
         minHeight: "90vh",
         position: "relative",
+        willChange: "transform",
         ...animation.fadeIn(1),
       }}
       ref={ref}
       animate
     >
-      <animated.div style={animation.slideIn(1)}>
+      <animated.div style={{ position: "relative", ...animation.slideIn(1) }}>
         <h1>let me build you something.</h1>
       </animated.div>
       <Container type="Flex">
@@ -138,9 +191,11 @@ const Scean3 = ({ animation }, ref) => {
                   border: "1px solid",
                   transition: "background .3s",
                   borderRadius: "3px",
+                  cursor: "pointer",
+                  color: isActive[i] ? "white" : "black",
                 }}
                 onClick={handleClick(i)}
-                bg={isActive[i] ? "#6cfba59e" : "transparent"}
+                bg={isActive[i] ? "#0000009e" : "transparent"}
                 p=".7em"
                 m=".2em"
                 {...data}
@@ -153,12 +208,37 @@ const Scean3 = ({ animation }, ref) => {
         item ? (
           <Container
             animate
-            style={{ position: "absolute", bottom: 0, ...props }}
+            style={{ position: "absolute", bottom: "2em", ...props }}
           >
-            <form style={{ display: "flex" }}>
-              <input placeholder="Phone" type="phone" />
-              <textarea name="Message" id="" cols="50" rows="5"></textarea>
-              <button>Submit</button>
+            <form
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Input
+                maxWidth="60%"
+                placeholder="Phone"
+                type="number"
+                style={{ cursor: "1em" }}
+                m=".5em"
+              />
+              <Textarea
+                m=".5em"
+                name="Message"
+                placeholder="About your project"
+                cols="50"
+                rows="5"
+              ></Textarea>
+              <Button
+                style={{
+                  border: "1px solid black",
+                }}
+                m="1em"
+                p=".3em"
+                text="Submit"
+              />
             </form>
           </Container>
         ) : null
@@ -173,7 +253,9 @@ const sceans = [forwardRef(Scean1), forwardRef(Scean2), forwardRef(Scean3)]
 const Scean_Interface = ({ index, ...props }) => {
   const [ref, entries] = useObserver({
     threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    rootMargin: "30px 0px 0px 0px",
   })
+  const [isActive, setActive] = useState(false)
 
   const calcXY = inr => {
     const offsetX = window.innerWidth / 2
@@ -202,62 +284,50 @@ const Scean_Interface = ({ index, ...props }) => {
     proj: [3],
   }))
 
-  if (entries.intersectionRatio) {
+  useEffect(() => {
     const inr = entries.intersectionRatio
-    set({
-      fadeIn: inr,
-      rotate: calcRotation(inr),
-      transform: calcXY(inr),
-      size: inr,
-      expand: inr,
-      h1: calcXY(inr / 2),
-      proj: calcXY(-inr),
-    })
-  }
-
-  const setAnimation = anim => {
-    const { transform, rotate, fadeIn, expand, proj, size } = anim
-    return {
-      slideIn: (directionX = 1, directionY = 1) => {
-        return {
-          transform: transform.interpolate((x, y) => {
-            return `translate3d(${x * directionX}px,${y * directionY}px,0px)`
-          }),
-        }
-      },
-      fadeIn: speed => ({
-        opacity: fadeIn.interpolate(e => Math.pow(e, speed)),
-      }),
-      rotate: {
-        transform: rotate.interpolate((x, y, z, e) => {
-          return `rotate3d(${x},${Math.pow(y, 2)},${z},${e}deg)`
-        }),
-      },
-      expand: {
-        transform: expand.interpolate(e => `scale(${e})`),
-      },
-      size: ([min, max, unit]) => {
-        console.log(min, max)
-        return { maxWidth: size.interpolate(e => min + e * max + unit) }
-      },
-      proj: proj.interpolate(x => {
-        return x
-      }),
+    const activeThreshold = 0.9
+    if (inr > activeThreshold) {
+      setActive(true)
     }
-  }
+    if (inr < activeThreshold) {
+      setActive(false)
+    }
+
+    if (inr) {
+      set({
+        fadeIn: inr,
+        rotate: calcRotation(inr),
+        transform: calcXY(inr),
+        size: inr,
+        expand: inr,
+        h1: calcXY(inr / 2),
+        proj: calcXY(-inr),
+      })
+    }
+  }, [entries.intersectionRatio])
+
+  console.log("effect")
 
   const Component = sceans[index]
 
-  return <Component animation={setAnimation(animations)} ref={ref} {...props} />
+  return (
+    <Component
+      isActive={isActive}
+      animation={setAnimation(animations)}
+      ref={ref}
+      {...props}
+    />
+  )
 }
 
 const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { frontmatter, html } = markdownRemark
-
   return (
     <Layout>
       <SEO title="Home" />
+      <Viewer />
       {sceans.map((e, i) => (
         <Scean_Interface
           setScean={props.setScean}
@@ -276,116 +346,31 @@ const About = animated(styled(Box)`
   }
 `)
 
-const ProjectCard = ({
-  logo,
-  title,
-  discription,
-  index,
-  animation,
-  ...props
-}) => {
-  const textRef = useRef(null)
-  const [textAnimation, set] = useSpring(() => {
-    return { scale: [1], opacity: [0.01], height: [0] }
-  })
-  const [show, toggle] = useState(false)
-
-  const handleMouseOver = ({ clientX, clientY, ...e }) => {
-    const { width, height, left, top } = textRef.current.getBoundingClientRect()
-    const x = left + width / 2
-    const y = top + height / 2
-
-    const zone = 600
-
-    const distance = (x1, x2, y1, y2) =>
-      Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-    const dis = distance(x, clientX, y, clientY)
-
-    if (dis < zone) {
-      const area = dis / zone
-      const scaledArea = 1 - area
-      set({ scale: scaledArea, opacity: scaledArea, height: area })
-    }
-    toggle(true)
-  }
-
+const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
   return (
-    <Container
-      animate
-      onMouseMove={handleMouseOver}
-      width={[1, 1 / 3]}
-      style={animation}
-    >
+    <Container onMouseEnter={() => handleMouseEnter(data)} width={[1, 1 / 3]}>
       <Flex
         style={{ minHeight: "5em" }}
         alignItems="center"
         justifyContent="center"
         mt="3em"
       >
-        <Image src={logo} />
+        <Image src={data.logo} />
       </Flex>
-      <Heading
-        style={{ whiteSpace: "nowrap", textAlign: "center" }}
-        fontWeight="100"
-        px="1em"
-      >
-        {title}
-      </Heading>
-      <animated.div
-        ref={textRef}
-        style={{
-          transform: textAnimation.scale.interpolate(e => `scale(${e})`),
-          opacity: textAnimation.opacity.interpolate(e => e),
-        }}
-      >
-        <Text p="1em"> {discription}</Text>
-      </animated.div>
+
+      <Container type="Flex" alignItems="center" justifyContent="center">
+        <Icon github={data.gitLink} />
+        <Button
+          text="Visit"
+          color="black"
+          fontSize=".8em"
+          px=".6em"
+          style={{ borderRadius: "3px" }}
+        />
+      </Container>
     </Container>
   )
 }
-
-const Projects = React.forwardRef(({ animation, setScean, ...props }, ref) => {
-  const trail = useTrail(projectData.length, { scale: [0], opacity: [0] })
-  return (
-    <Container
-      animate
-      flexDirection="column"
-      mt="5em"
-      width={[1]}
-      data-sal="slide-up"
-      ref={ref}
-      style={(animation.slideIn(0), animation.fadeIn(5))}
-      {...props}
-    >
-      <animated.div style={animation.slideIn(0)}>
-        <Heading
-          style={{
-            width: "40%",
-            textAlign: "center",
-            fontSize: "4.25rem",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Projects
-        </Heading>
-      </animated.div>
-      <animated.div>
-        <Flex flexWrap="wrap">
-          {trail.map(({ scale }, i) => (
-            <ProjectCard
-              animation={{
-                transform: scale.interpolate(e => e),
-              }}
-              index={i}
-              key={generateKey(i)}
-              {...projectData[i]}
-            />
-          ))}
-        </Flex>
-      </animated.div>
-    </Container>
-  )
-})
 
 // Page Querys
 

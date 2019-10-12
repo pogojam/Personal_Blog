@@ -1,63 +1,54 @@
 import React, { useEffect, useRef } from "react"
 import { Link } from "gatsby"
-import { Button, Flex, Card, Box } from "rebass"
-import { useSprings, animated, useSpring } from "react-spring"
-import { TiHome } from "react-icons/ti"
-import useCustom from "./useCustom"
-import useSpace from "./spacer"
+import { Button, Flex, Card, Image, Box, Heading, Text } from "rebass"
+import { useSprings, animated, useSpring, useTransition } from "react-spring"
+import Logo from "../static/images/logo.svg"
 
-const pages = [
-  { path: "/", name: "Home" },
-  { path: "/blog", name: "Blog" },
-  { path: "/stack", name: "Stack" },
-]
+const WrappedButton = animated(Button)
 
-const hover = {
-  projects: [],
-}
+const pages = [{ path: "/", name: "Home" }, { path: "/blog", name: "Blog" }]
 
-const NavButton = ({ name, path, ...props }) => (
+const NavButton = ({ name, path, animation, ...props }) => (
   <Link to={path}>
-    <Button {...props}>{path !== "/" ? name : <TiHome />}</Button>
+    <WrappedButton
+      style={{ cursor: "pointer", fontWeight: 100, ...animation }}
+      {...props}
+    >
+      {path !== "/" ? name : <Image src={Logo} />}
+    </WrappedButton>
   </Link>
 )
 
-const Container = ({ children, ...props }) => <Flex {...props}>{children}</Flex>
-
-const buildButtons = (pages, handleClick) => {
-  const [springs, set, stop] = useSprings(pages.length, index => ({
-    opacity: 1,
-  }))
+const buildButtons = (pages, animation) => {
   return pages.map((e, i) => (
     <NavButton
+      animation={{ color: animation.buttonColor }}
       bg="transparent"
-      color="black"
-      style={{ ...springs[i] }}
       key={e.name + i}
       {...e}
     />
   ))
 }
 
-const Nav = () => {
+const Nav = ({ animation, Viewer }) => {
   const navRef = useRef(null)
-  const [scean, setScean] = useCustom()
-
-  console.log(scean)
-
-  const [animation, setAnim] = useSpring(() => {
-    return {
-      from: { transform: "translateY(-300px)" },
-      to: { transform: "translateY(0px)" },
-    }
-  })
-
   return (
-    <animated.div style={{ position: "sticky", top: 0, ...animation }}>
-      <Flex ref={navRef} p="1em">
-        {buildButtons(pages)}
+    <animated.div
+      style={{
+        zIndex: 999,
+        width: "100%",
+        position: "fixed",
+        left: 0,
+        top: 0,
+        borderBottom: "1px solid",
+        backgroundColor: animation.backgroundColor,
+        height: animation.height,
+      }}
+    >
+      <Flex alignItems="center" ref={navRef}>
+        {buildButtons(pages, animation)}
       </Flex>
-      {scean && hover.projects[scean.project]}
+      {Viewer && <Viewer />}
     </animated.div>
   )
 }

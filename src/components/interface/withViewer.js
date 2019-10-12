@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from "react"
 import Container from "../container"
 import useCustom from "../useCustom"
-import { Text, Box, Heading } from "rebass"
+import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon } from "../elements/"
+import { Svg } from "../../static/textures/svg"
 
 const SmallBox = (color, type) => <Box bg={color}>{type}</Box>
 
+const AnimatedBackground = () => {
+  return <Svg p="20em" bg="blue" src="textureIntersection" />
+}
+
 const ViewerComponent = ({ animation, data }) => {
-  const [start, setStart] = useState(true)
+  const [start, setStart] = useState(false)
   console.log(start, setStart)
-  const transitions = useTransition(data, item => item.index, {
-    from: { opacity: 0, slide: [-60] },
-    enter: { opacity: 1, slide: [0] },
-    leave: { opacity: 0, slide: [60] },
-    immediate: start,
-    config: config.molasses,
-  })
+
+  const transitions = useTransition(
+    { y: 60, x: 60, ...data },
+    item => item.index,
+    {
+      from: { opacity: 0, slideY: [60], slideX: [30] },
+      enter: ({ y, x }) => ({ opacity: 1, slideY: [y], slideX: [x] }),
+      leave: { opacity: 0, slideY: [60], slideX: [30] },
+      unique: start,
+      onRest: end => {},
+
+      immediate: start,
+      config: config.molasses,
+    }
+  )
   return (
     <Container
       animate
@@ -74,24 +87,31 @@ const ViewerComponent = ({ animation, data }) => {
                 flexBasis: "100%",
                 display: "flex",
                 flexDirection: "column",
-                transform: props.slide.interpolate(e => `translateY(${e}%)`),
+                transform: props.slideY.interpolate(e => `translateY(${e}%)`),
               }}
             >
-              <Heading
-                fontSize="45px"
-                fontWeight="900"
+              <AnimatedBackground />
+              <animated.div
                 style={{
-                  whiteSpace: "nowrap",
-                  textAlign: "center",
-                  flexBasis: "45%",
-                  display: "flex",
-                  alignItems: "center",
+                  transform: props.slideX.interpolate(e => `translateX(${e}%)`),
                 }}
-                fontWeight="100"
-                px="1em"
               >
-                {title}
-              </Heading>
+                <Heading
+                  fontSize="45px"
+                  fontWeight="900"
+                  style={{
+                    whiteSpace: "nowrap",
+                    textAlign: "center",
+                    flexBasis: "45%",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  fontWeight="100"
+                  px="1em"
+                >
+                  {title}
+                </Heading>
+              </animated.div>
               <Text style={{ flexBasis: "100%" }} fontSize=".8em" p="1em">
                 {discription}
               </Text>

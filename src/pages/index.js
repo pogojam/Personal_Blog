@@ -17,9 +17,10 @@ import {
 } from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
 import { Icon, Button } from "../components/elements"
-import { setAnimation } from "../components/animations"
+import { setAnimation, useShards } from "../components/animations"
 import useCustom from "../components/useCustom"
 import { Viewer } from "../components/interface/withViewer"
+import { Svg } from "../static/textures/svg"
 
 //SCEAN Panels
 
@@ -28,10 +29,10 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
     <Container
       className="heading"
       style={{
-        ...animation.fadeIn(7),
+        ...animation.fadeIn(2),
         ...animation.slideIn(-1),
+        ...props.style,
       }}
-      mt={["15vh"]}
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
@@ -40,7 +41,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       ref={ref}
     >
       <About mt="10vh">
-        <animated.div style={animation.slideIn(-1)}>
+        <animated.div style={(animation.slideIn(-1), animation.rotate)}>
           <h1>Ryan Breaux</h1>
         </animated.div>
         <animated.div style={(animation.slideIn(1), animation.rotate)}>
@@ -97,14 +98,15 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
   return (
     <Container
       animate
+      type="Flex"
+      alignItems="center"
+      justifyContent="center"
       flexDirection="column"
-      pt="4em"
-      mt="5em"
       width={[1]}
       ref={ref}
-      style={animation.fadeIn(5)}
-      {...props}
+      style={{ ...props.style, ...animation.fadeIn(5) }}
     >
+      <Svg src="dimonds" />
       <animated.div
         style={{ willChange: "transfrom", ...animation.slideIn(1) }}
       >
@@ -135,7 +137,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
   )
 }
 
-const Scean3 = ({ animation }, ref) => {
+const Scean3 = ({ animation, ...props }, ref) => {
   const choices = [
     {
       text: "Desktop",
@@ -171,10 +173,10 @@ const Scean3 = ({ animation }, ref) => {
       justifyContent="center"
       p="5em"
       style={{
-        minHeight: "90vh",
         position: "relative",
         willChange: "transform",
         ...animation.fadeIn(1),
+        ...props.style,
       }}
       ref={ref}
       animate
@@ -256,6 +258,7 @@ const Scean_Interface = ({ index, ...props }) => {
     rootMargin: "30px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
+  const [shard, setShard] = useShards()
 
   const calcXY = inr => {
     const offsetX = window.innerWidth / 2
@@ -316,6 +319,7 @@ const Scean_Interface = ({ index, ...props }) => {
       isActive={isActive}
       animation={setAnimation(animations)}
       ref={ref}
+      style={{ minHeight: "100vh" }}
       {...props}
     />
   )

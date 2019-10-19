@@ -20,7 +20,8 @@ import { Icon, Button } from "../components/elements"
 import { setAnimation, useShards } from "../components/animations"
 import useCustom from "../components/useCustom"
 import { Viewer } from "../components/interface/withViewer"
-import { Svg } from "../static/textures/svg"
+import dimondSVG from "../static/textures/dimond.svg"
+import { SVG } from "../static/textures/svg"
 
 //SCEAN Panels
 
@@ -29,7 +30,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
     <Container
       className="heading"
       style={{
-        ...animation.fadeIn(2),
+        ...animation.fadeIn(4),
         ...animation.slideIn(-1),
         ...props.style,
       }}
@@ -40,6 +41,13 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       type="Flex"
       ref={ref}
     >
+      <Box
+        style={{
+          width: "100vw",
+          height: "100vh",
+          position: "absolute",
+        }}
+      ></Box>
       <About mt="10vh">
         <animated.div style={(animation.slideIn(-1), animation.rotate)}>
           <h1>Ryan Breaux</h1>
@@ -56,15 +64,30 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           <Box style={{ borderTop: "1px solid black" }} />
         </animated.div>
         <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
-          <Text p="1em" style={{ maxWidth: "95vh" }}>
-            Curious and humble , full stack developer and entrepreneur. Big on
-            design and lightning fast code. Found my love for JS developing on
-            Node , leveraging the power of Non-Blocking I/O and npm’s rich
-            package eco system. Out of necessity I first started learning web
-            development in college when I started my first business selling
-            clothing online through an e-commerce website.Since I have had to
-            learn more advanced techniques building tools for lead generation
-            and business productivity.
+          <Text
+            fontWeight="100"
+            pl="1em"
+            fontSize=".7em"
+            style={{ maxWidth: "95vh" }}
+          >
+            Curious and humble , full stack developer and entrepreneur.
+          </Text>
+          <Text
+            p="1em"
+            style={{
+              maxWidth: "95vh",
+              backgroundColor: "#ffffffd4",
+              borderRadius: "3px",
+            }}
+          >
+            {" "}
+            Big on design and lightning fast code. Found my love for JS
+            developing on Node , leveraging the power of Non-Blocking I/O and
+            npm’s rich package eco system. Out of necessity I first started
+            learning web development in college when I started my first business
+            selling clothing online through an e-commerce website.Since I have
+            had to learn more advanced techniques building tools for lead
+            generation and business productivity.
           </Text>
         </animated.div>
       </About>
@@ -99,22 +122,20 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
     <Container
       animate
       type="Flex"
-      alignItems="center"
       justifyContent="center"
       flexDirection="column"
       width={[1]}
       ref={ref}
       style={{ ...props.style, ...animation.fadeIn(5) }}
     >
-      <Svg src="dimonds" />
       <animated.div
-        style={{ willChange: "transfrom", ...animation.slideIn(1) }}
+        style={{ willChange: "transfrom", ...animation.slideIn(-1) }}
       >
         <Heading
           style={{
             width: "40%",
             textAlign: "center",
-            fontSize: "4.25rem",
+            fontSize: "7.25rem",
             whiteSpace: "nowrap",
           }}
         >
@@ -122,7 +143,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         </Heading>
       </animated.div>
       <animated.div style={animation.slideIn(0.8)}>
-        <Flex flexWrap="wrap">
+        <Flex flexWrap="wrap" style={{ maxWidth: "40vw" }}>
           {projectData.map((data, i) => (
             <ProjectCard
               handleMouseEnter={handleViewer}
@@ -184,27 +205,26 @@ const Scean3 = ({ animation, ...props }, ref) => {
       <animated.div style={{ position: "relative", ...animation.slideIn(1) }}>
         <h1>let me build you something.</h1>
       </animated.div>
+
       <Container type="Flex">
-        <Container type="Flex">
-          {choices.map((data, i) => (
-            <animated.div>
-              <Button
-                style={{
-                  border: "1px solid",
-                  transition: "background .3s",
-                  borderRadius: "3px",
-                  cursor: "pointer",
-                  color: isActive[i] ? "white" : "black",
-                }}
-                onClick={handleClick(i)}
-                bg={isActive[i] ? "#0000009e" : "transparent"}
-                p=".7em"
-                m=".2em"
-                {...data}
-              />
-            </animated.div>
-          ))}
-        </Container>
+        {choices.map((data, i) => (
+          <animated.div>
+            <Button
+              style={{
+                border: "1px solid",
+                transition: "background .3s",
+                borderRadius: "3px",
+                cursor: "pointer",
+                color: isActive[i] ? "white" : "black",
+              }}
+              onClick={handleClick(i)}
+              bg={isActive[i] ? "#0000009e" : "transparent"}
+              p=".7em"
+              m=".2em"
+              {...data}
+            />
+          </animated.div>
+        ))}
       </Container>
       {transition.map(({ item, key, props }) =>
         item ? (
@@ -258,7 +278,7 @@ const Scean_Interface = ({ index, ...props }) => {
     rootMargin: "30px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
-  const [shard, setShard] = useShards()
+  // const [shard, setShard] = useShards()
 
   const calcXY = inr => {
     const offsetX = window.innerWidth / 2
@@ -277,7 +297,7 @@ const Scean_Interface = ({ index, ...props }) => {
     return [...xyz, rotation]
   }
 
-  const [animations, set] = useSpring(() => ({
+  const [animations, set, stop] = useSpring(() => ({
     config: config.molasses,
     rotate: [1, 1, 1, 0],
     expand: 1,
@@ -298,19 +318,19 @@ const Scean_Interface = ({ index, ...props }) => {
     }
 
     if (inr) {
-      set({
-        fadeIn: inr,
-        rotate: calcRotation(inr),
-        transform: calcXY(inr),
-        size: inr,
-        expand: inr,
-        h1: calcXY(inr / 2),
-        proj: calcXY(-inr),
-      })
+      inr >= 0.2
+        ? set({
+            fadeIn: inr,
+            rotate: calcRotation(inr),
+            transform: calcXY(inr),
+            size: inr,
+            expand: inr,
+            h1: calcXY(inr / 2),
+            proj: calcXY(-inr),
+          })
+        : stop()
     }
   }, [entries.intersectionRatio])
-
-  console.log("effect")
 
   const Component = sceans[index]
 
@@ -325,13 +345,106 @@ const Scean_Interface = ({ index, ...props }) => {
   )
 }
 
+function Shard(node) {
+  let viewBox = { x: window.innerWidth, y: window.innerHeight }
+  const accelX = 0.5 * Math.random()
+  const accelY = 0.5 * Math.random()
+
+  this.getTransVal = () => {
+    const transitions = node.style.transform.split(" ")
+    const x = Number(transitions[0].replace(/[^\d.]/g, ""))
+    const y = Number(transitions[1].replace(/[^\d.]/g, ""))
+    return [x, y]
+  }
+
+  this.setObserver = () => {
+    const options = {
+      threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+      rootMargin: "30px 0px 0px 0px",
+    }
+
+    const observer = new IntersectionObserver(e => {
+      console.log(e)
+      console.log("hello")
+    }, options)
+
+    observer.observe(node)
+  }
+
+  this.getPosition = () => {
+    const [tranX, tranY] = this.getTransVal()
+    const { width, height, x, y } = node.getBoundingClientRect()
+    let outX = tranX
+    let outY = tranY
+
+    // console.log(node.getBoundingClientRect())
+
+    if (x > width) {
+      // outX = 0
+    }
+    if (y > height) {
+      // outY = 0
+    }
+
+    return [outX, outY]
+  }
+
+  this.update = () => {
+    const [x, y] = this.getPosition()
+    node.style.transform = `translateX(${x + accelX}px) translateY(${y +
+      accelY}px)`
+  }
+  this.setObserver()
+  node.style.transform = `translateX(0px) translateY(0px)`
+  window.onresize = () =>
+    (viewBox = { x: window.innerWidth, y: window.innerHeight })
+}
+
+const Background = () => {
+  const [nodes, setNodes] = useState()
+
+  useEffect(() => {
+    const nodeList = document.querySelectorAll(".shard")
+    initCanvas(nodeList)
+  }, [])
+
+  const initCanvas = list => {
+    const shards = []
+    list.forEach(el => shards.push(new Shard(el)))
+
+    const step = stamp => {
+      shards.forEach(el => {
+        el.update()
+      })
+      window.requestAnimationFrame(step)
+    }
+
+    window.requestAnimationFrame(step)
+  }
+
+  return (
+    <SVG
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        opacity: 0.3,
+      }}
+      src="dimonds"
+    ></SVG>
+  )
+}
+
 const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
-  const { frontmatter, html } = markdownRemark
+  const { html } = markdownRemark
   return (
     <Layout>
       <SEO title="Home" />
       <Viewer />
+      <Background />
       {sceans.map((e, i) => (
         <Scean_Interface
           setScean={props.setScean}
@@ -352,26 +465,15 @@ const About = animated(styled(Box)`
 
 const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
   return (
-    <Container onMouseEnter={() => handleMouseEnter(data)} width={[1, 1 / 3]}>
-      <Flex
-        style={{ minHeight: "5em" }}
-        alignItems="center"
-        justifyContent="center"
-        mt="3em"
-      >
-        <Image src={data.logo} />
-      </Flex>
-
-      <Container type="Flex" alignItems="center" justifyContent="center">
-        <Icon github={data.gitLink} />
-        <Button
-          text="Visit"
-          color="black"
-          fontSize=".8em"
-          px=".6em"
-          style={{ borderRadius: "3px" }}
-        />
-      </Container>
+    <Container
+      style={{ minHeight: "5em" }}
+      alignItems="center"
+      justifyContent="center"
+      mt="3em"
+      onClick={() => handleMouseEnter(data)}
+      width={[1, 1 / 3]}
+    >
+      <Image src={data.logo} />
     </Container>
   )
 }

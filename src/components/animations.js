@@ -42,17 +42,31 @@ export const setAnimation = anim => {
 export const Nav_Animation = Nav => ({ animation, ...props }) => {
   const [isTop, setTop] = useState(true)
 
-  const topScroll = useSpring(
-    isTop
-      ? {
-          backgroundColor: "white",
-          buttonColor: "black",
-        }
-      : {
-          backgroundColor: "black",
-          buttonColor: "white",
-        }
-  )
+  const topScroll = useSpring({
+    from: {
+      backgroundColor: "white",
+      buttonColor: "black",
+      height: "18%",
+      avatarOpacity: "1",
+    },
+    to: isTop
+      ? [
+          {
+            backgroundColor: "white",
+            buttonColor: "black",
+            height: "18%",
+          },
+          { avatarOpacity: "1" },
+        ]
+      : [
+          { avatarOpacity: "0" },
+          {
+            backgroundColor: "black",
+            buttonColor: "white",
+            height: "8%",
+          },
+        ],
+  })
 
   const [button, setButton] = useSpring(() => ({
     slideIn: [0, 0],

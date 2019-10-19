@@ -20,6 +20,7 @@ const link = (path, component) => (
 
 export const Icon = ({
   size = "1em",
+  color,
   facebook,
   github,
   linkedin,
@@ -36,7 +37,7 @@ export const Icon = ({
     <Container {...props}>
       {facebook &&
         link(facebook, <IoLogoFacebook href={facebook} size={size} />)}
-      {github && link(github, <IoLogoGithub size={size} />)}
+      {github && link(github, <IoLogoGithub size={size} color={color} />)}
       {linkedin && link(linkedin, <IoLogoLinkedin size={size} />)}
       {docker && <DiDocker size={size} />}
       {linux && <DiLinux size={size} />}

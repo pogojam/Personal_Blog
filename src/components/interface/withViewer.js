@@ -3,29 +3,25 @@ import Container from "../container"
 import useCustom from "../useCustom"
 import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
-import { Icon } from "../elements/"
+import { Icon, Button } from "../elements/"
 import { Svg } from "../../static/textures/svg"
 
 const SmallBox = (color, type) => <Box bg={color}>{type}</Box>
 
 const AnimatedBackground = () => {
-  return <Svg p="20em" bg="blue" src="textureIntersection" />
+  return <Svg p="20em" bg="blue" src="dimonds" />
 }
 
 const ViewerComponent = ({ animation, data }) => {
   const [start, setStart] = useState(false)
-  console.log(start, setStart)
 
   const transitions = useTransition(
-    { y: 60, x: 60, ...data },
+    { y: 0, x: 0, ...data },
     item => item.index,
     {
       from: { opacity: 0, slideY: [60], slideX: [30] },
       enter: ({ y, x }) => ({ opacity: 1, slideY: [y], slideX: [x] }),
-      leave: { opacity: 0, slideY: [60], slideX: [30] },
-      unique: start,
-      onRest: end => {},
-
+      leave: { opacity: 0, slideY: [-60], slideX: [0] },
       immediate: start,
       config: config.molasses,
     }
@@ -48,14 +44,15 @@ const ViewerComponent = ({ animation, data }) => {
         color: "white",
         top: 0,
         right: 0,
-        height: "33vh",
+        maxWidth: "50vw",
+        height: "100vh",
         willChange: "transform",
-        transform: animation.transform.interpolate(e => `translateY(${e}%)`),
+        transform: animation.transform.interpolate(e => `translateX(${e}%)`),
         zIndex: 9999,
       }}
     >
       {transitions.map(({ item, key, props }) => {
-        const { discription, poster, title, stack = [] } = item
+        const { discription, poster, title, gitLink, stack = [] } = item
 
         const stackObj = stack.reduce((acc, val) => {
           Object.assign(acc, { [val]: val })
@@ -86,18 +83,18 @@ const ViewerComponent = ({ animation, data }) => {
               style={{
                 flexBasis: "100%",
                 display: "flex",
+                maxWidth: "50%",
                 flexDirection: "column",
                 transform: props.slideY.interpolate(e => `translateY(${e}%)`),
               }}
             >
-              <AnimatedBackground />
               <animated.div
                 style={{
                   transform: props.slideX.interpolate(e => `translateX(${e}%)`),
                 }}
               >
                 <Heading
-                  fontSize="45px"
+                  fontSize="3.4em"
                   fontWeight="900"
                   style={{
                     whiteSpace: "nowrap",
@@ -108,22 +105,44 @@ const ViewerComponent = ({ animation, data }) => {
                   }}
                   fontWeight="100"
                   px="1em"
+                  py=".5em"
                 >
                   {title}
                 </Heading>
               </animated.div>
-              <Text style={{ flexBasis: "100%" }} fontSize=".8em" p="1em">
+              <Text
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexBasis: "100%",
+                }}
+                fontSize=".8em"
+                p="1em"
+                px="2.5em"
+              >
                 {discription}
               </Text>
-              <Icon
+
+              <Container
                 type="Flex"
                 justifyContent="flex-end"
                 p="1em"
                 style={{
                   borderTop: "1px solid white",
                 }}
-                {...stackObj}
-              />
+              >
+                <Container mr="auto" type="Flex">
+                  <Icon github={gitLink} color="white" />
+                  <Button
+                    text="Visit"
+                    color="white"
+                    fontSize=".8em"
+                    px=".6em"
+                    style={{ borderRadius: "3px" }}
+                  />
+                </Container>
+                <Icon {...stackObj} />
+              </Container>
             </animated.div>
           </Container>
         )
@@ -137,7 +156,7 @@ export const Viewer = () => {
   const enterView = Object.entries(view).length > 0
 
   const [animation, set, stop] = useSpring(() => ({
-    transform: [-150],
+    transform: [100],
     opacity: [0],
   }))
 
@@ -146,7 +165,7 @@ export const Viewer = () => {
       set({ transform: [0], opacity: [1] })
       stop()
     } else {
-      set({ transform: [-150], opacity: [0] })
+      set({ transform: [100], opacity: [0] })
     }
   }, [enterView])
 

@@ -63,7 +63,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
           {
             backgroundColor: "black",
             buttonColor: "white",
-            height: "8%",
+            height: "5%",
           },
         ],
   })

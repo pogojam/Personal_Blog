@@ -20,8 +20,37 @@ import { Icon, Button } from "../components/elements"
 import { setAnimation, useShards } from "../components/animations"
 import useCustom from "../components/useCustom"
 import { Viewer } from "../components/interface/withViewer"
+import { SliderButton } from "../components/interface/slider"
 import dimondSVG from "../static/textures/dimond.svg"
 import { SVG } from "../static/textures/svg"
+
+const ProjectCard = ({ data, animation, handleMouseEnter, ...props }) => {
+  const CardImage = animated(Image)
+  return (
+    <Container
+      m="auto"
+      animate
+      style={{
+        minHeight: "6em",
+        minWidth: "6em",
+        maxWidth: "30vw",
+        borderRadius: "4px",
+        backgroundSize: "cover",
+      }}
+      type="Flex"
+      alignItems="center"
+      justifyContent="space-around"
+      m="1em"
+      onClick={() => handleMouseEnter(data)}
+    >
+      <CardImage
+        style={{ willChange: "transform", ...animation }}
+        src={data.logo}
+      />
+      {/* <Heading>{data.title}</Heading> */}
+    </Container>
+  )
+}
 
 //SCEAN Panels
 
@@ -107,10 +136,15 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
 
 const Scean2 = ({ animation, isActive, ...props }, ref) => {
   const setView = useCustom()[1]
-
   const handleViewer = data => {
     isActive && setView(data)
   }
+
+  const enterAnimation = useSpring({
+    from: { slide: [0] },
+    to: isActive ? { slide: [2], scale: [1] } : { slide: [100], scale: [0] },
+    config: {},
+  })
 
   useEffect(() => {
     if (!isActive) {
@@ -119,42 +153,60 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
   }, [isActive])
 
   return (
-    <Container
-      animate
-      type="Flex"
-      justifyContent="center"
-      flexDirection="column"
-      width={[1]}
-      ref={ref}
-      style={{ ...props.style, ...animation.fadeIn(5) }}
-    >
-      <animated.div
-        style={{ willChange: "transfrom", ...animation.slideIn(-1) }}
+    <>
+      <Container
+        animate
+        type="Flex"
+        justifyContent="center"
+        flexDirection="column"
+        width={[1]}
+        ref={ref}
+        style={{ ...props.style, ...animation.fadeIn(5) }}
       >
-        <Heading
-          style={{
-            width: "40%",
-            textAlign: "center",
-            fontSize: "7.25rem",
-            whiteSpace: "nowrap",
-          }}
+        <animated.div
+          style={{ willChange: "transfrom", ...animation.slideIn(-1) }}
         >
-          Projects
-        </Heading>
-      </animated.div>
-      <animated.div style={animation.slideIn(0.8)}>
-        <Flex flexWrap="wrap" style={{ maxWidth: "40vw" }}>
-          {projectData.map((data, i) => (
-            <ProjectCard
-              handleMouseEnter={handleViewer}
-              key={generateKey(i)}
-              isActive={props.isActive}
-              data={{ index: i, ...data }}
-            />
-          ))}
-        </Flex>
-      </animated.div>
-    </Container>
+          <Heading
+            style={{
+              width: "40%",
+              textAlign: "center",
+              fontSize: "7.25rem",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Projects
+          </Heading>
+        </animated.div>
+      </Container>
+      <Container
+        animate
+        style={{
+          display: "flex",
+          position: "fixed",
+          width: "100%",
+          height: "15vh",
+          bottom: 0,
+          left: 0,
+          zIndex: 999,
+          justifyContent: "space-around",
+          boxShadow: "1px -1px 14px 0px rgba(0,0,0,0.75)",
+          transform: enterAnimation.slide.interpolate(e => `translateY(${e}%)`),
+        }}
+      >
+        {/* <SliderButton /> */}
+        {projectData.map((data, i) => (
+          <ProjectCard
+            handleMouseEnter={handleViewer}
+            key={generateKey(i)}
+            isActive={isActive}
+            animation={{
+              transform: enterAnimation.scale.interpolate(e => `scale(${e})`),
+            }}
+            data={{ index: i, ...data }}
+          />
+        ))}
+      </Container>
+    </>
   )
 }
 
@@ -274,7 +326,7 @@ const sceans = [forwardRef(Scean1), forwardRef(Scean2), forwardRef(Scean3)]
 
 const Scean_Interface = ({ index, ...props }) => {
   const [ref, entries] = useObserver({
-    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.7, 0.8, 0.9, 1.0],
     rootMargin: "30px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
@@ -309,7 +361,7 @@ const Scean_Interface = ({ index, ...props }) => {
 
   useEffect(() => {
     const inr = entries.intersectionRatio
-    const activeThreshold = 0.9
+    const activeThreshold = 0.7
     if (inr > activeThreshold) {
       setActive(true)
     }
@@ -401,8 +453,6 @@ function Shard(node) {
 }
 
 const Background = () => {
-  const [nodes, setNodes] = useState()
-
   useEffect(() => {
     const nodeList = document.querySelectorAll(".shard")
     initCanvas(nodeList)
@@ -426,8 +476,8 @@ const Background = () => {
     <SVG
       style={{
         width: "100vw",
-        height: "100vh",
-        position: "fixed",
+        height: "300vh",
+        position: "absolute",
         top: 0,
         left: 0,
         opacity: 0.3,
@@ -462,21 +512,6 @@ const About = animated(styled(Box)`
     font-size: 3em;
   }
 `)
-
-const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
-  return (
-    <Container
-      style={{ minHeight: "5em" }}
-      alignItems="center"
-      justifyContent="center"
-      mt="3em"
-      onClick={() => handleMouseEnter(data)}
-      width={[1, 1 / 3]}
-    >
-      <Image src={data.logo} />
-    </Container>
-  )
-}
 
 // Page Querys
 

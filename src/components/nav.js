@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { Link } from "gatsby"
 import { Button, Flex, Card, Image, Box, Heading, Text } from "rebass"
 import { useSprings, animated, useSpring, useTransition } from "react-spring"
+import { Icon } from "./elements/icons"
 import Container from "./container"
 import Logo from "../static/images/logo.svg"
 
@@ -23,7 +24,7 @@ const NavButton = ({ name, path, animation, ...props }) => (
 const buildButtons = (pages, animation) => {
   return pages.map((e, i) => (
     <NavButton
-      animation={{ color: animation.buttonColor }}
+      animation={{ color: animation ? animation.buttonColor : "white" }}
       bg="transparent"
       key={e.name + i}
       {...e}
@@ -45,7 +46,7 @@ const Avatar = ({ link, animation }) => {
         position: "absolute",
         right: 0,
         top: "-35px",
-        opacity: animation.avatarOpacity,
+        opacity: animation ? animation.avatarOpacity : 0,
       }}
     />
   )
@@ -63,8 +64,9 @@ const Nav = ({ animation, avatar = true }) => {
         left: 0,
         top: 0,
         borderBottom: "1px solid",
-        backgroundColor: animation.backgroundColor,
-        height: animation.height,
+        backgroundColor: animation ? animation.backgroundColor : "black",
+        height: animation ? animation.height : "5%",
+        willChange: "height",
         display: "flex",
       }}
     >
@@ -77,6 +79,15 @@ const Nav = ({ animation, avatar = true }) => {
           link="https://res.cloudinary.com/dxjse9tsv/image/upload/v1555035590/ryansWebsite/Selfi_B_W.jpg"
         />
       )}
+      <Icon
+        linkedin="https://linkedin.com/in/ryan-breaux-4603396a"
+        github="https://github.com/pogojam"
+        size="1.3em"
+        color="white"
+        ml="auto"
+        mr="1em"
+        style={{ display: "flex", zIndex: 9999, alignItems: "center" }}
+      />
     </animated.div>
   )
 }

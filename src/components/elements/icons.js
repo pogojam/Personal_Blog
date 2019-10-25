@@ -20,7 +20,6 @@ const link = (path, component) => (
 
 export const Icon = ({
   size = "1em",
-  color,
   facebook,
   github,
   linkedin,
@@ -36,10 +35,13 @@ export const Icon = ({
   return (
     <Container {...props}>
       {facebook &&
-        link(facebook, <IoLogoFacebook href={facebook} size={size} />)}
-      {github && link(github, <IoLogoGithub size={size} color={color} />)}
-      {linkedin && link(linkedin, <IoLogoLinkedin size={size} />)}
-      {docker && <DiDocker size={size} />}
+        link(
+          facebook,
+          <IoLogoFacebook href={facebook} size={size} {...props} />
+        )}
+      {github && link(github, <IoLogoGithub size={size} {...props} />)}
+      {linkedin && link(linkedin, <IoLogoLinkedin size={size} {...props} />)}
+      {docker && <DiDocker size={size} {...props} />}
       {linux && <DiLinux size={size} />}
       {database && <DiDatabase size={size} />}
       {javascript && <DiJavascript1 size={size} />}

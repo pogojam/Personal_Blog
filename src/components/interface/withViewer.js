@@ -7,27 +7,6 @@ import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import { Svg } from "../../static/textures/svg"
 
-const SmallBox = (color, type) => <Box bg={color}>{type}</Box>
-
-const AnimatedBackground = () => {
-  return <Svg p="20em" bg="blue" src="dimonds" />
-}
-
-const Nav = ({ data, handleViewer, isActive }) => {
-  return (
-    <Box>
-      {data.map((data, i) => (
-        <ProjectCard
-          handleMouseEnter={handleViewer}
-          key={generateKey(i)}
-          isActive={isActive}
-          data={{ index: i, ...data }}
-        />
-      ))}
-    </Box>
-  )
-}
-
 const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
   return (
     <Container
@@ -100,8 +79,9 @@ const Content = ({
         animate
         style={{
           flexBasis: "100%",
-          backgroundSize: "130% 130%",
+          backgroundSize: "130% auto",
           backgroundImage: `linear-gradient( rgba(0,0,0,0), rgba(0,0,0,0) ),url(${poster})`,
+          willChange: "transform",
           ...backgroundSlide,
           ...props.slideX,
         }}

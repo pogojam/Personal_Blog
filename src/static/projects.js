@@ -11,8 +11,9 @@ export default [
       "Application to take care of all home entertainment needs. This App is built to run on a Asus TinkerBoard S as a dedicated linux server.",
     gitLink: "https://github.com/pogojam/entertainmentCenter",
     poster:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554668355/branches-bright-Web.jpg",
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571961583/git/Screen_Shot_2019-10-24_at_4.59.00_PM.png",
     stack: ["linux", "database", "react", "javascript"],
+    tag: "Smart Home Interface",
   },
   {
     title: "SlipJaw",
@@ -23,6 +24,7 @@ export default [
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554668355/branches-bright-Web.jpg",
     stack: ["react", "javascript", "apple"],
+    tag: "Bussiness Solution, Hyatt",
   },
   {
     title: "Folder Importer",
@@ -33,6 +35,7 @@ export default [
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1570561245/git/Screen_Shot_2019-10-08_at_12.00.02_PM.png",
     stack: ["react", "npm", "javascript"],
+    tag: "Developer productivity tool",
   },
   {
     title: "React Grid Builder",
@@ -43,5 +46,42 @@ export default [
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1570489149/git/Screen_Shot_2019-10-07_at_3.52.53_PM.png",
     stack: ["react", "npm", "javascript"],
+    tag: "Developer npm library",
+  },
+  {
+    title: "Bell Captain",
+    logo:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571863057/Logos/bellcaptain_logo.svg",
+    discription:
+      "Platform used to manage daily cash distribution for cash related businesses.",
+    gitLink: "https://github.com/pogojam/bellcaptain",
+    poster:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571864302/git/Screen_Shot_2019-10-23_at_1.57.04_PM.png",
+    stack: ["react", "database", "javascript"],
+    tag: "Business asset allocation tool",
+  },
+  {
+    title: "TextBeast",
+    logo:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571863057/Logos/bellcaptain_logo.svg",
+    discription:
+      "This tool is used for extracting phone and name data from .html or .txt files and parsing them into a .csv file.",
+    gitLink: "https://github.com/pogojam/TextBeast",
+    poster:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571865172/git/Screen_Shot_2019-10-23_at_2.07.39_PM.png",
+    stack: ["javascript"],
+    tag: "Big data tool",
+  },
+  {
+    title: "AZButler",
+    logo:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866361/Logos/Asset_3.svg",
+    discription:
+      "This tool is used for extracting phone and name data from .html or .txt files and parsing them into a .csv file.",
+    gitLink: "https://github.com/pogojam/AZButler",
+    poster:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
+    stack: ["javascript", "react"],
+    tag: "Business Website",
   },
 ]

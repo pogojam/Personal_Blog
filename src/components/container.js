@@ -1,9 +1,16 @@
 import { Card, Flex, Box } from "rebass"
 import React, { useEffect, useState } from "react"
 import _ from "lodash"
+import styled from "styled-components"
+import { gridTemplateAreas } from "styled-system"
 import { useSpring, animated } from "react-spring"
 
-const types = { Card, Box, Flex }
+const Grid = styled(Box)`
+  display: grid;
+  ${gridTemplateAreas}
+`
+
+const types = { Card, Box, Flex, Grid }
 
 const attachRef = (Element, props) =>
   React.forwardRef((props, ref) => {

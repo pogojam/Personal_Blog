@@ -7,5 +7,3 @@ caption: " Modularize your Graphql backend for improved plugability"
 ---
 
 ### Introduction
-
-dfsdfsd

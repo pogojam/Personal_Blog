@@ -24,30 +24,81 @@ import { SliderButton } from "../components/interface/slider"
 import dimondSVG from "../static/textures/dimond.svg"
 import { SVG } from "../static/textures/svg"
 
-const ProjectCard = ({ data, animation, handleMouseEnter, ...props }) => {
+const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
+  const containerRef = useRef()
+
+  useEffect(() => {
+    console.log(containerRef.current.getBoundingClientRect())
+  }, [])
+
+  const calc = (x, y) => {
+    const con = containerRef.current.getBoundingClientRect()
+    return [
+      -(y - con.top - con.height / 2) / 20,
+      (x - con.left - con.width / 2) / 20,
+      1.1,
+    ]
+  }
+  const trans = (x, y, s) =>
+    `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
+
+  const [hoverAnimation, set] = useSpring(() => ({ xys: [0, 0, 1] }))
+
   const CardImage = animated(Image)
   return (
     <Container
-      m="auto"
       animate
-      style={{
-        minHeight: "6em",
-        minWidth: "6em",
-        maxWidth: "30vw",
-        borderRadius: "4px",
-        backgroundSize: "cover",
-      }}
-      type="Flex"
+      ref={containerRef}
+      onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
+      onMouseLeave={() => set({ xys: [0, 0, 1] })}
       alignItems="center"
-      justifyContent="space-around"
-      m="1em"
+      width="100%"
+      p="1em"
+      bg="aliceblue"
+      style={{
+        willChange: "transform",
+        display: "grid",
+        gridTemplateAreas: `"header header header" "space1 space space2"`,
+        borderRadius: "8px",
+        position: "relative",
+        boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
+        transform: hoverAnimation.xys.interpolate(trans),
+      }}
       onClick={() => handleMouseEnter(data)}
     >
-      <CardImage
-        style={{ willChange: "transform", ...animation }}
-        src={data.logo}
+      <Box
+        style={{
+          flexBasis: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gridArea: "space1",
+        }}
+      >
+        <CardImage
+          style={{
+            minWidth: "60px",
+          }}
+          src={data.logo}
+        />
+      </Box>
+      <Box
+        backgroundColor="black"
+        m="1em"
+        style={{ height: "3em", width: "1px", gridArea: "space" }}
       />
-      {/* <Heading>{data.title}</Heading> */}
+      <Container
+        type="Flex"
+        style={{
+          flexBasis: "100%",
+          flexDirection: "column",
+          gridArea: "space2",
+          justifyContent: "center",
+        }}
+      >
+        <Text>{data.tag}</Text>
+      </Container>
+      <Heading style={{ gridArea: "header" }}>{data.title}</Heading>
     </Container>
   )
 }
@@ -70,14 +121,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       type="Flex"
       ref={ref}
     >
-      <Box
-        style={{
-          width: "100vw",
-          height: "100vh",
-          position: "absolute",
-        }}
-      ></Box>
-      <About mt="10vh">
+      <About>
         <animated.div style={(animation.slideIn(-1), animation.rotate)}>
           <h1>Ryan Breaux</h1>
         </animated.div>
@@ -120,15 +164,12 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           </Text>
         </animated.div>
       </About>
-      <animated.div style={animation.slideIn()}>
-        <animated.div style={animation.expand}>
-          <Icon
-            linkedin="linkedin.com/in/ryan-breaux-4603396a"
-            github="https://github.com/pogojam"
-            size="1.3em"
-            mt="10em"
-          />
-        </animated.div>
+      <animated.div style={animation.expand}>
+        <Icon
+          linkedin="linkedin.com/in/ryan-breaux-4603396a"
+          github="https://github.com/pogojam"
+          size="1.3em"
+        />
       </animated.div>
     </Container>
   )
@@ -140,12 +181,6 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
     isActive && setView(data)
   }
 
-  const enterAnimation = useSpring({
-    from: { slide: [0] },
-    to: isActive ? { slide: [2], scale: [1] } : { slide: [100], scale: [0] },
-    config: {},
-  })
-
   useEffect(() => {
     if (!isActive) {
       setView({})
@@ -153,44 +188,34 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
   }, [isActive])
 
   return (
-    <>
-      <Container
-        animate
-        type="Flex"
-        justifyContent="center"
-        flexDirection="column"
-        width={[1]}
-        ref={ref}
-        style={{ ...props.style, ...animation.fadeIn(5) }}
-      >
-        <animated.div
-          style={{ willChange: "transfrom", ...animation.slideIn(-1) }}
-        >
-          <Heading
-            style={{
-              width: "40%",
-              textAlign: "center",
-              fontSize: "7.25rem",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Projects
-          </Heading>
-        </animated.div>
-      </Container>
-      <Container
-        animate
+    <Container
+      animate
+      ref={ref}
+      pt="6em"
+      style={{
+        willChange: "transfrom, opacity",
+        ...props.style,
+        ...animation.fadeIn(5),
+        ...animation.slideIn(-1),
+      }}
+    >
+      <Heading
         style={{
-          display: "flex",
-          position: "fixed",
-          width: "100%",
-          height: "15vh",
-          bottom: 0,
-          left: 0,
-          zIndex: 999,
-          justifyContent: "space-around",
-          boxShadow: "1px -1px 14px 0px rgba(0,0,0,0.75)",
-          transform: enterAnimation.slide.interpolate(e => `translateY(${e}%)`),
+          width: "40%",
+          textAlign: "center",
+          fontSize: "7.25rem",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Projects
+      </Heading>
+      <Container
+        animate
+        mt="3em"
+        type="Grid"
+        gridTemplateAreas={[`"1fr"`, `"1fr 1fr"`, `"1fr 1fr 1fr"`]}
+        style={{
+          gridGap: "4em",
         }}
       >
         {/* <SliderButton /> */}
@@ -199,14 +224,11 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             handleMouseEnter={handleViewer}
             key={generateKey(i)}
             isActive={isActive}
-            animation={{
-              transform: enterAnimation.scale.interpolate(e => `scale(${e})`),
-            }}
             data={{ index: i, ...data }}
           />
         ))}
       </Container>
-    </>
+    </Container>
   )
 }
 
@@ -325,8 +347,23 @@ const sceans = [forwardRef(Scean1), forwardRef(Scean2), forwardRef(Scean3)]
 // SCEAN INTERFACE
 
 const Scean_Interface = ({ index, ...props }) => {
+  // function roundNumber(number, decimals) {
+  //   var newnumber = new Number(number + "").toFixed(parseInt(decimals))
+  //   return parseFloat(newnumber)
+  // }
+  // const incArr = inc => {
+  //   let length = 1 / inc
+  //   let output = []
+
+  //   for (let i = 0; i < length - 1; ++i) {
+  //     output.length === 0 && output.push(0 + inc)
+  //     output.push(roundNumber(output[i] + inc, 12))
+  //   }
+  //   return output
+  // }
+
   const [ref, entries] = useObserver({
-    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.7, 0.8, 0.9, 1.0],
+    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
     rootMargin: "30px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
@@ -343,17 +380,16 @@ const Scean_Interface = ({ index, ...props }) => {
 
   const calcRotation = inr => {
     const xyz = [1, 1, 0]
-
     const rotation = 180 - inr * 180
 
     return [...xyz, rotation]
   }
 
   const [animations, set, stop] = useSpring(() => ({
-    config: config.molasses,
+    config: { mass: 5, tension: 350, friction: 40 },
     rotate: [1, 1, 1, 0],
     expand: 1,
-    fadeIn: [1],
+    fadeIn: [0],
     size: [1],
     transform: [0, 0],
     proj: [3],
@@ -367,6 +403,7 @@ const Scean_Interface = ({ index, ...props }) => {
     }
     if (inr < activeThreshold) {
       setActive(false)
+      stop()
     }
 
     if (inr) {
@@ -382,16 +419,18 @@ const Scean_Interface = ({ index, ...props }) => {
           })
         : stop()
     }
-  }, [entries.intersectionRatio])
+  }, [entries.intersectionRatio, isActive])
 
   const Component = sceans[index]
+
+  console.log(index)
 
   return (
     <Component
       isActive={isActive}
       animation={setAnimation(animations)}
       ref={ref}
-      style={{ minHeight: "100vh" }}
+      style={{ height: "100vh" }}
       {...props}
     />
   )
@@ -407,20 +446,6 @@ function Shard(node) {
     const x = Number(transitions[0].replace(/[^\d.]/g, ""))
     const y = Number(transitions[1].replace(/[^\d.]/g, ""))
     return [x, y]
-  }
-
-  this.setObserver = () => {
-    const options = {
-      threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-      rootMargin: "30px 0px 0px 0px",
-    }
-
-    const observer = new IntersectionObserver(e => {
-      console.log(e)
-      console.log("hello")
-    }, options)
-
-    observer.observe(node)
   }
 
   this.getPosition = () => {
@@ -446,10 +471,7 @@ function Shard(node) {
     node.style.transform = `translateX(${x + accelX}px) translateY(${y +
       accelY}px)`
   }
-  this.setObserver()
   node.style.transform = `translateX(0px) translateY(0px)`
-  window.onresize = () =>
-    (viewBox = { x: window.innerWidth, y: window.innerHeight })
 }
 
 const Background = () => {
@@ -481,6 +503,7 @@ const Background = () => {
         top: 0,
         left: 0,
         opacity: 0.3,
+        willChange: "transform",
       }}
       src="dimonds"
     ></SVG>
@@ -494,7 +517,7 @@ const IndexPage = ({ data, ...props }) => {
     <Layout>
       <SEO title="Home" />
       <Viewer />
-      <Background />
+      {/* <Background /> */}
       {sceans.map((e, i) => (
         <Scean_Interface
           setScean={props.setScean}

@@ -6,9 +6,8 @@ import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
 
-const LayoutNav = pipe(Nav)(Nav_Animation)
-
-const Layout = ({ children, ...props }) => {
+const Layout = ({ children, navAnim = true, ...props }) => {
+  const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
   return (
     <>
       <Flex

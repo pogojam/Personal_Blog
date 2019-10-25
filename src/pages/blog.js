@@ -58,7 +58,7 @@ const Blog = ({ data: { allMarkdownRemark } }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <Layout my="6em">
+    <Layout navAnim={false} my="6em">
       <Hero img={data.img} title={data.title} caption={data.caption} />
       {edges.map(({ node }) => (
         <BlogCard {...node} />

@@ -1,8 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
-import Particles from "react-particles-js"
-import particleParam from "./setup/particle"
 
 const Container = styled.div`
   h2 {

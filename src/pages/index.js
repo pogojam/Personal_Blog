@@ -1,107 +1,27 @@
-import React, { useState, useEffect, useRef, forwardRef, Children } from "react"
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  forwardRef,
+  Children,
+} from "react"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import styled from "styled-components"
-import projectData from "../static/projects"
 import _ from "lodash"
-import {
-  useSprings,
-  useTransition,
-  config,
-  animated,
-  useSpring,
-  useTrail,
-} from "react-spring"
+import { useTransition, animated, useSpring } from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
 import { Icon, Button } from "../components/elements"
 import { setAnimation, useShards } from "../components/animations"
-import useCustom from "../components/useCustom"
 import { Viewer } from "../components/interface/withViewer"
 import { SliderButton } from "../components/interface/slider"
-import dimondSVG from "../static/textures/dimond.svg"
 import { SVG } from "../static/textures/svg"
-
-const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
-  const containerRef = useRef()
-
-  useEffect(() => {
-    console.log(containerRef.current.getBoundingClientRect())
-  }, [])
-
-  const calc = (x, y) => {
-    const con = containerRef.current.getBoundingClientRect()
-    return [
-      -(y - con.top - con.height / 2) / 20,
-      (x - con.left - con.width / 2) / 20,
-      1.1,
-    ]
-  }
-  const trans = (x, y, s) =>
-    `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
-
-  const [hoverAnimation, set] = useSpring(() => ({ xys: [0, 0, 1] }))
-
-  const CardImage = animated(Image)
-  return (
-    <Container
-      animate
-      ref={containerRef}
-      onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
-      onMouseLeave={() => set({ xys: [0, 0, 1] })}
-      alignItems="center"
-      width="100%"
-      p="1em"
-      bg="aliceblue"
-      style={{
-        willChange: "transform",
-        display: "grid",
-        gridTemplateAreas: `"header header header" "space1 space space2"`,
-        borderRadius: "8px",
-        position: "relative",
-        boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
-        transform: hoverAnimation.xys.interpolate(trans),
-      }}
-      onClick={() => handleMouseEnter(data)}
-    >
-      <Box
-        style={{
-          flexBasis: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gridArea: "space1",
-        }}
-      >
-        <CardImage
-          style={{
-            minWidth: "60px",
-          }}
-          src={data.logo}
-        />
-      </Box>
-      <Box
-        backgroundColor="black"
-        m="1em"
-        style={{ height: "3em", width: "1px", gridArea: "space" }}
-      />
-      <Container
-        type="Flex"
-        style={{
-          flexBasis: "100%",
-          flexDirection: "column",
-          gridArea: "space2",
-          justifyContent: "center",
-        }}
-      >
-        <Text>{data.tag}</Text>
-      </Container>
-      <Heading style={{ gridArea: "header" }}>{data.title}</Heading>
-    </Container>
-  )
-}
+import Projects from "../components/interface/projectView"
+import { useScroll } from "react-use-gesture"
 
 //SCEAN Panels
 
@@ -176,17 +96,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
 }
 
 const Scean2 = ({ animation, isActive, ...props }, ref) => {
-  const setView = useCustom()[1]
-  const handleViewer = data => {
-    isActive && setView(data)
-  }
-
-  useEffect(() => {
-    if (!isActive) {
-      setView({})
-    }
-  }, [isActive])
-
+  const animateProjects = useSpring(isActive ? { opacity: 1 } : { opacity: 0 })
   return (
     <Container
       animate
@@ -195,39 +105,26 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
       style={{
         willChange: "transfrom, opacity",
         ...props.style,
-        ...animation.fadeIn(5),
         ...animation.slideIn(-1),
       }}
     >
-      <Heading
-        style={{
-          width: "40%",
-          textAlign: "center",
-          fontSize: "7.25rem",
-          whiteSpace: "nowrap",
-        }}
+      <animated.div
+        style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
-        Projects
-      </Heading>
-      <Container
-        animate
-        mt="3em"
-        type="Grid"
-        gridTemplateAreas={[`"1fr"`, `"1fr 1fr"`, `"1fr 1fr 1fr"`]}
-        style={{
-          gridGap: "4em",
-        }}
-      >
-        {/* <SliderButton /> */}
-        {projectData.map((data, i) => (
-          <ProjectCard
-            handleMouseEnter={handleViewer}
-            key={generateKey(i)}
-            isActive={isActive}
-            data={{ index: i, ...data }}
-          />
-        ))}
-      </Container>
+        <Heading
+          style={{
+            width: "40%",
+            textAlign: "center",
+            fontSize: "7.25rem",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Projects
+        </Heading>
+      </animated.div>
+      <animated.div style={animateProjects}>
+        <Projects isActive={isActive} />
+      </animated.div>
     </Container>
   )
 }
@@ -423,8 +320,6 @@ const Scean_Interface = ({ index, ...props }) => {
 
   const Component = sceans[index]
 
-  console.log(index)
-
   return (
     <Component
       isActive={isActive}
@@ -513,11 +408,11 @@ const Background = () => {
 const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
+
   return (
     <Layout>
       <SEO title="Home" />
       <Viewer />
-      {/* <Background /> */}
       {sceans.map((e, i) => (
         <Scean_Interface
           setScean={props.setScean}

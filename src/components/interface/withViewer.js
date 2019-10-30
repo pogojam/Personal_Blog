@@ -1,32 +1,17 @@
 import React, { useEffect, useState, Children } from "react"
 import Container from "../container"
 import generateKey from "../util"
-import useCustom from "../useCustom"
+import useCustom from "../hooks/useCustom"
 import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import { Svg } from "../../static/textures/svg"
 
-const ProjectCard = ({ data, handleMouseEnter, ...props }) => {
-  return (
-    <Container
-      style={{ minHeight: "5em" }}
-      alignItems="center"
-      justifyContent="center"
-      mt="3em"
-      onClick={() => handleMouseEnter(data)}
-      width={[1, 1 / 3]}
-    >
-      <Image src={data.logo} />
-    </Container>
-  )
-}
-
 const Wrapper = ({ children, animation }) => (
   <Container
     animate
     mt="5vh"
-    bg="black"
+    bg="#313131"
     type="Flex"
     flexDirection="column"
     alignItems="center"
@@ -41,7 +26,7 @@ const Wrapper = ({ children, animation }) => (
       maxWidth: "100vw",
       height: "40vh",
       willChange: "transform",
-      transform: animation.transform.interpolate(e => `translateX(${e}%)`),
+      transform: animation.transform.interpolate(e => `translateY(${e}%)`),
       zIndex: 991,
     }}
   >
@@ -68,35 +53,34 @@ const Content = ({
         position: "absolute",
         top: 0,
         left: 0,
-        opacity: props.opacity,
         width: "100%",
         height: "100%",
       }}
-      animate
       key={key}
     >
       <Container
         animate
         style={{
           flexBasis: "100%",
-          backgroundSize: "130% auto",
+          backgroundSize: "cover",
           backgroundImage: `linear-gradient( rgba(0,0,0,0), rgba(0,0,0,0) ),url(${poster})`,
-          willChange: "transform",
+          willChange: "transform , backgroundPosition",
           ...backgroundSlide,
-          ...props.slideX,
         }}
       />
       <animated.div
         style={{
+          willChange: "opacity",
           flexBasis: "80%",
           display: "flex",
-          maxWidth: "50%",
+          maxWidth: "70%",
           flexDirection: "column",
-          transform: props.slideY.interpolate(e => `translateY(${e}%)`),
+          opacity: props.opacity.interpolate(e => e),
         }}
       >
         <animated.div
           style={{
+            willChange: "transform",
             transform: props.slideX.interpolate(e => `translateX(${e}%)`),
           }}
         >
@@ -136,6 +120,7 @@ const Content = ({
           p="1em"
           style={{
             borderTop: "1px solid white",
+            flexBasis: "18%",
           }}
         >
           <Container mr="auto" type="Flex">
@@ -156,17 +141,14 @@ const Content = ({
 }
 
 const ViewerComponent = ({ animation, data }) => {
-  const [start, setStart] = useState(false)
-
   const transitions = useTransition(
     { y: 0, x: 0, ...data },
     item => item.index,
     {
       from: { opacity: 0, slideY: [60], slideX: [30] },
-      enter: ({ y, x }) => [{ opacity: 1, slideY: [y], slideX: [x] }],
-      leave: { opacity: 0, slideY: [-60], slideX: [0] },
-      immediate: start,
-      config: config.molasses,
+      enter: { opacity: 1, slideY: [0], slideX: [0] },
+      leave: { opacity: 0, slideY: [-60], slideX: [-30] },
+      config: { mass: 1, tension: 210, friction: 20 },
     }
   )
 
@@ -191,10 +173,11 @@ const ViewerComponent = ({ animation, data }) => {
 export const Viewer = () => {
   const [view] = useCustom()
   const enterView = Object.entries(view).length > 0
-  // const enterView = true
+
+  console.log(view)
 
   const [animation, set, stop] = useSpring(() => ({
-    transform: [100],
+    transform: [-100],
     opacity: [0],
   }))
 
@@ -203,7 +186,7 @@ export const Viewer = () => {
       set({ transform: [0], opacity: [1] })
       stop()
     } else {
-      set({ transform: [100], opacity: [0] })
+      set({ transform: [-100], opacity: [0] })
     }
   }, [enterView])
 

@@ -11,6 +11,7 @@ const Layout = ({ children, navAnim = true, ...props }) => {
   return (
     <>
       <Flex
+        id="MainContainer"
         ml={"10%"}
         mr={"10%"}
         flexDirection="column"

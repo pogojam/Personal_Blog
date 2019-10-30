@@ -30,18 +30,39 @@ export const Icon = ({
   npm,
   apple,
   database,
+  subStyle,
+  style,
   ...props
 }) => {
   return (
-    <Container {...props}>
+    <Container style={style} {...props}>
       {facebook &&
         link(
           facebook,
-          <IoLogoFacebook href={facebook} size={size} {...props} />
+          <IoLogoFacebook
+            href={facebook}
+            size={size}
+            style={{ ...subStyle, style }}
+            {...props}
+          />
         )}
-      {github && link(github, <IoLogoGithub size={size} {...props} />)}
-      {linkedin && link(linkedin, <IoLogoLinkedin size={size} {...props} />)}
-      {docker && <DiDocker size={size} {...props} />}
+      {github &&
+        link(
+          github,
+          <IoLogoGithub size={size} style={{ ...subStyle, style }} {...props} />
+        )}
+      {linkedin &&
+        link(
+          linkedin,
+          <IoLogoLinkedin
+            size={size}
+            style={{ ...subStyle, style }}
+            {...props}
+          />
+        )}
+      {docker && (
+        <DiDocker size={size} style={{ ...subStyle, style }} {...props} />
+      )}
       {linux && <DiLinux size={size} />}
       {database && <DiDatabase size={size} />}
       {javascript && <DiJavascript1 size={size} />}

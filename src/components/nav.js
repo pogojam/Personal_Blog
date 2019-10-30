@@ -86,6 +86,8 @@ const Nav = ({ animation, avatar = true }) => {
         ml="auto"
         mr="1em"
         style={{ display: "flex", zIndex: 9999, alignItems: "center" }}
+        space="1em"
+        subStyle={{ marginLeft: "1em" }}
       />
     </animated.div>
   )

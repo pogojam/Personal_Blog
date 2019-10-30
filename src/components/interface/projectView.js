@@ -48,6 +48,7 @@ const ProjectCard = ({ data, handleClick }) => {
         position: "relative",
         boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
         transform: hoverAnimation.xys.interpolate(trans),
+        cursor: "pointer",
       }}
     >
       <Box
@@ -61,7 +62,7 @@ const ProjectCard = ({ data, handleClick }) => {
       >
         <CardImage
           style={{
-            minWidth: "60px",
+            minWidth: "20px",
           }}
           src={data.logo}
         />
@@ -80,9 +81,11 @@ const ProjectCard = ({ data, handleClick }) => {
           justifyContent: "center",
         }}
       >
-        <Text>{data.tag}</Text>
+        <Text fontSize={[".5em", "1em"]}>{data.tag}</Text>
       </Container>
-      <Heading style={{ gridArea: "header" }}>{data.title}</Heading>
+      <Heading fontSize={["1em", "2em"]} style={{ gridArea: "header" }}>
+        {data.title}
+      </Heading>
     </Container>
   )
 }
@@ -100,9 +103,10 @@ const Projects = ({ key, isActive }) => {
     <Container
       key={key}
       animate
-      p="10%"
+      pt={["1em", "10%"]}
+      p={[0, "10%"]}
       type="Grid"
-      gridTemplateAreas={[`"1fr"`, `"1fr 1fr"`, `"1fr 1fr 1fr"`]}
+      gridTemplateAreas={[`"1fr 1fr"`, `"1fr 1fr 1fr"`]}
       style={{
         width: "100%",
         gridGap: "2em",

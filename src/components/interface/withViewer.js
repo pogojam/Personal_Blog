@@ -16,6 +16,7 @@ const Wrapper = ({ children, animation }) => (
     flexDirection="column"
     alignItems="center"
     width={["100%"]}
+    height={["75vh", "40vh"]}
     style={{
       overflow: "hidden",
       borderBottomLeftRadius: "4px",
@@ -24,7 +25,6 @@ const Wrapper = ({ children, animation }) => (
       top: 0,
       right: 0,
       maxWidth: "100vw",
-      height: "40vh",
       willChange: "transform",
       transform: animation.transform.interpolate(e => `translateY(${e}%)`),
       zIndex: 991,
@@ -56,6 +56,7 @@ const Content = ({
         width: "100%",
         height: "100%",
       }}
+      flexDirection={["column", "row"]}
       key={key}
     >
       <Container
@@ -71,9 +72,8 @@ const Content = ({
       <animated.div
         style={{
           willChange: "opacity",
-          flexBasis: "80%",
+          flexBasis: "100%",
           display: "flex",
-          maxWidth: "70%",
           flexDirection: "column",
           opacity: props.opacity.interpolate(e => e),
         }}
@@ -102,6 +102,7 @@ const Content = ({
           </Heading>
         </animated.div>
         <Text
+          textAlign={"center"}
           style={{
             display: "flex",
             alignItems: "center",

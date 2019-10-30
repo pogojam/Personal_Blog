@@ -121,9 +121,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         </Heading>
       </animated.div>
 
-      <animated.div
-        style={{ overflow: "hidden", maxHeight: "100%", ...animateProjects }}
-      >
+      <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
         <Projects isActive={isActive} />
       </animated.div>
     </Container>

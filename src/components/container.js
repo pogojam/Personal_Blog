@@ -2,7 +2,7 @@ import { Card, Flex, Box } from "rebass"
 import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import styled from "styled-components"
-import { gridTemplateAreas } from "styled-system"
+import { gridTemplateAreas, height, flexBasis } from "styled-system"
 import { useSpring, animated } from "react-spring"
 
 const Grid = styled(Box)`
@@ -11,6 +11,14 @@ const Grid = styled(Box)`
 `
 
 const types = { Card, Box, Flex, Grid }
+
+Object.keys(types).map(
+  key =>
+    (types[key] = styled(types[key])`
+      ${height}
+      ${flexBasis}
+    `)
+)
 
 const attachRef = (Element, props) =>
   React.forwardRef((props, ref) => {

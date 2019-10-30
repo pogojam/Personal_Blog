@@ -100,17 +100,12 @@ const Projects = ({ key, isActive }) => {
     <Container
       key={key}
       animate
-      pl="10%"
-      pr="10%"
-      pb="3%"
+      p="10%"
       type="Grid"
       gridTemplateAreas={[`"1fr"`, `"1fr 1fr"`, `"1fr 1fr 1fr"`]}
       style={{
         width: "100%",
         gridGap: "2em",
-        position: "fixed",
-        left: 0,
-        bottom: 0,
         willChange: "opacity",
       }}
     >

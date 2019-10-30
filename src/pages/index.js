@@ -25,6 +25,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
   return (
     <Container
       className="heading"
+      pt={["40%", 0]}
       style={{
         ...animation.fadeIn(4),
         ...animation.slideIn(-1),
@@ -97,7 +98,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
     <Container
       animate
       ref={ref}
-      pt="6em"
+      pt="3em"
       style={{
         willChange: "transfrom, opacity",
         ...props.style,
@@ -108,17 +109,21 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
         <Heading
+          pl="5vw"
+          fontSize={["5.25rem", "7.25rem"]}
           style={{
             width: "40%",
             textAlign: "center",
-            fontSize: "7.25rem",
             whiteSpace: "nowrap",
           }}
         >
           Projects
         </Heading>
       </animated.div>
-      <animated.div style={animateProjects}>
+
+      <animated.div
+        style={{ overflow: "hidden", maxHeight: "100%", ...animateProjects }}
+      >
         <Projects isActive={isActive} />
       </animated.div>
     </Container>
@@ -257,6 +262,7 @@ const Scean_Interface = ({ index, ...props }) => {
 
   const windowHeight =
     typeof window !== "undefined" ? `${window.innerHeight}px` : "80vh"
+  const activeThreshold = 0.6
 
   const [ref, entries] = useObserver({
     threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -292,7 +298,6 @@ const Scean_Interface = ({ index, ...props }) => {
 
   useEffect(() => {
     const inr = entries.intersectionRatio
-    const activeThreshold = 0.7
     if (inr > activeThreshold) {
       setActive(true)
     }

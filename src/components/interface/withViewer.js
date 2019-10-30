@@ -63,7 +63,7 @@ const Content = ({
         animate
         style={{
           flexBasis: "100%",
-          backgroundSize: "cover",
+          backgroundSize: "140%",
           backgroundImage: `linear-gradient( rgba(0,0,0,0), rgba(0,0,0,0) ),url(${poster})`,
           willChange: "transform , backgroundPosition",
           ...backgroundSlide,

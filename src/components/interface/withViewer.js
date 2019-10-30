@@ -174,8 +174,6 @@ export const Viewer = () => {
   const [view] = useCustom()
   const enterView = Object.entries(view).length > 0
 
-  console.log(view)
-
   const [animation, set, stop] = useSpring(() => ({
     transform: [-100],
     opacity: [0],

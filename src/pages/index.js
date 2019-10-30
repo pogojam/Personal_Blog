@@ -10,18 +10,14 @@ import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
 import styled from "styled-components"
 import _ from "lodash"
 import { useTransition, animated, useSpring } from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
 import { Icon, Button } from "../components/elements"
-import { setAnimation, useShards } from "../components/animations"
+import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
-import { SliderButton } from "../components/interface/slider"
-import { SVG } from "../static/textures/svg"
 import Projects from "../components/interface/projectView"
-import { useScroll } from "react-use-gesture"
 
 //SCEAN Panels
 
@@ -264,7 +260,6 @@ const Scean_Interface = ({ index, ...props }) => {
     rootMargin: "30px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
-  // const [shard, setShard] = useShards()
 
   const calcXY = inr => {
     const offsetX = window.innerWidth / 2
@@ -331,87 +326,12 @@ const Scean_Interface = ({ index, ...props }) => {
   )
 }
 
-function Shard(node) {
-  let viewBox = { x: window.innerWidth, y: window.innerHeight }
-  const accelX = 0.5 * Math.random()
-  const accelY = 0.5 * Math.random()
-
-  this.getTransVal = () => {
-    const transitions = node.style.transform.split(" ")
-    const x = Number(transitions[0].replace(/[^\d.]/g, ""))
-    const y = Number(transitions[1].replace(/[^\d.]/g, ""))
-    return [x, y]
-  }
-
-  this.getPosition = () => {
-    const [tranX, tranY] = this.getTransVal()
-    const { width, height, x, y } = node.getBoundingClientRect()
-    let outX = tranX
-    let outY = tranY
-
-    // console.log(node.getBoundingClientRect())
-
-    if (x > width) {
-      // outX = 0
-    }
-    if (y > height) {
-      // outY = 0
-    }
-
-    return [outX, outY]
-  }
-
-  this.update = () => {
-    const [x, y] = this.getPosition()
-    node.style.transform = `translateX(${x + accelX}px) translateY(${y +
-      accelY}px)`
-  }
-  node.style.transform = `translateX(0px) translateY(0px)`
-}
-
-const Background = () => {
-  useEffect(() => {
-    const nodeList = document.querySelectorAll(".shard")
-    initCanvas(nodeList)
-  }, [])
-
-  const initCanvas = list => {
-    const shards = []
-    list.forEach(el => shards.push(new Shard(el)))
-
-    const step = stamp => {
-      shards.forEach(el => {
-        el.update()
-      })
-      window.requestAnimationFrame(step)
-    }
-
-    window.requestAnimationFrame(step)
-  }
-
-  return (
-    <SVG
-      style={{
-        width: "100vw",
-        height: "300vh",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        opacity: 0.3,
-        willChange: "transform",
-      }}
-      src="dimonds"
-    ></SVG>
-  )
-}
-
 const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
 
   return (
     <Layout>
-      <SEO title="Home" />
       <Viewer />
       {sceans.map((e, i) => (
         <Scean_Interface

@@ -89,27 +89,3 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
 
   return <Nav {...props} animation={{ ...topScroll, ...animation }} />
 }
-
-const styleConfig = {
-  display: "none",
-}
-
-export const useShards = () => {
-  const [styles, setStyles] = useState([])
-
-  const setShard = shards =>
-    shards.forEach((shard, i) => {
-      shard.style = styles[i]
-    })
-
-  useEffect(() => {
-    const shards = document.querySelectorAll(".shard")
-    window.onscroll = () => {
-      console.log(shards)
-      setStyles([{ display: "none" }])
-      setShard(shards)
-    }
-  }, [])
-
-  return [null, null]
-}

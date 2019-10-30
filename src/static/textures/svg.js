@@ -16,7 +16,6 @@ export const SVG = props => {
   }
 
   if (src === "dimonds") {
-    console.log(props)
     return (
       <svg
         {...props}

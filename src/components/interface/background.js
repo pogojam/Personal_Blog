@@ -45,7 +45,6 @@ const initCanvas = () => {
     if (bubbleCount != Math.floor(scrollRatio * maxBubble)) {
       if (polarity === "up") {
         BubbleArray.length = bubbleCount
-        console.log(BubbleArray.length)
       }
       if (polarity === "down") {
         for (let i = BubbleArray.length; i < bubbleCount; i++) {

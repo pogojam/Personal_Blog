@@ -33,7 +33,6 @@ const buildButtons = (pages, animation) => {
 }
 
 const Avatar = ({ link, animation }) => {
-  console.log(animation)
   return (
     <Container
       animate

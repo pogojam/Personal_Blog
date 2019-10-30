@@ -25,7 +25,6 @@ const setAnimation = anim => {
       transform: expand.interpolate(e => `scale(${e})`),
     },
     size: ([min, max, unit]) => {
-      console.log(min, max)
       return { maxWidth: size.interpolate(e => min + e * max + unit) }
     },
     proj: proj.interpolate(x => {

@@ -28,7 +28,6 @@ const setSpace = (name, ref) => {
 
 const sizes = name =>
   subscriptionList.map(e => {
-    console.log(name)
     if (e.name === name) return e.client
   })
 

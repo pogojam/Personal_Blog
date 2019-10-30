@@ -12,13 +12,15 @@ export const useObserver = ({ root = null, rootMargin, threshold = 0 }) => {
   const [node, setNode] = useState(null)
   const isWindow = typeof window !== `undefined`
 
-  const observer = isWindow? useRef(
-    new window.IntersectionObserver(([entry]) => updateEntry(entry), {
-      root,
-      rootMargin,
-      threshold,
-    })
-  ):null
+  const observer = isWindow
+    ? useRef(
+        new window.IntersectionObserver(([entry]) => updateEntry(entry), {
+          root,
+          rootMargin,
+          threshold,
+        })
+      )
+    : null
 
   useEffect(() => {
     const { current: currentObserver } = observer

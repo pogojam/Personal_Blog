@@ -75,7 +75,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             npm’s rich package eco system. Out of necessity I first started
             learning web development in college when I started my first business
             selling clothing online through an e-commerce website.Since I have
-            since had to learn more advanced techniques building tools for lead
+            since learned more advanced techniques building tools for lead
             generation and business productivity.
           </Text>
         </animated.div>

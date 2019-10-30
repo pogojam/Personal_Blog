@@ -255,6 +255,9 @@ const Scean_Interface = ({ index, ...props }) => {
   //   return output
   // }
 
+  const windowHeight =
+    typeof window !== "undefined" ? `${window.innerHeight}px` : "80vh"
+
   const [ref, entries] = useObserver({
     threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
     rootMargin: "0px 0px 0px 0px",
@@ -320,7 +323,7 @@ const Scean_Interface = ({ index, ...props }) => {
       isActive={isActive}
       animation={setAnimation(animations)}
       ref={ref}
-      style={{ height: "100vh" }}
+      style={{ height: windowHeight }}
       {...props}
     />
   )

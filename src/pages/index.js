@@ -74,9 +74,9 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             developing on Node , leveraging the power of Non-Blocking I/O and
             npm’s rich package eco system. Out of necessity I first started
             learning web development in college when I started my first business
-            selling clothing online through an e-commerce website.Since I have
-            since learned more advanced techniques building tools for lead
-            generation and business productivity.
+            selling clothing online through an e-commerce website. I have since
+            learned more advanced techniques building tools for lead generation
+            and business productivity.
           </Text>
         </animated.div>
       </About>

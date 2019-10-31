@@ -37,8 +37,8 @@ const Avatar = ({ link, animation }) => {
     <Container
       animate
       style={{
-        width: "13em",
-        height: "13em",
+        width: "11em",
+        height: "10em",
         background: `url(${link})`,
         backgroundSize: "cover",
         marginLeft: "auto",

@@ -64,7 +64,7 @@ const Nav = ({ animation, avatar = true }) => {
         top: 0,
         borderBottom: "1px solid",
         backgroundColor: animation ? animation.backgroundColor : "black",
-        height: animation ? animation.height : "5%",
+        height: animation ? animation.height : "3em",
         willChange: "height",
         display: "flex",
       }}

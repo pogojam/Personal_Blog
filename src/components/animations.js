@@ -46,7 +46,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
     from: {
       backgroundColor: "white",
       buttonColor: "black",
-      height: "18%",
+      height: "10em",
       avatarOpacity: "1",
     },
     to: isTop
@@ -54,7 +54,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
           {
             backgroundColor: "white",
             buttonColor: "black",
-            height: "18%",
+            height: "10em",
           },
           { avatarOpacity: "1" },
         ]
@@ -63,7 +63,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
           {
             backgroundColor: "black",
             buttonColor: "white",
-            height: "5%",
+            height: "3em",
           },
         ],
   })

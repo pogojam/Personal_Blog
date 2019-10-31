@@ -2,11 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 
-const Container = styled.div`
-  h2 {
-    font-size: 3em;
-  }
-`
+const Container = styled.div``
 
 export default function HTML(props) {
   return (

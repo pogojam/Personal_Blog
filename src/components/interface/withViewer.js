@@ -122,6 +122,7 @@ const Content = ({
           style={{
             borderTop: "1px solid white",
             flexBasis: "18%",
+            minHeight: "55px",
           }}
         >
           <Container mr="auto" type="Flex">

@@ -110,7 +110,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
       >
         <Heading
           pl="5vw"
-          fontSize={["5.25rem", "7.25rem"]}
+          fontSize={["2em", "7.25rem"]}
           style={{
             width: "40%",
             textAlign: "center",

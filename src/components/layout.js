@@ -5,6 +5,7 @@ import { pipe } from "./util"
 import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
+import Background from "./interface/background"
 
 const Layout = ({ children, navAnim = true, ...props }) => {
   const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
@@ -18,6 +19,7 @@ const Layout = ({ children, navAnim = true, ...props }) => {
         {...props}
         style={{ minHeight: "100vh", ...props.style }}
       >
+        <Background />
         <LayoutNav />
         <Box>{children}</Box>
       </Flex>

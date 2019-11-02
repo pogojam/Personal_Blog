@@ -1,11 +1,12 @@
+import React, { useRef, useLayoutEffect } from "react"
 import { getDistance } from "../util"
 
-const initCanvas = () => {
+const initCanvas = ref => {
   // canvas context
-  const canvas = document.getElementById("HomeCanvas")
+  const canvas = ref.current
   canvas.height = window.innerHeight
   canvas.width = window.innerWidth
-  const c = canvas.getContext("2d")
+  const c = canvas.getContext("2d", { alpha: false })
 
   // window variables
   var innerWidth = window.innerWidth
@@ -103,14 +104,13 @@ const initCanvas = () => {
     }
   }
 
-  let BubbleArray
   const initBubbles = 40
+  let BubbleArray = []
 
   // inital bubbles
 
   const initShapes = () => {
     // add shapes
-    BubbleArray = []
     // push shapes into array
     for (let i = 0; i < initBubbles; i++) {
       // positon
@@ -137,4 +137,16 @@ const initCanvas = () => {
   animate()
 }
 
-export default initCanvas
+const Background = () => {
+  const canvasRef = useRef()
+  useLayoutEffect(() => {
+    console.log(canvasRef)
+    initCanvas(canvasRef)
+  })
+
+  return (
+    <canvas style={{ position: "fixed", left: 0, top: 0 }} ref={canvasRef} />
+  )
+}
+
+export default Background

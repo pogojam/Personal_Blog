@@ -48,3 +48,10 @@ export const useSceanState = state => {
 
   return [setScean, current]
 }
+
+export const getDistance = (x1, y1, x2, y2) => {
+  let xDistance = x1 - x2
+  let yDistance = y1 - y2
+
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2))
+}

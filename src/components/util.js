@@ -55,3 +55,9 @@ export const getDistance = (x1, y1, x2, y2) => {
 
   return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2))
 }
+
+export const getRandomInt = (min, max) => {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
+}

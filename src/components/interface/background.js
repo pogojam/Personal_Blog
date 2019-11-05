@@ -1,152 +1,118 @@
-import React, { useRef, useLayoutEffect } from "react"
-import { getDistance } from "../util"
+import React, { useRef, useEffect, useState, useLayoutEffect } from "react"
+import styled from "styled-components"
+import { getDistance, getRandomInt } from "../util"
+import * as THREE from "three"
 
-const initCanvas = ref => {
-  // canvas context
-  const canvas = ref.current
-  canvas.height = window.innerHeight
-  canvas.width = window.innerWidth
-  const c = canvas.getContext("2d", { alpha: false })
+const initCanvas = setCanvas => {
+  const scene = new THREE.Scene()
+  // Camera
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  )
 
-  // window variables
-  var innerWidth = window.innerWidth
-  var innerHeight = window.innerHeight
-  // Mouse
-  var mouse = {
-    x: null,
-    y: null,
-  }
-  document.addEventListener("mousemove", event => {
-    mouse.x = event.x
-    mouse.y = event.y
+  camera.position.z = 20
+
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer.setClearColor("black")
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  const canvas = renderer.domElement
+  canvas.style.position = "fixed"
+  canvas.style.display = "block"
+  canvas.style.zIndex = -1
+  canvas.style.top = 0
+  canvas.style.left = 0
+  document.body.appendChild(canvas)
+
+  window.addEventListener("resize", () => {
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
   })
 
-  // scroll
-  let polarity = "down"
-  let scrollRatio
-  let containerHeight = document
-    .getElementById("MainContainer")
-    .getBoundingClientRect().height
-
-  document.addEventListener("scroll", event => {
-    if (scrollRatio < window.pageYOffset / (containerHeight - innerHeight)) {
-      polarity = "down"
-    }
-    if (scrollRatio > window.pageYOffset / (containerHeight - innerHeight)) {
-      polarity = "up"
-    }
-
-    scrollRatio = window.pageYOffset / (containerHeight - innerHeight)
+  window.addEventListener("scroll", () => {
+    camera.rotation.y += 0.001
+    camera.rotation.x -= 0.01
   })
 
-  let maxBubble = 100
-  let bubbleCount = Math.floor(scrollRatio * maxBubble)
+  // const geometry = new THREE.TetrahedronGeometry(2)
+  // const material = new THREE.MeshPhongMaterial({ color: 0x470fb8 })
+  // const mesh = new THREE.Mesh(geometry, material)
+  // mesh.scale.x += 1
 
-  const updateScrollBubble = () => {
-    if (bubbleCount != Math.floor(scrollRatio * maxBubble)) {
-      if (polarity === "up") {
-        BubbleArray.length = bubbleCount
-      }
-      if (polarity === "down") {
-        for (let i = BubbleArray.length; i < bubbleCount; i++) {
-          let x = Math.random() * innerWidth
-          let y = innerHeight
-          const radius = 20 * Math.random()
-          const colorArray = ["#027495", "#01a9c1", "#bad6db"]
-          const color = colorArray[Math.floor(Math.random() * 3)]
+  const shardCount = 600
+  const shards = []
 
-          BubbleArray.push(new Bubble(x, y, radius, color))
-        }
-      }
-    }
-    bubbleCount = Math.floor(scrollRatio * maxBubble)
+  const light = new THREE.PointLight(0xffcff, 1, 500)
+  light.position.set(10, 0, 25)
+
+  // Add to scean
+  const SceanStars = new Stars(scene, 6000)
+  scene.add(light)
+
+  const update = () => {
+    renderer.render(scene, camera)
+    SceanStars.animate()
+
+    requestAnimationFrame(update)
+  }
+  requestAnimationFrame(update)
+}
+
+// Mesh Objects
+
+function Stars(scean, count) {
+  const starGeo = new THREE.Geometry()
+  const sprite = new THREE.TextureLoader().load(
+    "https://res.cloudinary.com/dxjse9tsv/image/upload/v1572988193/textures/Star.png"
+  )
+  const starMaterial = new THREE.PointsMaterial({
+    color: 0xaaaaaa,
+    size: 0.7,
+    map: sprite,
+  })
+  // Animations vals
+
+  const stars = new THREE.Points(starGeo, starMaterial)
+
+  for (let i = 0; i < count; i++) {
+    const vector = new THREE.Vector3(
+      getRandomInt(-300, 600),
+      getRandomInt(-300, 600),
+      getRandomInt(-300, 600)
+    )
+    vector.velocity = 0
+    vector.acceleration = 0.01
+    starGeo.vertices.push(vector)
   }
 
-  // shapes
+  this.animate = () => {
+    starGeo.vertices.forEach(vert => {
+      vert.velocity += vert.acceleration
+      vert.y -= vert.velocity
 
-  const Bubble = function(x, y, radius, color) {
-    this.color = color
-    this.radius = radius
-    this.x = x
-    this.y = y
-
-    let lift = -(Math.random() * 10) + 3
-
-    this.dx = 0
-    this.dy = 0
-
-    this.update = () => {
-      if (this.y < 0) {
-        this.y = innerHeight
-        this.x = Math.random() * innerWidth
-        this.dy = -Math.random() * 5
+      if (vert.y < -400) {
+        vert.y = 200
+        vert.velocity = 0
       }
-      // Mouse Interaction
-      if (getDistance(this.x, this.y, mouse.x, mouse.y) < 100) {
-        this.x > mouse.x ? (this.dx = 1) : (this.dx = -1)
-      }
+    })
 
-      // Container Interaction
-
-      // add velocitys
-      this.y += this.dy
-      this.x += this.dx
-      // upward gravity
-      this.y += lift
-      // Draw Shape
-      this.draw()
-    }
-    this.draw = () => {
-      c.beginPath()
-      c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
-      c.fillStyle = color
-      c.fill()
-    }
+    starGeo.verticesNeedUpdate = true
   }
 
-  const initBubbles = 40
-  let BubbleArray = []
-
-  // inital bubbles
-
-  const initShapes = () => {
-    // add shapes
-    // push shapes into array
-    for (let i = 0; i < initBubbles; i++) {
-      // positon
-      let x = Math.random() * innerWidth
-      let y = Math.random() * innerHeight
-      const radius = 10 * Math.random()
-      const colorArray = ["#027495", "#01a9c1", "#bad6db"]
-      const color = colorArray[Math.floor(Math.random() * 3)]
-
-      BubbleArray.push(new Bubble(x, y, radius, color))
-    }
-  }
-
-  initShapes()
-
-  const animate = () => {
-    requestAnimationFrame(animate)
-    c.fillStyle = "white"
-    c.fillRect(0, 0, innerWidth, innerHeight)
-    // updateScrollBubble()
-    BubbleArray.forEach(Bubble => Bubble.update())
-  }
-
-  animate()
+  scean.add(stars)
 }
 
 const Background = () => {
-  const canvasRef = useRef()
-  useLayoutEffect(() => {
-    console.log(canvasRef)
-    initCanvas(canvasRef)
+  const [Canvas, setCanvas] = useState()
+  useEffect(() => {
+    initCanvas()
   })
 
-  return (
-    <canvas style={{ position: "fixed", left: 0, top: 0 }} ref={canvasRef} />
-  )
+  return <div />
 }
 
 export default Background

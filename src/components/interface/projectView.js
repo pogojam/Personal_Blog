@@ -36,7 +36,6 @@ const ProjectCard = ({ data, handleClick }) => {
       alignItems="center"
       width="100%"
       p="1em"
-      bg="#122535"
       style={{
         color: "white",
         willChange: "transform",
@@ -45,6 +44,7 @@ const ProjectCard = ({ data, handleClick }) => {
         lineHeight: "1em",
         fontSize: ".8em",
         borderRadius: "8px",
+        border: "1px solid",
         position: "relative",
         boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
         transform: hoverAnimation.xys.interpolate(trans),

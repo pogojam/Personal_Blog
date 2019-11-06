@@ -44,16 +44,12 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
 
   const topScroll = useSpring({
     from: {
-      backgroundColor: "white",
-      buttonColor: "black",
       height: "7em",
       avatarOpacity: "1",
     },
     to: isTop
       ? [
           {
-            backgroundColor: "white",
-            buttonColor: "black",
             height: "7em",
           },
           { avatarOpacity: "1" },
@@ -61,8 +57,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
       : [
           { avatarOpacity: "0" },
           {
-            backgroundColor: "black",
-            buttonColor: "white",
+            buttonColor: "black",
             height: "3em",
           },
         ],

@@ -24,7 +24,7 @@ const NavButton = ({ name, path, animation, ...props }) => (
 const buildButtons = (pages, animation) => {
   return pages.map((e, i) => (
     <NavButton
-      animation={{ color: animation ? animation.buttonColor : "white" }}
+      animation={{ color: "white" }}
       bg="transparent"
       key={e.name + i}
       {...e}
@@ -55,6 +55,7 @@ const Nav = ({ animation, avatar = true }) => {
   const navRef = useRef(null)
   return (
     <animated.div
+      id="Nav"
       style={{
         overflow: "hidden",
         zIndex: 999,
@@ -63,7 +64,6 @@ const Nav = ({ animation, avatar = true }) => {
         left: 0,
         top: 0,
         borderBottom: "1px solid",
-        backgroundColor: animation ? animation.backgroundColor : "black",
         height: animation ? animation.height : "3em",
         willChange: "height",
         display: "flex",

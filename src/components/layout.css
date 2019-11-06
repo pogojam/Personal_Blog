@@ -214,7 +214,7 @@ html {
   box-sizing: inherit;
 }
 body {
-  color: hsla(0, 0%, 0%, 0.8);
+  color: white;
   font-family: georgia, serif;
   font-weight: normal;
   word-wrap: break-word;

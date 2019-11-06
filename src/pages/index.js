@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  forwardRef,
-  Children,
-} from "react"
+import React, { useState, useEffect, useRef, forwardRef } from "react"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
@@ -66,7 +59,6 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             p="1em"
             style={{
               maxWidth: "95vh",
-              backgroundColor: "#ffffffd4",
               borderRadius: "3px",
             }}
           >
@@ -185,7 +177,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 transition: "background .3s",
                 borderRadius: "3px",
                 cursor: "pointer",
-                color: isActive[i] ? "white" : "black",
+                color: isActive[i] ? "red" : "white",
               }}
               onClick={handleClick(i)}
               bg={isActive[i] ? "#0000009e" : "transparent"}

@@ -1,38 +1,48 @@
-import React, { useEffect, useState, Children } from "react"
+import React, { useEffect, useState, useLayoutEffect } from "react"
 import Container from "../container"
 import generateKey from "../util"
 import useCustom from "../hooks/useCustom"
 import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
-import { Svg } from "../../static/textures/svg"
+import ProjectData from "../../static/projects"
 
-const Wrapper = ({ children, animation }) => (
-  <Container
-    animate
-    mt="5vh"
-    bg="#313131"
-    type="Flex"
-    flexDirection="column"
-    alignItems="center"
-    width={["100%"]}
-    height={["75vh", "40vh"]}
-    style={{
-      overflow: "hidden",
-      borderBottomLeftRadius: "4px",
-      position: "fixed",
-      color: "white",
-      top: 0,
-      right: 0,
-      maxWidth: "100vw",
-      willChange: "transform",
-      transform: animation.transform.interpolate(e => `translateY(${e}%)`),
-      zIndex: 991,
-    }}
-  >
-    {children}
-  </Container>
-)
+const Wrapper = ({ children, animation }) => {
+  const [marginTop, setMargin] = useState(40)
+
+  useLayoutEffect(() => {
+    const top = document.getElementById("Nav").getBoundingClientRect().height
+    console.log(top)
+    setMargin(top)
+  }, [])
+
+  return (
+    <Container
+      animate
+      mt="3em"
+      bg="black"
+      type="Flex"
+      flexDirection="column"
+      alignItems="center"
+      width={["100%"]}
+      height={["75vh", "40vh"]}
+      style={{
+        overflow: "hidden",
+        borderBottomLeftRadius: "4px",
+        position: "fixed",
+        color: "white",
+        top: 0,
+        right: 0,
+        maxWidth: "100vw",
+        willChange: "transform",
+        transform: animation.transform.interpolate(e => `translateY(${e}%)`),
+        zIndex: 991,
+      }}
+    >
+      {children}
+    </Container>
+  )
+}
 
 const Content = ({
   data: { discription, poster, title, gitLink },
@@ -41,8 +51,8 @@ const Content = ({
   key,
 }) => {
   const backgroundSlide = useSpring({
-    from: { backgroundPosition: "0% center" },
-    to: { backgroundPosition: "60% center" },
+    from: { transform: "translateX(0%)" },
+    to: { transform: "translateX(10%)" },
     config: { tension: 10, mass: 4 },
   })
 
@@ -60,15 +70,31 @@ const Content = ({
       key={key}
     >
       <Container
-        animate
         style={{
           flexBasis: "100%",
           backgroundSize: "140%",
-          backgroundImage: `linear-gradient( rgba(0,0,0,0), rgba(0,0,0,0) ),url(${poster})`,
           willChange: "transform , backgroundPosition",
-          ...backgroundSlide,
+          position: "relative",
+          overflow: "hidden",
         }}
-      />
+      >
+        {ProjectData.map((d, i) => (
+          <Container
+            animate
+            style={{
+              ...backgroundSlide,
+              background: `url(${d.poster})`,
+              position: "absolute",
+              backgroundSize: "cover",
+              top: 0,
+              left: "-15%",
+              width: "115%",
+              minHeight: "100%",
+              opacity: d.poster === poster ? 1 : 0,
+            }}
+          />
+        ))}
+      </Container>
       <animated.div
         style={{
           willChange: "opacity",
@@ -153,7 +179,6 @@ const ViewerComponent = ({ animation, data }) => {
       config: { mass: 1, tension: 210, friction: 20 },
     }
   )
-
   return (
     <Wrapper animation={animation}>
       {transitions.map(({ item, key, props }) => {
@@ -177,7 +202,7 @@ export const Viewer = () => {
   const enterView = Object.entries(view).length > 0
 
   const [animation, set, stop] = useSpring(() => ({
-    transform: [-100],
+    transform: [-120],
     opacity: [0],
   }))
 
@@ -186,7 +211,7 @@ export const Viewer = () => {
       set({ transform: [0], opacity: [1] })
       stop()
     } else {
-      set({ transform: [-100], opacity: [0] })
+      set({ transform: [-120], opacity: [0] })
     }
   }, [enterView])
 

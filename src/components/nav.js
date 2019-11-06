@@ -46,6 +46,7 @@ const Avatar = ({ link, animation }) => {
         right: 0,
         top: "-35px",
         opacity: animation ? animation.avatarOpacity : 0,
+        display: "none",
       }}
     />
   )

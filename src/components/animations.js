@@ -50,7 +50,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
     to: isTop
       ? [
           {
-            height: "7em",
+            height: "0em",
           },
           { avatarOpacity: "1" },
         ]

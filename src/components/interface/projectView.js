@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { keyframes, css } from "styled-components"
 import React, { useRef, useEffect, useState } from "react"
 import { useSpring, animated } from "react-spring"
 import Container from "../container"
@@ -10,8 +10,17 @@ import { generateKey } from "../util"
 
 const CardImage = animated(Image)
 
+const spin = keyframes`
+  0% {
+    transform: rotateY(0deg) translateY(0px);
+  }
+  100% {
+    transform: rotateY(360deg) translateY(-30px);
+  }
+`
+
 const CardContainer = styled(Container)`
-  ${({ showState }) => {
+  ${({ showState, ring }) => {
     switch (showState) {
       case 0:
         return `
@@ -19,59 +28,78 @@ const CardContainer = styled(Container)`
         `
         break
       case 1:
-        return `
-        &:hover {
-    h2 {
-      opacity: 0;
-    }
-    img {
-      transform: translateY(10%);
-    }
-    &:before {
-      opacity: 1;
-      transform: translateY(-40%);
-    }
-  }
+        return css`
+          &:hover {
+            h2 {
+              /* transform: translateY(-15px) scale(1.1);
+
+              &:after {
+                width: 3em;
+                box-shadow: rgba(56, 7, 255, 0.75) 1px 0px 4px 2px;
+              } */
+              transition: opacity 0.6s;
+              opacity: 0;
+            }
+            img {
+              animation: ${spin} 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+                forwards;
+            }
+            &:before {
+              opacity: 1;
+              transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5;
+              transform: translateY(-40%);
+            }
+          }
         `
         break
       case 2:
-        return `
-
-         
-        h2 {
-      opacity: 0;
-    }
-    img {
-      transform: translateY(10%);
-    }
-    &:before {
-      opacity:1 !important;
-      transform: translateY(-40%);
-    }
+        return css`
+          h2 {
+            opacity: 0;
+          }
+          img {
+            transform: translateY(10%);
+          }
+          &:before {
+            opacity: 1 !important;
+            transform: translateY(-40%);
+          }
         `
         break
     }
   }}
 
   h2 {
-    transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: opacity 0.6s 0.5s;
+
+    &:after {
+      content: "";
+      width: 0;
+      height: 1px;
+      background-color: ${({ ring }) => ring};
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transition: width 1s;
+      transform: translate3d(-50%, 8px, 0);
+    }
   }
   img {
-    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   &:before {
-    transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
     content: "";
     opacity: 0;
-    width: 107%;
-    height: 40%;
+    width: 42%;
+    height: 11%;
     z-index: -1;
-    transform: translateY(10%);
+    transform: translateY(15%);
     position: absolute;
     top: 75%;
     border-radius: 50%;
-    box-shadow: rgba(255, 255, 255, 0.75) 2px 2px 9px 0px;
+    box-shadow: rgba(255, 255, 255, 0.75) 0px 3px 9px 0px,
+      0 2px 43px 14px ${({ ring }) => ring};
   }
 `
 
@@ -124,6 +152,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
     >
       <CardContainer
         animate
+        ring={data.color}
         ref={containerRef}
         onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
@@ -167,7 +196,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
             src={data.logo}
           />
         </Box>
-        <Heading m="1em" color="#a091af" fontSize={["1em", "1em"]}>
+        <Heading m="1em" color="#d5d4d6" fontSize={["1em"]}>
           {data.title}
         </Heading>
       </CardContainer>

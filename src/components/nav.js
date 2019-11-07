@@ -13,7 +13,7 @@ const pages = [{ path: "/", name: "Home" }, { path: "/blog", name: "Blog" }]
 const NavButton = ({ name, path, animation, ...props }) => (
   <Link to={path}>
     <WrappedButton
-    className="hoverGrow"
+      className="hoverGrow"
       style={{ cursor: "pointer", fontWeight: 100, ...animation }}
       {...props}
     >
@@ -78,7 +78,7 @@ const Nav = ({ animation, avatar = true }) => {
       {avatar && (
         <Avatar
           animation={animation}
-          link='https://res.cloudinary.com/dxjse9tsv/image/upload/v1573081599/ryansWebsite/ryansWebsite_Selfi_B_W_Center-removebg-preview.png'
+          link="https://res.cloudinary.com/dxjse9tsv/image/upload/v1573081599/ryansWebsite/ryansWebsite_Selfi_B_W_Center-removebg-preview.png"
         />
       )}
       <Icon

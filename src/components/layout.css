@@ -1,5 +1,6 @@
 /* @import url("https://fonts.googleapis.com/css?family=Abel|Jomhuria&display=swap"); */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans|Raleway:300&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Josefin+Slab|Julius+Sans+One|Monoton|Poiret+One|Gruppo&display=swap");
 
 .hoverGrow {
   transition: transform 1s linear;
@@ -41,13 +42,13 @@
 
 * {
   /* font-family: "Abel", sans-serif; */
-  font-family: "Open Sans", sans-serif;
+  font-family: "Gruppo", cursive;
 }
 
 h1,
 h2,
 h3 {
-  font-family: "Raleway", sans-serif !important;
+  font-family: "Monoton", cursive !important;
 }
 html {
   font-family: "Abel", sans-serif;

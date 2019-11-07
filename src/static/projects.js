@@ -14,6 +14,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571961583/git/Screen_Shot_2019-10-24_at_4.59.00_PM.png",
     stack: ["linux", "database", "react", "javascript"],
     tag: "Smart Home Interface",
+    color: "#252564",
   },
   {
     title: "SlipJaw",
@@ -25,6 +26,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554668355/branches-bright-Web.jpg",
     stack: ["react", "javascript", "apple"],
     tag: "Bussiness Solution, Hyatt",
+    color: "#FE463F",
   },
   {
     title: "Folder Importer",
@@ -36,6 +38,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1570561245/git/Screen_Shot_2019-10-08_at_12.00.02_PM.png",
     stack: ["react", "npm", "javascript"],
     tag: "Developer productivity tool",
+    color: "#fc0e34",
   },
   {
     title: "React Grid Builder",
@@ -47,6 +50,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1570489149/git/Screen_Shot_2019-10-07_at_3.52.53_PM.png",
     stack: ["react", "npm", "javascript"],
     tag: "Developer npm library",
+    color: "#dfff11",
   },
   {
     title: "Bell Captain",
@@ -59,6 +63,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571864302/git/Screen_Shot_2019-10-23_at_1.57.04_PM.png",
     stack: ["react", "database", "javascript"],
     tag: "Business asset allocation tool",
+    color: "#0ff0fc",
   },
   {
     title: "TextBeast",
@@ -71,6 +76,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571865172/git/Screen_Shot_2019-10-23_at_2.07.39_PM.png",
     stack: ["javascript"],
     tag: "Big data tool",
+    color: "#6600ff",
   },
   {
     title: "AZButler",
@@ -83,5 +89,6 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
     stack: ["javascript", "react"],
     tag: "Business Website",
+    color: "#fc0e34",
   },
 ]

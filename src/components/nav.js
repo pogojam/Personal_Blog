@@ -13,6 +13,7 @@ const pages = [{ path: "/", name: "Home" }, { path: "/blog", name: "Blog" }]
 const NavButton = ({ name, path, animation, ...props }) => (
   <Link to={path}>
     <WrappedButton
+    className="hoverGrow"
       style={{ cursor: "pointer", fontWeight: 100, ...animation }}
       {...props}
     >
@@ -68,6 +69,7 @@ const Nav = ({ animation, avatar = true }) => {
         height: animation ? animation.height : "3em",
         willChange: "height",
         display: "flex",
+        background: "black",
       }}
     >
       <Flex alignItems="center" ref={navRef}>
@@ -76,7 +78,7 @@ const Nav = ({ animation, avatar = true }) => {
       {avatar && (
         <Avatar
           animation={animation}
-          link="https://res.cloudinary.com/dxjse9tsv/image/upload/v1555035590/ryansWebsite/Selfi_B_W.jpg"
+          link='https://res.cloudinary.com/dxjse9tsv/image/upload/v1573081599/ryansWebsite/ryansWebsite_Selfi_B_W_Center-removebg-preview.png'
         />
       )}
       <Icon
@@ -88,6 +90,7 @@ const Nav = ({ animation, avatar = true }) => {
         mr="1em"
         style={{ display: "flex", zIndex: 9999, alignItems: "center" }}
         space="1em"
+        className="hoverGrow"
         subStyle={{ marginLeft: "1em" }}
       />
     </animated.div>

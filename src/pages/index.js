@@ -42,9 +42,13 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           </Heading>
         </animated.div>
         <animated.div
-          style={{ ...animation.fadeIn(14), ...animation.size([0, 30, "vw"]) }}
+          style={{
+            willChange: "transform,opacity",
+            ...animation.fadeIn(14),
+            ...animation.size([0, 30, "vw"]),
+          }}
         >
-          <Box style={{ borderTop: "1px solid black" }} />
+          <Box m="1em" style={{ borderTop: "1px solid white" }} />
         </animated.div>
         <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
           <Text
@@ -73,19 +77,23 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           </Text>
         </animated.div>
       </About>
-      <animated.div style={animation.expand}>
+      {/* <animated.div style={animation.expand}>
         <Icon
           linkedin="linkedin.com/in/ryan-breaux-4603396a"
           github="https://github.com/pogojam"
           size="1.3em"
         />
-      </animated.div>
+      </animated.div> */}
     </Container>
   )
 }
 
 const Scean2 = ({ animation, isActive, ...props }, ref) => {
-  const animateProjects = useSpring(isActive ? { opacity: 1 } : { opacity: 0 })
+  const animateProjects = useSpring(
+    isActive
+      ? { opacity: 1, transform: "scale(1)" }
+      : { opacity: 0, transform: "scale(0)" }
+  )
   return (
     <Container
       animate
@@ -107,12 +115,12 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
+            color: "rgba(106, 53, 175, 0.46)",
           }}
         >
           Projects
         </Heading>
       </animated.div>
-
       <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
         <Projects isActive={isActive} />
       </animated.div>
@@ -267,7 +275,7 @@ const Scean_Interface = ({ index, ...props }) => {
 
     const x = offsetX - inr * offsetX
     const y = offsetY - inr * offsetY
-    return [x, 0]
+    return [x, 0, x]
   }
 
   const calcRotation = inr => {

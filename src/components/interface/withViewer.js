@@ -12,7 +12,6 @@ const Wrapper = ({ children, animation }) => {
 
   useLayoutEffect(() => {
     const top = document.getElementById("Nav").getBoundingClientRect().height
-    console.log(top)
     setMargin(top)
   }, [])
 
@@ -20,12 +19,11 @@ const Wrapper = ({ children, animation }) => {
     <Container
       animate
       mt="3em"
-      bg="black"
       type="Flex"
       flexDirection="column"
       alignItems="center"
       width={["100%"]}
-      height={["75vh", "40vh"]}
+      height={["100vh"]}
       style={{
         overflow: "hidden",
         borderBottomLeftRadius: "4px",
@@ -35,7 +33,7 @@ const Wrapper = ({ children, animation }) => {
         right: 0,
         maxWidth: "100vw",
         willChange: "transform",
-        transform: animation.transform.interpolate(e => `translateY(${e}%)`),
+        transform: animation.transform.interpolate(e => `translateX(${e}%)`),
         zIndex: 991,
       }}
     >
@@ -72,10 +70,11 @@ const Content = ({
       <Container
         style={{
           flexBasis: "100%",
-          backgroundSize: "140%",
-          willChange: "transform , backgroundPosition",
+          willChange: "transform",
           position: "relative",
           overflow: "hidden",
+          maxHeight: "50vh",
+          borderBottomRightRadius: "113px",
         }}
       >
         {ProjectData.map((d, i) => (
@@ -152,8 +151,9 @@ const Content = ({
           }}
         >
           <Container mr="auto" type="Flex">
-            <Icon github={gitLink} color="white" />
+            <Icon className="hoverGrow" github={gitLink} color="white" />
             <Button
+              className="hoverGrow"
               text="Visit"
               color="white"
               fontSize=".8em"

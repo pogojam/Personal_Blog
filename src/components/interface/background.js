@@ -46,12 +46,9 @@ const initCanvas = setCanvas => {
   const shardCount = 600
   const shards = []
 
-  const light = new THREE.PointLight(0xffcff, 1, 500)
-  light.position.set(10, 0, 25)
 
   // Add to scean
   const SceanStars = new Stars(scene, 6000)
-  scene.add(light)
 
   const update = () => {
     renderer.render(scene, camera)

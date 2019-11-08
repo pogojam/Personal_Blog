@@ -18,12 +18,11 @@ const Wrapper = ({ children, animation }) => {
   return (
     <Container
       animate
-      mt="3em"
       type="Flex"
       flexDirection="column"
       alignItems="center"
       width={["100%"]}
-      height={["100vh"]}
+      height={["100%"]}
       style={{
         overflow: "hidden",
         borderBottomLeftRadius: "4px",
@@ -31,7 +30,6 @@ const Wrapper = ({ children, animation }) => {
         color: "white",
         top: 0,
         right: 0,
-        maxWidth: "100vw",
         willChange: "transform",
         transform: animation.transform.interpolate(e => `translateX(${e}%)`),
         zIndex: 991,
@@ -64,7 +62,7 @@ const Content = ({
         width: "100%",
         height: "100%",
       }}
-      flexDirection={["column", "row"]}
+      flexDirection={["column"]}
       key={key}
     >
       <Container
@@ -73,8 +71,6 @@ const Content = ({
           willChange: "transform",
           position: "relative",
           overflow: "hidden",
-          maxHeight: "50vh",
-          borderBottomRightRadius: "113px",
         }}
       >
         {ProjectData.map((d, i) => (
@@ -115,9 +111,8 @@ const Content = ({
             style={{
               whiteSpace: "wrap",
               textAlign: "center",
-              flexBasis: "45%",
               display: "flex",
-              alignItems: "center",
+              justifyContent: "center",
             }}
             fontWeight="100"
             px="1em"
@@ -126,20 +121,20 @@ const Content = ({
             {title}
           </Heading>
         </animated.div>
-        <Text
-          textAlign={"center"}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexBasis: "100%",
-          }}
-          fontSize=".8em"
-          p="1em"
-          px="2.5em"
-        >
-          {discription}
-        </Text>
-
+        <Container flexBasis="100%" type="Flex">
+          <Text
+            style={{
+              display: "flex",
+              flexBasis: "50%",
+              textAlign: "left",
+            }}
+            p="3em"
+            pr="10em"
+          >
+            {discription}
+          </Text>
+          <Box style={{ flexBasis: "50%" }}></Box>
+        </Container>
         <Container
           type="Flex"
           justifyContent="flex-end"
@@ -148,6 +143,7 @@ const Content = ({
             borderTop: "1px solid white",
             flexBasis: "18%",
             minHeight: "55px",
+            backgroundColor: "#733e7359",
           }}
         >
           <Container mr="auto" type="Flex">
@@ -202,7 +198,7 @@ export const Viewer = () => {
   const enterView = Object.entries(view).length > 0
 
   const [animation, set, stop] = useSpring(() => ({
-    transform: [-120],
+    transform: [120],
     opacity: [0],
   }))
 
@@ -211,7 +207,7 @@ export const Viewer = () => {
       set({ transform: [0], opacity: [1] })
       stop()
     } else {
-      set({ transform: [-120], opacity: [0] })
+      set({ transform: [120], opacity: [0] })
     }
   }, [enterView])
 

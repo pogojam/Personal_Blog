@@ -69,6 +69,8 @@ const CardContainer = styled(Container)`
     }
   }}
 
+  transition:opacity 1s;
+
   h2 {
     transition: opacity 0.6s 0.5s;
 
@@ -118,7 +120,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
 
   const calcCenter = () => {
     const rect = containerRef.current.getBoundingClientRect()
-    const tx = window.innerWidth / 4 - (rect.width / 2 + rect.left)
+    const tx = window.innerWidth / 2 - (rect.width / 2 + rect.left)
     const ty =
       window.innerHeight -
       containerRef.current.getBoundingClientRect().bottom +

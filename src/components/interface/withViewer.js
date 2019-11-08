@@ -6,6 +6,7 @@ import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
+import styled, { keyframes } from "styled-components"
 
 const Wrapper = ({ children, animation }) => {
   const [marginTop, setMargin] = useState(40)
@@ -31,7 +32,7 @@ const Wrapper = ({ children, animation }) => {
         top: 0,
         right: 0,
         willChange: "transform",
-        transform: animation.transform.interpolate(e => `translateX(${e}%)`),
+        // transform: animation.transform.interpolate(e => `translateX(${e}%)`),
         zIndex: 991,
       }}
     >
@@ -40,6 +41,49 @@ const Wrapper = ({ children, animation }) => {
   )
 }
 
+const slowFadeIn = keyframes`
+  from{
+background-color:#000000e0;
+  }
+  to{
+    background-color:#0000001f;
+  }
+`
+
+const ImageView = styled(Container)`
+  transform: translateX(-36%)
+    matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+  .prjImg {
+    transform: matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: ${slowFadeIn} 4s forwards;
+  }
+`
+
+const SlantView = styled(Container)`
+  transform: translateX(-36%)
+    matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: ${slowFadeIn} 4s forwards;
+  }
+`
+
 const Content = ({
   data: { discription, poster, title, gitLink },
   stackObj,
@@ -47,8 +91,14 @@ const Content = ({
   key,
 }) => {
   const backgroundSlide = useSpring({
-    from: { transform: "translateX(0%)" },
-    to: { transform: "translateX(10%)" },
+    from: {
+      transform:
+        "translateX(0%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) ",
+    },
+    to: {
+      transform:
+        "translateX(40%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) ",
+    },
     config: { tension: 10, mass: 4 },
   })
 
@@ -65,31 +115,46 @@ const Content = ({
       flexDirection={["column"]}
       key={key}
     >
-      <Container
-        style={{
-          flexBasis: "100%",
-          willChange: "transform",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {ProjectData.map((d, i) => (
-          <Container
-            animate
-            style={{
-              ...backgroundSlide,
-              background: `url(${d.poster})`,
-              position: "absolute",
-              backgroundSize: "cover",
-              top: 0,
-              left: "-15%",
-              width: "115%",
-              minHeight: "100%",
-              opacity: d.poster === poster ? 1 : 0,
-            }}
-          />
-        ))}
+      <Container style={{ position: "relative" }} type="Flex" flexBasis="100%">
+        <SlantView
+          style={{
+            willChange: "transform",
+            position: "absolute",
+            width: "100vw",
+            height: "100%",
+            overflow: "hidden",
+          }}
+        >
+          {ProjectData.map((d, i) => (
+            <Container
+              animate
+              className="prjImg"
+              style={{
+                ...backgroundSlide,
+                background: `url(${d.poster})`,
+                position: "absolute",
+                backgroundSize: "cover",
+                top: 0,
+                left: "-15%",
+                width: "115%",
+                minHeight: "100%",
+                opacity: d.poster === poster ? 1 : 0,
+              }}
+            />
+          ))}
+        </SlantView>
+
+        <SlantView
+          style={{
+            position: "absolute",
+            width: "100vw",
+            height: "100%",
+            right: "-104%",
+            backgroundColor: "#ff0000",
+          }}
+        ></SlantView>
       </Container>
+
       <animated.div
         style={{
           willChange: "opacity",

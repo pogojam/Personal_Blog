@@ -25,6 +25,9 @@ const initCanvas = setCanvas => {
   canvas.style.zIndex = -1
   canvas.style.top = 0
   canvas.style.left = 0
+  canvas.style.backfaceVisibility = "none"
+  canvas.style.willChange = "transform"
+
   document.body.appendChild(canvas)
 
   window.addEventListener("resize", () => {
@@ -45,7 +48,6 @@ const initCanvas = setCanvas => {
 
   const shardCount = 600
   const shards = []
-
 
   // Add to scean
   const SceanStars = new Stars(scene, 6000)
@@ -104,7 +106,6 @@ function Stars(scean, count) {
 }
 
 const Background = () => {
-  const [Canvas, setCanvas] = useState()
   useEffect(() => {
     initCanvas()
   })

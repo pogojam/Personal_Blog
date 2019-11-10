@@ -6,9 +6,9 @@ import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
-import styled, { keyframes } from "styled-components"
+import styled, { keyframes, css } from "styled-components"
 
-const Wrapper = ({ children, animation }) => {
+const Wrapper = ({ children, zIndex, isActive }) => {
   const [marginTop, setMargin] = useState(40)
 
   useLayoutEffect(() => {
@@ -32,8 +32,8 @@ const Wrapper = ({ children, animation }) => {
         top: 0,
         right: 0,
         willChange: "transform",
-        // transform: animation.transform.interpolate(e => `translateX(${e}%)`),
-        zIndex: 991,
+        transform: isActive ? "translateX(0%)" : "translateX(-100%)",
+        backfaceVisibility: "none",
       }}
     >
       {children}
@@ -43,10 +43,10 @@ const Wrapper = ({ children, animation }) => {
 
 const slowFadeIn = keyframes`
   from{
-background-color:#000000e0;
+      opacity:1;
   }
   to{
-    background-color:#0000001f;
+    opacity:.6;
   }
 `
 
@@ -65,14 +65,25 @@ const ImageView = styled(Container)`
     left: 0;
     width: 100%;
     height: 100%;
+    background-color: black;
     animation: ${slowFadeIn} 4s forwards;
   }
 `
 
 const SlantView = styled(Container)`
-  transform: translateX(-36%)
-    matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  will-change: transform;
+  transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
 
+  ${({ isActive, side }) =>
+    isActive
+      ? css`
+          transform: translateX(-36%)
+            matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        `
+      : css`
+          transform: translateX(${side === "left" ? -100 : 0}%)
+            matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        `}
   &:after {
     content: "";
     position: absolute;
@@ -89,6 +100,9 @@ const Content = ({
   stackObj,
   props,
   key,
+  isActive,
+  inAnimation,
+  color,
 }) => {
   const backgroundSlide = useSpring({
     from: {
@@ -102,23 +116,28 @@ const Content = ({
     config: { tension: 10, mass: 4 },
   })
 
+  const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
+
   return (
-    <Container
-      type="Flex"
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-      }}
-      flexDirection={["column"]}
-      key={key}
-    >
-      <Container style={{ position: "relative" }} type="Flex" flexBasis="100%">
+    <>
+      <Container
+        animate
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          height: "100%",
+          width: "100%",
+          willChange: "transform ",
+          opacity: inAnimation.opacity.interpolate(e => e),
+        }}
+        type="Flex"
+        flexBasis="100%"
+      >
         <SlantView
+          side="left"
+          isActive={isActive}
           style={{
-            willChange: "transform",
             position: "absolute",
             width: "100vw",
             height: "100%",
@@ -145,29 +164,38 @@ const Content = ({
         </SlantView>
 
         <SlantView
+          isActive={isActive}
           style={{
             position: "absolute",
             width: "100vw",
             height: "100%",
             right: "-104%",
-            backgroundColor: "#ff0000",
+            border: "1px solid #9800e6",
+            background: color,
           }}
         ></SlantView>
       </Container>
 
       <animated.div
         style={{
-          willChange: "opacity",
-          flexBasis: "100%",
+          willChange: "transform opacity",
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          height: "50%",
+          width: "100%",
           display: "flex",
           flexDirection: "column",
           opacity: props.opacity.interpolate(e => e),
+          transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
       >
         <animated.div
           style={{
             willChange: "transform",
-            transform: props.slideX.interpolate(e => `translateX(${e}%)`),
+            transform: props.slideX.interpolate(
+              e => `translateX(${slideCalcY(e, -1)}%)`
+            ),
           }}
         >
           <Heading
@@ -208,7 +236,6 @@ const Content = ({
             borderTop: "1px solid white",
             flexBasis: "18%",
             minHeight: "55px",
-            backgroundColor: "#733e7359",
           }}
         >
           <Container mr="auto" type="Flex">
@@ -225,36 +252,41 @@ const Content = ({
           <Icon {...stackObj} />
         </Container>
       </animated.div>
-    </Container>
+    </>
   )
 }
 
-const ViewerComponent = ({ animation, data }) => {
-  const transitions = useTransition(
-    { y: 0, x: 0, ...data },
-    item => item.index,
-    {
-      from: { opacity: 0, slideY: [60], slideX: [30] },
-      enter: { opacity: 1, slideY: [0], slideX: [0] },
-      leave: { opacity: 0, slideY: [-60], slideX: [-30] },
-      config: { mass: 1, tension: 210, friction: 20 },
-    }
-  )
+const ViewerComponent = ({ inAnimation, data, isActive }) => {
+  const transitions = useTransition(data, null, {
+    from: { opacity: 0, slideY: [60], slideX: [30] },
+    enter: { opacity: 1, slideY: [0], slideX: [0] },
+    leave: { opacity: 0, slideY: [-60], slideX: [-30] },
+    config: { mass: 1, tension: 210, friction: 20 },
+  })
   return (
-    <Wrapper animation={animation}>
-      {transitions.map(({ item, key, props }) => {
-        const { stack = [] } = item
+    <>
+      {transitions.map(({ key, props }) => {
+        const { stack = [] } = data
 
         const stackObj = stack.reduce((acc, val) => {
           Object.assign(acc, { [val]: val })
           return acc
         }, {})
 
+        console.log(isActive)
+
         return (
-          <Content key={key} stackObj={stackObj} props={props} data={item} />
+          <Content
+            inAnimation={inAnimation}
+            key={key}
+            stackObj={stackObj}
+            props={props}
+            data={data}
+            isActive={isActive}
+          />
         )
       })}
-    </Wrapper>
+    </>
   )
 }
 
@@ -263,18 +295,27 @@ export const Viewer = () => {
   const enterView = Object.entries(view).length > 0
 
   const [animation, set, stop] = useSpring(() => ({
-    transform: [120],
+    slide: [100],
     opacity: [0],
   }))
 
   useEffect(() => {
     if (enterView) {
-      set({ transform: [0], opacity: [1] })
+      const offset = window.pageYOffset
+      set({ slide: [0], opacity: [1] })
+      window.addEventListener("scroll", () => {
+        window.scrollTo({
+          top: offset,
+          behavior: "smooth",
+        })
+      })
       stop()
     } else {
-      set({ transform: [120], opacity: [0] })
+      set({ slide: [100], opacity: [0] })
     }
   }, [enterView])
 
-  return <ViewerComponent animation={animation} data={view} />
+  return (
+    <ViewerComponent isActive={enterView} inAnimation={animation} data={view} />
+  )
 }

@@ -115,7 +115,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            color: "rgba(106, 53, 175, 0.46)",
+            color: "black",
           }}
         >
           Projects

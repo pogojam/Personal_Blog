@@ -77,13 +77,6 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           </Text>
         </animated.div>
       </About>
-      {/* <animated.div style={animation.expand}>
-        <Icon
-          linkedin="linkedin.com/in/ryan-breaux-4603396a"
-          github="https://github.com/pogojam"
-          size="1.3em"
-        />
-      </animated.div> */}
     </Container>
   )
 }
@@ -94,6 +87,9 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
       ? { opacity: 1, transform: "scale(1)" }
       : { opacity: 0, transform: "scale(0)" }
   )
+
+  const [headingState, setHeading] = useState(true)
+
   return (
     <Container
       animate
@@ -115,14 +111,15 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            color: "black",
+            color: "white",
+            opacity: headingState ? 1 : 0,
           }}
         >
           Projects
         </Heading>
       </animated.div>
       <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
-        <Projects isActive={isActive} />
+        <Projects setHeading={setHeading} isActive={isActive} />
       </animated.div>
     </Container>
   )

@@ -10,12 +10,20 @@ import { generateKey } from "../util"
 
 const CardImage = animated(Image)
 
-const spin = keyframes`
+const spinIn = keyframes`
   0% {
     transform: rotateY(0deg) translateY(0px);
   }
   100% {
     transform: rotateY(360deg) translateY(-30px);
+  }
+`
+const spinOut = keyframes`
+  0% {
+    transform: rotateY(360deg) translateY(-30px);
+  }
+  100% {
+    transform: rotateY(0deg) translateY(0px);
   }
 `
 
@@ -41,14 +49,20 @@ const CardContainer = styled(Container)`
               opacity: 0;
             }
             img {
-              animation: ${spin} 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-                forwards;
+              /* animation: ${spinIn} 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+                forwards; */
+                transform: rotateY(360deg) translateY(-30px);
             }
             &:before {
               opacity: 1;
               transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5;
               transform: translateY(-40%);
             }
+          }
+
+          img {
+            transition: transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: rotateY(0deg) translateY(0px);
           }
         `
         break
@@ -177,7 +191,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
           fontSize: ".8em",
           borderRadius: "8px",
           position: "relative",
-          boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
+          // boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
           transform: hoverAnimation.xys.interpolate(trans),
           cursor: "pointer",
         }}
@@ -206,8 +220,12 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
   )
 }
 
-const Projects = ({ key, isActive }) => {
+const Projects = ({ key, isActive, setHeading }) => {
   const [activeView, setView] = useCustom()
+
+  if (Object.entries(activeView).length > 0) {
+    setHeading(false)
+  }
 
   useEffect(() => {
     if (!isActive) {

@@ -50,23 +50,51 @@ const slowFadeIn = keyframes`
   }
 `
 
-const ImageView = styled(Container)`
-  transform: translateX(-36%)
-    matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-
-  .prjImg {
-    transform: matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-  }
+const CircleButton = styled(Button)`
+  position: relative;
+  width: 3em;
+  height: 3em;
+  margin: 1em;
+  color: "white";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 3s;
 
   &:after {
     content: "";
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 50%;
+    border: 1px solid white;
+    box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
+    transition: transform 4s;
+  }
+
+  &:before {
+    content: "";
     width: 100%;
     height: 100%;
-    background-color: black;
-    animation: ${slowFadeIn} 4s forwards;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 18pt 2pt red, 0 0 0pt 2pt red inset;
+    transition: transform 4s;
+  }
+
+  &:hover {
+    &:before {
+      transform: scale(1.1);
+    }
+    &:after {
+      transform: scale(1.3);
+    }
+
+    transform: scale(0.9);
   }
 `
 
@@ -126,7 +154,7 @@ const Content = ({
           position: "fixed",
           left: 0,
           top: 0,
-          height: "100%",
+          height: "50%",
           width: "100%",
           willChange: "transform ",
           opacity: inAnimation.opacity.interpolate(e => e),
@@ -170,8 +198,7 @@ const Content = ({
             width: "100vw",
             height: "100%",
             right: "-104%",
-            border: "1px solid #9800e6",
-            background: color,
+            background: "#252525",
           }}
         ></SlantView>
       </Container>
@@ -180,6 +207,7 @@ const Content = ({
         style={{
           willChange: "transform opacity",
           position: "fixed",
+          zIndex: 999,
           left: 0,
           bottom: 0,
           height: "50%",
@@ -201,9 +229,9 @@ const Content = ({
           <Heading
             fontSize="3.4em"
             fontWeight="900"
+            textAlign={["left", "center"]}
             style={{
               whiteSpace: "wrap",
-              textAlign: "center",
               display: "flex",
               justifyContent: "center",
             }}
@@ -214,15 +242,19 @@ const Content = ({
             {title}
           </Heading>
         </animated.div>
-        <Container flexBasis="100%" type="Flex">
+        <Container
+          style={{ alignItems: "flex-end" }}
+          flexBasis="100%"
+          type="Flex"
+          flexDirection={["column", "row"]}
+        >
           <Text
             style={{
               display: "flex",
-              flexBasis: "50%",
+              flexBasis: "40%",
               textAlign: "left",
             }}
-            p="3em"
-            pr="10em"
+            px={["1em", "3em"]}
           >
             {discription}
           </Text>
@@ -230,25 +262,18 @@ const Content = ({
         </Container>
         <Container
           type="Flex"
-          justifyContent="flex-end"
-          p="1em"
+          p={["0em", "1em"]}
+          alignItems="center"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
           style={{
-            borderTop: "1px solid white",
-            flexBasis: "18%",
-            minHeight: "55px",
+            flexBasis: "38%",
+            zIndex: 999,
           }}
         >
-          <Container mr="auto" type="Flex">
-            <Icon className="hoverGrow" github={gitLink} color="white" />
-            <Button
-              className="hoverGrow"
-              text="Visit"
-              color="white"
-              fontSize=".8em"
-              px=".6em"
-              style={{ borderRadius: "3px" }}
-            />
-          </Container>
+          <CircleButton text="View" />
+          <Icon className="hoverGrow" github={gitLink} color="white" />
           <Icon {...stackObj} />
         </Container>
       </animated.div>
@@ -301,11 +326,11 @@ export const Viewer = () => {
 
   useEffect(() => {
     if (enterView) {
-      const offset = window.pageYOffset
+      const offsetY = window.pageYOffset
       set({ slide: [0], opacity: [1] })
       window.addEventListener("scroll", () => {
         window.scrollTo({
-          top: offset,
+          top: offsetY,
           behavior: "smooth",
         })
       })

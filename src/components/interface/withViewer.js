@@ -7,39 +7,7 @@ import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
 import styled, { keyframes, css } from "styled-components"
-
-const Wrapper = ({ children, zIndex, isActive }) => {
-  const [marginTop, setMargin] = useState(40)
-
-  useLayoutEffect(() => {
-    const top = document.getElementById("Nav").getBoundingClientRect().height
-    setMargin(top)
-  }, [])
-
-  return (
-    <Container
-      animate
-      type="Flex"
-      flexDirection="column"
-      alignItems="center"
-      width={["100%"]}
-      height={["100%"]}
-      style={{
-        overflow: "hidden",
-        borderBottomLeftRadius: "4px",
-        position: "fixed",
-        color: "white",
-        top: 0,
-        right: 0,
-        willChange: "transform",
-        transform: isActive ? "translateX(0%)" : "translateX(-100%)",
-        backfaceVisibility: "none",
-      }}
-    >
-      {children}
-    </Container>
-  )
-}
+import azVideo from "../../static/video/azbutler_website_high.mp4"
 
 const slowFadeIn = keyframes`
   from{
@@ -98,6 +66,54 @@ const CircleButton = styled(Button)`
   }
 `
 
+const BackButton = styled(Button)`
+  position: absolute;
+  right: 0;
+  transform: ${({ isActive }) =>
+    isActive
+      ? `translateY(-50%) translateX(0%)`
+      : `translateY(-50%) translateX(-40%)`};
+  transition: transform opacity 1s 0.5s;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0)};
+  font-family: "Monoton", cursive !important;
+  font-size: 3em;
+  top: 50%;
+  padding-right: 1em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #1b00ff;
+  &:hover {
+    &:after {
+      transform: translateY(-1em) translateX(0em);
+    }
+
+    &:before {
+      transform: translateY(1em) translateX(0em);
+    }
+  }
+
+  &:after {
+    width: 4em;
+    height: 2px;
+    content: "";
+    position: absolute;
+    transform: translateY(-1em) translateX(10em);
+    box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
+    transition: 0.7s cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+
+  &:before {
+    width: 4em;
+    height: 2px;
+    content: "";
+    position: absolute;
+    transform: translateY(1em) translateX(10em);
+    box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
+    transition: 1s cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+`
+
 const SlantView = styled(Container)`
   will-change: transform;
   transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -131,6 +147,8 @@ const Content = ({
   isActive,
   inAnimation,
   color,
+  enterView,
+  setView,
 }) => {
   const backgroundSlide = useSpring({
     from: {
@@ -145,6 +163,12 @@ const Content = ({
   })
 
   const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
+  const playVideo = (p, ref) => {
+    console.log(ref)
+    if (p === poster && ref) {
+      ref.play()
+    }
+  }
 
   return (
     <>
@@ -174,20 +198,23 @@ const Content = ({
         >
           {ProjectData.map((d, i) => (
             <Container
+              as="video"
               animate
               className="prjImg"
+              ref={ref => playVideo(d.poster, ref)}
               style={{
                 ...backgroundSlide,
-                background: `url(${d.poster})`,
                 position: "absolute",
                 backgroundSize: "cover",
-                top: 0,
+                top: "-25%",
                 left: "-15%",
-                width: "115%",
+                width: "100%",
                 minHeight: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
-            />
+            >
+              <source src={azVideo} type="video/mp4" />
+            </Container>
           ))}
         </SlantView>
 
@@ -218,30 +245,23 @@ const Content = ({
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
       >
-        <animated.div
+        <Heading
+          fontSize="3.4em"
+          fontWeight="900"
+          textAlign={["left", "center"]}
           style={{
-            willChange: "transform",
-            transform: props.slideX.interpolate(
-              e => `translateX(${slideCalcY(e, -1)}%)`
-            ),
+            whiteSpace: "wrap",
+            display: "flex",
+            justifyContent: "center",
+            transition: "opacity 1s .3s",
+            opacity: isActive ? 1 : 0,
           }}
+          fontWeight="100"
+          px="1em"
+          py=".5em"
         >
-          <Heading
-            fontSize="3.4em"
-            fontWeight="900"
-            textAlign={["left", "center"]}
-            style={{
-              whiteSpace: "wrap",
-              display: "flex",
-              justifyContent: "center",
-            }}
-            fontWeight="100"
-            px="1em"
-            py=".5em"
-          >
-            {title}
-          </Heading>
-        </animated.div>
+          {title}
+        </Heading>
         <Container
           style={{ alignItems: "flex-end" }}
           flexBasis="100%"
@@ -253,6 +273,8 @@ const Content = ({
               display: "flex",
               flexBasis: "40%",
               textAlign: "left",
+              transition: "opacity 1s .4s",
+              opacity: isActive ? 1 : 0,
             }}
             px={["1em", "3em"]}
           >
@@ -272,16 +294,43 @@ const Content = ({
             zIndex: 999,
           }}
         >
-          <CircleButton text="View" />
-          <Icon className="hoverGrow" github={gitLink} color="white" />
-          <Icon {...stackObj} />
+          <CircleButton
+            style={{
+              transition: "opacity 1s .2s",
+              opacity: isActive ? 1 : 0,
+            }}
+            text="View"
+          />
+          <Icon
+            style={{
+              transition: "opacity 1s .1s",
+              opacity: isActive ? 1 : 0,
+            }}
+            className="hoverGrow"
+            github={gitLink}
+            color="white"
+          />
+          <Icon
+            style={{
+              transition: "opacity 1s ",
+              opacity: isActive ? 1 : 0,
+            }}
+            {...stackObj}
+          />
         </Container>
+        <BackButton
+          isActive={isActive}
+          onClick={() => {
+            setView({})
+          }}
+          text="Menu"
+        />
       </animated.div>
     </>
   )
 }
 
-const ViewerComponent = ({ inAnimation, data, isActive }) => {
+const ViewerComponent = ({ inAnimation, data, isActive, setView }) => {
   const transitions = useTransition(data, null, {
     from: { opacity: 0, slideY: [60], slideX: [30] },
     enter: { opacity: 1, slideY: [0], slideX: [0] },
@@ -298,10 +347,9 @@ const ViewerComponent = ({ inAnimation, data, isActive }) => {
           return acc
         }, {})
 
-        console.log(isActive)
-
         return (
           <Content
+            setView={setView}
             inAnimation={inAnimation}
             key={key}
             stackObj={stackObj}
@@ -316,7 +364,7 @@ const ViewerComponent = ({ inAnimation, data, isActive }) => {
 }
 
 export const Viewer = () => {
-  const [view] = useCustom()
+  const [view, setView] = useCustom()
   const enterView = Object.entries(view).length > 0
 
   const [animation, set, stop] = useSpring(() => ({
@@ -324,23 +372,32 @@ export const Viewer = () => {
     opacity: [0],
   }))
 
+  const scrollEvent = offsetY => () => {
+    window.scrollTo({
+      top: offsetY,
+      behavior: "smooth",
+    })
+  }
+
   useEffect(() => {
+    const offsetY = window.pageYOffset
+
     if (enterView) {
-      const offsetY = window.pageYOffset
       set({ slide: [0], opacity: [1] })
-      window.addEventListener("scroll", () => {
-        window.scrollTo({
-          top: offsetY,
-          behavior: "smooth",
-        })
-      })
+      window.addEventListener("scroll", scrollEvent(offsetY), true)
       stop()
     } else {
+      window.removeEventListener("scroll", scrollEvent(offsetY), true)
       set({ slide: [100], opacity: [0] })
     }
   }, [enterView])
 
   return (
-    <ViewerComponent isActive={enterView} inAnimation={animation} data={view} />
+    <ViewerComponent
+      setView={setView}
+      isActive={enterView}
+      inAnimation={animation}
+      data={view}
+    />
   )
 }

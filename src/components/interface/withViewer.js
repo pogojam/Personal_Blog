@@ -7,7 +7,7 @@ import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
 import styled, { keyframes, css } from "styled-components"
-import azVideo from "../../static/video/azbutler_website_high.mp4"
+import azVideo from "../../static/video/azbutler_4X1_High.mp4"
 
 const slowFadeIn = keyframes`
   from{

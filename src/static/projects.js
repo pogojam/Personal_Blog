@@ -2,6 +2,9 @@ import homeappSVG from "./images/HomeApp.svg"
 import slipjawSVG from "./images/SlipJaw.svg"
 import folderimporterSVG from "./images/FolderImporter.svg"
 import gridbuilderSVG from "./images/GridBuilder.svg"
+import azvideo from "./video/azbutler_website_high.mp4"
+import textvideo from "./video/textbeast_compressed.mp4"
+import gridVideo from "./video/textbeast_compressed.mp4"
 
 export default [
   {
@@ -20,7 +23,7 @@ export default [
     title: "SlipJaw",
     logo: slipjawSVG,
     discription:
-      "SlipJaw pulls name, car and locationd data from valet slips using a mobile camera. This app then outputs a .csv file to be sent to CMS Servers.",
+      "SlipJaw pulls name , car and locationd data from valet slips using a mobile camera. This app then outputs a .csv file to be sent to CMS Servers.",
     gitLink: "https://github.com/pogojam/SlipJaw",
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554668355/branches-bright-Web.jpg",
@@ -76,6 +79,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571865172/git/Screen_Shot_2019-10-23_at_2.07.39_PM.png",
     stack: ["javascript"],
     tag: "Big data tool",
+    video: textvideo,
     color: "#6600ff",
   },
   {
@@ -89,6 +93,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
     stack: ["javascript", "react"],
     tag: "Business Website",
+    video: azvideo,
     color: "#fc0e34",
   },
 ]

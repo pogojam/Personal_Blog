@@ -213,7 +213,7 @@ const Content = ({
                 opacity: d.poster === poster ? 1 : 0,
               }}
             >
-              <source src={azVideo} type="video/mp4" />
+              <source src={d.video} type="video/mp4" />
             </Container>
           ))}
         </SlantView>
@@ -363,6 +363,12 @@ const ViewerComponent = ({ inAnimation, data, isActive, setView }) => {
   )
 }
 
+const scrollEvent = offsetY => () =>
+  window.scrollTo({
+    top: offsetY,
+    behavior: "smooth",
+  })
+
 export const Viewer = () => {
   const [view, setView] = useCustom()
   const enterView = Object.entries(view).length > 0
@@ -371,13 +377,6 @@ export const Viewer = () => {
     slide: [100],
     opacity: [0],
   }))
-
-  const scrollEvent = offsetY => () => {
-    window.scrollTo({
-      top: offsetY,
-      behavior: "smooth",
-    })
-  }
 
   useEffect(() => {
     const offsetY = window.pageYOffset

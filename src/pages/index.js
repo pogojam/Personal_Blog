@@ -111,7 +111,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            color: "white",
+            color: "#d3bcff47",
             opacity: headingState ? 1 : 0,
           }}
         >

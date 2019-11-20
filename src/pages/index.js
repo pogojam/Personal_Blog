@@ -82,6 +82,21 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
 }
 
 const Scean2 = ({ animation, isActive, ...props }, ref) => {
+  const HeadingContainer = styled(Container)`
+    &:after {
+      /* content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 30vh;
+      width: 100%;
+      background-color: blue;
+      z-index: -1;
+      transform:matrix3d(1, 0, 0, 1, 25, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      will-change: transform; */
+    }
+  `
+
   const animateProjects = useSpring(
     isActive
       ? { opacity: 1, transform: "scale(1)" }
@@ -101,7 +116,8 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         ...animation.slideIn(-1),
       }}
     >
-      <animated.div
+      <HeadingContainer
+        animate
         style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
         <Heading
@@ -111,13 +127,14 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            color: "#d3bcff47",
+            color: "rgb(222, 6, 6)",
+            transform: "rotate(-10deg) skewX(-29deg)",
             opacity: headingState ? 1 : 0,
           }}
         >
           Projects
         </Heading>
-      </animated.div>
+      </HeadingContainer>
       <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
         <Projects setHeading={setHeading} isActive={isActive} />
       </animated.div>
@@ -303,7 +320,7 @@ const Scean_Interface = ({ index, ...props }) => {
     }
 
     if (inr) {
-      inr >= 0.2
+      inr >= 0
         ? set({
             fadeIn: inr,
             rotate: calcRotation(inr),

@@ -207,7 +207,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
         >
           <CardImage
             style={{
-              minWidth: "20px",
+              width: "5.5em",
             }}
             src={data.logo}
           />

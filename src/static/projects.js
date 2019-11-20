@@ -64,7 +64,7 @@ export default [
   {
     title: "Bell Captain",
     logo:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571863057/Logos/bellcaptain_logo.svg",
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1574110239/Logos/bellcaptain_logo.svg",
     discription:
       "Platform used to manage daily cash distribution for cash related businesses.",
     gitLink: "https://github.com/pogojam/bellcaptain",
@@ -79,7 +79,7 @@ export default [
   {
     title: "TextBeast",
     logo:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571863057/Logos/bellcaptain_logo.svg",
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/c_scale,w_12/v1574111496/Logos/monster.svg",
     discription:
       "This tool is used for extracting phone and name data from .html or .txt files and parsing them into a .csv file.",
     gitLink: "https://github.com/pogojam/TextBeast",

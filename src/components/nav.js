@@ -65,7 +65,6 @@ const Nav = ({ animation, avatar = true }) => {
         position: "fixed",
         left: 0,
         top: 0,
-        borderBottom: "1px solid",
         height: animation ? animation.height : "3em",
         willChange: "height transform",
         display: "flex",

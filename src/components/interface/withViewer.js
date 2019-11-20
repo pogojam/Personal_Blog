@@ -147,7 +147,6 @@ const Content = ({
   isActive,
   inAnimation,
   color,
-  enterView,
   setView,
 }) => {
   const backgroundSlide = useSpring({
@@ -182,6 +181,7 @@ const Content = ({
           width: "100%",
           willChange: "transform ",
           opacity: inAnimation.opacity.interpolate(e => e),
+          zIndex: isActive ? 9999 : -2,
         }}
         type="Flex"
         flexBasis="100%"
@@ -226,6 +226,7 @@ const Content = ({
             height: "100%",
             right: "-104%",
             background: "#252525",
+            display: "none",
           }}
         ></SlantView>
       </Container>
@@ -383,10 +384,10 @@ export const Viewer = () => {
 
     if (enterView) {
       set({ slide: [0], opacity: [1] })
-      window.addEventListener("scroll", scrollEvent(offsetY), true)
+      // window.addEventListener("scroll", scrollEvent(offsetY), true)
       stop()
     } else {
-      window.removeEventListener("scroll", scrollEvent(offsetY), true)
+      // window.removeEventListener("scroll", scrollEvent(offsetY), true)
       set({ slide: [100], opacity: [0] })
     }
   }, [enterView])

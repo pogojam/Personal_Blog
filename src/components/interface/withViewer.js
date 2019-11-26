@@ -143,7 +143,6 @@ const Content = ({
   data: { discription, poster, title, gitLink },
   stackObj,
   props,
-  key,
   isActive,
   inAnimation,
   color,
@@ -163,7 +162,6 @@ const Content = ({
 
   const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
   const playVideo = (p, ref) => {
-    console.log(ref)
     if (p === poster && ref) {
       ref.play()
     }
@@ -198,6 +196,7 @@ const Content = ({
         >
           {ProjectData.map((d, i) => (
             <Container
+              key={i}
               as="video"
               animate
               className="prjImg"
@@ -205,6 +204,7 @@ const Content = ({
               style={{
                 ...backgroundSlide,
                 position: "absolute",
+                background: `url(${poster})`,
                 backgroundSize: "cover",
                 top: "-25%",
                 left: "-15%",
@@ -256,6 +256,7 @@ const Content = ({
             justifyContent: "center",
             transition: "opacity 1s .3s",
             opacity: isActive ? 1 : 0,
+            color: "#ffbdbd",
           }}
           fontWeight="100"
           px="1em"
@@ -350,6 +351,7 @@ const ViewerComponent = ({ inAnimation, data, isActive, setView }) => {
 
         return (
           <Content
+            key={key}
             setView={setView}
             inAnimation={inAnimation}
             key={key}
@@ -384,10 +386,10 @@ export const Viewer = () => {
 
     if (enterView) {
       set({ slide: [0], opacity: [1] })
-      // window.addEventListener("scroll", scrollEvent(offsetY), true)
+      // document.body.style.overflow = "hidden"
       stop()
     } else {
-      // window.removeEventListener("scroll", scrollEvent(offsetY), true)
+      // document.body.style.overflow = "scroll"
       set({ slide: [100], opacity: [0] })
     }
   }, [enterView])

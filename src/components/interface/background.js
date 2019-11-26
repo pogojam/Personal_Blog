@@ -2,8 +2,9 @@ import React, { useRef, useEffect, useState, useLayoutEffect } from "react"
 import styled from "styled-components"
 import { getDistance, getRandomInt } from "../util"
 import * as THREE from "three"
+import { useScroll } from "react-use-gesture"
 
-const initCanvas = setCanvas => {
+function CanvasBackground() {
   const scene = new THREE.Scene()
   // Camera
   const camera = new THREE.PerspectiveCamera(
@@ -17,7 +18,7 @@ const initCanvas = setCanvas => {
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setClearColor("black")
+  renderer.setClearColor("#431a3e")
   renderer.setSize(window.innerWidth, window.innerHeight)
   const canvas = renderer.domElement
   canvas.style.position = "fixed"
@@ -36,18 +37,10 @@ const initCanvas = setCanvas => {
     camera.updateProjectionMatrix()
   })
 
-  window.addEventListener("scroll", () => {
+  this.scrollEvent = () => {
     camera.rotation.y += 0.001
     camera.rotation.x -= 0.01
-  })
-
-  // const geometry = new THREE.TetrahedronGeometry(2)
-  // const material = new THREE.MeshPhongMaterial({ color: 0x470fb8 })
-  // const mesh = new THREE.Mesh(geometry, material)
-  // mesh.scale.x += 1
-
-  const shardCount = 600
-  const shards = []
+  }
 
   // Add to scean
   const SceanStars = new Stars(scene, 6000)
@@ -106,11 +99,15 @@ function Stars(scean, count) {
 }
 
 const Background = () => {
-  useEffect(() => {
-    initCanvas()
+  const [bg, setBg] = useState(null)
+  const bind = useScroll(bg ? bg.scrollEvent : null, {
+    domTarget: window,
   })
+  useEffect(() => {
+    setBg(new CanvasBackground())
+  }, [])
 
-  return <div />
+  return bg ? <div {...bind()} /> : <div />
 }
 
 export default Background

@@ -109,9 +109,11 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
     <Container
       animate
       ref={ref}
-      pt="3em"
       style={{
         willChange: "transfrom, opacity",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         ...props.style,
         ...animation.slideIn(-1),
       }}
@@ -121,14 +123,14 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
         <Heading
-          pl="5vw"
-          fontSize={["2em", "7.25rem"]}
+          fontSize={["2em", "4.25rem"]}
           style={{
             width: "40%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            color: "rgb(222, 6, 6)",
-            transform: "rotate(-10deg) skewX(-29deg)",
+            margin: "auto",
+            transition: "opacity 1s",
+            color: "#ffbdbd",
             opacity: headingState ? 1 : 0,
           }}
         >
@@ -192,7 +194,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
 
       <Container type="Flex">
         {choices.map((data, i) => (
-          <animated.div>
+          <animated.div key={i}>
             <Button
               style={{
                 border: "1px solid",
@@ -213,6 +215,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
       {transition.map(({ item, key, props }) =>
         item ? (
           <Container
+            key={key}
             animate
             style={{ position: "absolute", bottom: "2em", ...props }}
           >

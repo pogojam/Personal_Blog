@@ -68,7 +68,7 @@ const Nav = ({ animation, avatar = true }) => {
         height: animation ? animation.height : "3em",
         willChange: "height transform",
         display: "flex",
-        background: "black",
+        background: "#0000007d",
       }}
     >
       <Flex alignItems="center" ref={navRef}>

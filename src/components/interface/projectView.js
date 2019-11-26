@@ -38,20 +38,13 @@ const CardContainer = styled(Container)`
       case 1:
         return css`
           &:hover {
+            background-color: #d5fbff00;
             h2 {
-              /* transform: translateY(-15px) scale(1.1);
-
-              &:after {
-                width: 3em;
-                box-shadow: rgba(56, 7, 255, 0.75) 1px 0px 4px 2px;
-              } */
               transition: opacity 0.6s;
               opacity: 0;
             }
             img {
-              /* animation: ${spinIn} 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-                forwards; */
-                transform: rotateY(360deg) translateY(-30px);
+              transform: rotateY(360deg) translateY(-38px);
             }
             &:before {
               opacity: 1;
@@ -68,11 +61,12 @@ const CardContainer = styled(Container)`
         break
       case 2:
         return css`
+          background-color: #d5fbff00 !important;
           h2 {
             opacity: 0;
           }
           img {
-            transform: translateY(10%);
+            transform: translateY(-30%);
           }
           &:before {
             opacity: 1 !important;
@@ -83,10 +77,23 @@ const CardContainer = styled(Container)`
     }
   }}
 
-  transition:opacity 1s;
+  transition:opacity .7s , background-color .7s;
+  height: 100%;
 
   h2 {
+    color: #ffbdbd;
     transition: opacity 0.6s 0.5s;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    bottom: -15px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding: 0.2em;
+    text-align: center;
+    /* border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px; */
 
     &:after {
       content: "";
@@ -104,6 +111,7 @@ const CardContainer = styled(Container)`
   }
 
   &:before {
+    background-color: #ffebcd;
     transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
     content: "";
     opacity: 0;
@@ -181,7 +189,6 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
         p="1em"
         showState={showState}
         style={{
-          transition: "opacity .7s linear ",
           color: "white",
           willChange: "transform",
           display: "flex",
@@ -197,6 +204,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
         }}
       >
         <Box
+          p="1em"
           style={{
             flexBasis: "100%",
             display: "flex",
@@ -207,12 +215,12 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
         >
           <CardImage
             style={{
-              width: "5.5em",
+              width: "5em",
             }}
             src={data.logo}
           />
         </Box>
-        <Heading m="1em" color="#d5d4d6" fontSize={["1em"]}>
+        <Heading m="1em" fontSize={["1em"]}>
           {data.title}
         </Heading>
       </CardContainer>
@@ -225,6 +233,8 @@ const Projects = ({ key, isActive, setHeading }) => {
 
   if (Object.entries(activeView).length > 0) {
     setHeading(false)
+  } else {
+    setHeading(true)
   }
 
   useEffect(() => {
@@ -237,8 +247,7 @@ const Projects = ({ key, isActive, setHeading }) => {
     <Container
       key={key}
       animate
-      pt={["1em", "10%"]}
-      p={[0, "10%"]}
+      pt={["1em", "5%"]}
       type="Grid"
       gridTemplateAreas={[`"1fr 1fr"`, `"1fr 1fr 1fr"`]}
       style={{

@@ -69,7 +69,7 @@ export const Nav_Animation = Nav => ({ animation, ...props }) => {
 
   useEffect(() => {
     const offsetY = 20
-    window.onscroll = e => {
+    document.onscroll = e => {
       if (window.scrollY > offsetY) {
         setTop(false)
       }

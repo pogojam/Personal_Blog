@@ -18,7 +18,7 @@ function CanvasBackground() {
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setClearColor("#431a3e")
+  renderer.setClearColor("white")
   renderer.setSize(window.innerWidth, window.innerHeight)
   const canvas = renderer.domElement
   canvas.style.position = "fixed"
@@ -39,13 +39,14 @@ function CanvasBackground() {
 
   this.scrollEvent = () => {
     camera.rotation.y += 0.001
-    camera.rotation.x -= 0.01
+    camera.rotation.x -= 0.001
   }
 
   // Add to scean
   const SceanStars = new Stars(scene, 6000)
 
   const update = () => {
+    this.scrollEvent()
     renderer.render(scene, camera)
     SceanStars.animate()
 
@@ -59,7 +60,7 @@ function CanvasBackground() {
 function Stars(scean, count) {
   const starGeo = new THREE.Geometry()
   const sprite = new THREE.TextureLoader().load(
-    "https://res.cloudinary.com/dxjse9tsv/image/upload/v1572988193/textures/Star.png"
+    "https://res.cloudinary.com/dxjse9tsv/image/upload/v1574805294/General_Icons/Oval.png"
   )
   const starMaterial = new THREE.PointsMaterial({
     color: 0xaaaaaa,
@@ -76,8 +77,8 @@ function Stars(scean, count) {
       getRandomInt(-300, 600),
       getRandomInt(-300, 600)
     )
-    vector.velocity = 0
-    vector.acceleration = 0.01
+    vector.velocity = 0.3
+    vector.acceleration = 0.005
     starGeo.vertices.push(vector)
   }
 
@@ -97,14 +98,17 @@ function Stars(scean, count) {
 
   scean.add(stars)
 }
+const background = new CanvasBackground()
 
 const Background = () => {
   const [bg, setBg] = useState(null)
+
   const bind = useScroll(bg ? bg.scrollEvent : null, {
     domTarget: window,
   })
   useEffect(() => {
-    setBg(new CanvasBackground())
+    console.log("tick")
+    setBg(background)
   }, [])
 
   return bg ? <div {...bind()} /> : <div />

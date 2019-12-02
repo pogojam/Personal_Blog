@@ -10,29 +10,13 @@ import { generateKey } from "../util"
 
 const CardImage = animated(Image)
 
-const spinIn = keyframes`
-  0% {
-    transform: rotateY(0deg) translateY(0px);
-  }
-  100% {
-    transform: rotateY(360deg) translateY(-30px);
-  }
-`
-const spinOut = keyframes`
-  0% {
-    transform: rotateY(360deg) translateY(-30px);
-  }
-  100% {
-    transform: rotateY(0deg) translateY(0px);
-  }
-`
-
 const CardContainer = styled(Container)`
   ${({ showState, ring }) => {
     switch (showState) {
       case 0:
-        return `
-        opacity:0;
+        return css`
+          opacity: 0;
+          pointer-events: none;
         `
         break
       case 1:
@@ -40,8 +24,7 @@ const CardContainer = styled(Container)`
           &:hover {
             background-color: #d5fbff00;
             h2 {
-              transition: opacity 0.6s;
-              opacity: 0;
+              transform: scale(1.2);
             }
             img {
               transform: rotateY(360deg) translateY(-38px);
@@ -49,7 +32,7 @@ const CardContainer = styled(Container)`
             &:before {
               opacity: 1;
               transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5;
-              transform: translateY(-40%);
+              transform: translateY(-40%) scale(0.7);
             }
           }
 
@@ -61,7 +44,9 @@ const CardContainer = styled(Container)`
         break
       case 2:
         return css`
+          pointer-events: none;
           background-color: #d5fbff00 !important;
+          box-shadow: none;
           h2 {
             opacity: 0;
           }
@@ -81,13 +66,11 @@ const CardContainer = styled(Container)`
   height: 100%;
 
   h2 {
-    color: #ffbdbd;
+    color: black;
     transition: opacity 0.6s 0.5s;
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    bottom: -15px;
+    left: -20px;
+    top: 0;
     margin-bottom: 0;
     margin-left: 0;
     padding: 0.2em;
@@ -110,29 +93,27 @@ const CardContainer = styled(Container)`
   img {
   }
 
-  &:before {
-    background-color: #ffebcd;
+  /* &:before {
+    background-color: black;
     transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
     content: "";
     opacity: 0;
     width: 42%;
     height: 11%;
     z-index: -1;
-    transform: translateY(15%);
+    transform: translateY(15%) scale(0.4);
     position: absolute;
     top: 75%;
     border-radius: 50%;
-    box-shadow: rgba(255, 255, 255, 0.75) 0px 3px 9px 0px,
-      0 2px 43px 14px ${({ ring }) => ring};
-  }
+  } */
 `
 
-const ProjectCard = ({ data, handleClick, activeView }) => {
+const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
   const [showState, setState] = useState(1)
-  const containerRef = useRef()
+  const boxRef = useRef()
 
   const calc = (x, y) => {
-    const con = containerRef.current.getBoundingClientRect()
+    const con = boxRef.current.getBoundingClientRect()
     return [
       -(y - con.top - con.height / 2) / 20,
       (x - con.left - con.width / 2) / 20,
@@ -141,11 +122,11 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
   }
 
   const calcCenter = () => {
-    const rect = containerRef.current.getBoundingClientRect()
+    const rect = boxRef.current.getBoundingClientRect()
     const tx = window.innerWidth / 2 - (rect.width / 2 + rect.left)
     const ty =
       window.innerHeight -
-      containerRef.current.getBoundingClientRect().bottom +
+      boxRef.current.getBoundingClientRect().bottom +
       -(window.innerHeight / 5)
     return { xy: [tx, ty] }
   }
@@ -170,6 +151,18 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
     }
   }, [showState])
 
+  useEffect(() => {
+    const backgroundNode = document.querySelector(".scean2_Background")
+    if (showState === 2) {
+      console.log(backgroundNode)
+      backgroundNode.style.opacity = 0
+    } else {
+      if (backgroundNode.style.opacity < 0.1) {
+        // backgroundNode.style.opacity = 1
+      }
+    }
+  }, [showState])
+
   return (
     <animated.div
       style={{ transform: clickAnimation.xy.interpolate(centerTrans) }}
@@ -177,19 +170,20 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
       <CardContainer
         animate
         ring={data.color}
-        ref={containerRef}
+        ref={boxRef}
         onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
           e.preventDefault()
-          handleClick(data)
+          handleClick({ ref: containerRef, ...data })
         }}
         alignItems="center"
         width="100%"
         p="1em"
         showState={showState}
+        className="activeIcon"
         style={{
-          color: "white",
+          color: "black",
           willChange: "transform",
           display: "flex",
           flexDirection: "column",
@@ -198,19 +192,22 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
           fontSize: ".8em",
           borderRadius: "8px",
           position: "relative",
-          // boxShadow: "2px 2px 9px 0px rgba(0,0,0,0.75)",
           transform: hoverAnimation.xys.interpolate(trans),
           cursor: "pointer",
+          boxShadow: " 0px 10px 30px -5px rgba(0, 0, 0, 0.3)",
         }}
       >
         <Box
           p="1em"
+          className=".imgBox"
           style={{
             flexBasis: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             gridArea: "space1",
+            background: "black",
+            borderRadius: "11px",
           }}
         >
           <CardImage
@@ -220,7 +217,16 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
             src={data.logo}
           />
         </Box>
-        <Heading m="1em" fontSize={["1em"]}>
+        <Heading
+          m="1em"
+          style={{
+            background: "black",
+            color: "white",
+            borderRadius: "3px",
+            transition: "transform 0.6s",
+          }}
+          fontSize={["1em"]}
+        >
           {data.title}
         </Heading>
       </CardContainer>
@@ -230,6 +236,7 @@ const ProjectCard = ({ data, handleClick, activeView }) => {
 
 const Projects = ({ key, isActive, setHeading }) => {
   const [activeView, setView] = useCustom()
+  const ref = useRef()
 
   if (Object.entries(activeView).length > 0) {
     setHeading(false)
@@ -245,6 +252,8 @@ const Projects = ({ key, isActive, setHeading }) => {
 
   return (
     <Container
+      className="projectContainer"
+      ref={ref}
       key={key}
       animate
       pt={["1em", "5%"]}
@@ -258,6 +267,7 @@ const Projects = ({ key, isActive, setHeading }) => {
     >
       {projectData.map((data, i) => (
         <ProjectCard
+          containerRef={ref}
           activeView={activeView}
           handleClick={setView}
           key={generateKey(i)}

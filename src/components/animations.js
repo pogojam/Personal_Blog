@@ -4,7 +4,7 @@ import useCustom from "./useCustom"
 import useSpace from "./spacer"
 
 export const setAnimation = anim => {
-  const { transform, rotate, fadeIn, expand, proj, size } = anim
+  const { transform, rotate, fadeIn, scean2, expand, proj, size } = anim
   return {
     slideIn: (directionX = 1, directionY = 1) => {
       return {
@@ -36,6 +36,15 @@ export const setAnimation = anim => {
       proj.interpolate(x => {
         return x
       }),
+    scean2: {
+      transform:
+        scean2 &&
+        scean2.interpolate(
+          e =>
+            `rotate(${e *
+              -40}deg) matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)`
+        ),
+    },
   }
 }
 

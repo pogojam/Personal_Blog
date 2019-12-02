@@ -20,6 +20,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       className="heading"
       pt={["40%", 0]}
       style={{
+        color: "black",
         ...animation.fadeIn(4),
         ...animation.slideIn(-1),
         ...props.style,
@@ -48,7 +49,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             ...animation.size([0, 30, "vw"]),
           }}
         >
-          <Box m="1em" style={{ borderTop: "1px solid white" }} />
+          <Box m="1em" style={{ borderTop: "1px solid black" }} />
         </animated.div>
         <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
           <Text
@@ -105,6 +106,18 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
 
   const [headingState, setHeading] = useState(true)
 
+  const Background = animated(styled(Box)`
+    left: 0;
+    width: 100%;
+    height: 150vw;
+    min-height: 100vh;
+    background: #f10244;
+    position: absolute;
+    transition: opacity 0.3s;
+    z-index: 0;
+    transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  `)
+
   return (
     <Container
       animate
@@ -114,27 +127,33 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        position: "relative",
         ...props.style,
-        ...animation.slideIn(-1),
       }}
     >
+      <Background
+        className="scean2_Background"
+        style={{ ...animation.scean2 }}
+      />
       <HeadingContainer
         animate
         style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
         <Heading
-          fontSize={["2em", "4.25rem"]}
+          fontSize={["2em", "10.25rem"]}
           style={{
             width: "40%",
+            position: "absolute",
+            top: "-.6em",
             textAlign: "center",
             whiteSpace: "nowrap",
             margin: "auto",
             transition: "opacity 1s",
-            color: "#ffbdbd",
+            color: "black",
             opacity: headingState ? 1 : 0,
           }}
         >
-          Projects
+          Apps
         </Heading>
       </HeadingContainer>
       <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
@@ -184,6 +203,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
         willChange: "transform",
         ...animation.fadeIn(1),
         ...props.style,
+        color: "black",
       }}
       ref={ref}
       animate
@@ -201,7 +221,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 transition: "background .3s",
                 borderRadius: "3px",
                 cursor: "pointer",
-                color: isActive[i] ? "red" : "white",
+                color: isActive[i] ? "red" : "black",
               }}
               onClick={handleClick(i)}
               bg={isActive[i] ? "#0000009e" : "transparent"}
@@ -310,6 +330,7 @@ const Scean_Interface = ({ index, ...props }) => {
     size: [1],
     transform: [0, 0],
     proj: [3],
+    scean2: [0],
   }))
 
   useEffect(() => {
@@ -332,6 +353,7 @@ const Scean_Interface = ({ index, ...props }) => {
             expand: inr,
             h1: calcXY(inr / 2),
             proj: calcXY(-inr),
+            scean2: inr,
           })
         : stop()
     }

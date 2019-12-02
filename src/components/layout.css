@@ -1,13 +1,14 @@
 /* @import url("https://fonts.googleapis.com/css?family=Abel|Jomhuria&display=swap"); */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans|Raleway:300&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Josefin+Slab|Julius+Sans+One|Monoton|Poiret+One|Gruppo&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Heebo:900&display=swap");
 
 .hoverGrow {
   transition: transform 1s linear;
 }
 
 .hoverGrow:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 .hoverCard h2 {
@@ -48,7 +49,7 @@
 h1,
 h2,
 h3 {
-  font-family: "Monoton", cursive !important;
+  font-family: "Heebo", sans-serif;
 }
 html {
   font-family: "Abel", sans-serif;

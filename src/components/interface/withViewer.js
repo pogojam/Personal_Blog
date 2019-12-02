@@ -7,14 +7,24 @@ import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
 import styled, { keyframes, css } from "styled-components"
-import azVideo from "../../static/video/azbutler_4X1_High.mp4"
+import useMobileDetect from "use-mobile-detect-hook"
+import projects from "../../static/projects"
 
-const slowFadeIn = keyframes`
+const animation_slowFadeIn = keyframes`
   from{
       opacity:1;
   }
   to{
     opacity:.6;
+  }
+`
+
+const animation_slideIn = keyframes`
+  from:{
+    transition:translateX('')
+  }
+  to{
+
   }
 `
 
@@ -69,63 +79,52 @@ const CircleButton = styled(Button)`
 const BackButton = styled(Button)`
   position: absolute;
   right: 0;
-  transform: ${({ isActive }) =>
-    isActive
-      ? `translateY(-50%) translateX(0%)`
-      : `translateY(-50%) translateX(-40%)`};
-  transition: transform opacity 1s 0.5s;
+  transform: translateY(-50%) translateX(0%);
+  transition: transform opacity 1s 5s;
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
   font-family: "Monoton", cursive !important;
-  font-size: 3em;
+  font-size: 1.8em;
   top: 50%;
-  padding-right: 1em;
   height: 100%;
   display: flex;
   align-items: center;
-  color: #1b00ff;
+  color: black;
+  background: bisque;
+
   &:hover {
-    &:after {
+    /* &:after {
       transform: translateY(-1em) translateX(0em);
     }
 
     &:before {
       transform: translateY(1em) translateX(0em);
-    }
-  }
-
-  &:after {
-    width: 4em;
-    height: 2px;
-    content: "";
-    position: absolute;
-    transform: translateY(-1em) translateX(10em);
-    box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
-    transition: 0.7s cubic-bezier(0.39, 0.575, 0.565, 1);
-  }
-
-  &:before {
-    width: 4em;
-    height: 2px;
-    content: "";
-    position: absolute;
-    transform: translateY(1em) translateX(10em);
-    box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
-    transition: 1s cubic-bezier(0.39, 0.575, 0.565, 1);
+    } */
   }
 `
 
 const SlantView = styled(Container)`
   will-change: transform;
-  transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 1.2s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  z-index: 1;
 
-  ${({ isActive, side }) =>
+  ${({ isActive, isMobile, side }) =>
     isActive
+      ? isMobile
+        ? css`
+            transform: translateX(0%);
+          `
+        : css`
+            transform: translateX(${side === "left" ? "-50%" : "-52%"})
+              matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+          `
+      : isMobile
       ? css`
-          transform: translateX(-36%)
-            matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+          transform: translateX(-40%);
         `
       : css`
-          transform: translateX(${side === "left" ? -100 : 0}%)
+          transform: translateX(
+              ${side === "left" ? "calc(-115% + 8em)" : "55%"}
+            )
             matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         `}
   &:after {
@@ -135,7 +134,7 @@ const SlantView = styled(Container)`
     left: 0;
     width: 100%;
     height: 100%;
-    animation: ${slowFadeIn} 4s forwards;
+    animation: ${animation_slowFadeIn} 4s forwards;
   }
 `
 
@@ -143,19 +142,26 @@ const Content = ({
   data: { discription, poster, title, gitLink },
   stackObj,
   props,
+
   isActive,
   inAnimation,
   color,
   setView,
 }) => {
+  const detectMobile = useMobileDetect()
+  const isMobile = detectMobile.isMobile()
+  const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
+  const desktopAnim = [
+    `translateX(0%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) `,
+    `translateX(40%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)`,
+  ]
+
   const backgroundSlide = useSpring({
     from: {
-      transform:
-        "translateX(0%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) ",
+      transform: isMobile ? mobileAnim[0] : desktopAnim[0],
     },
     to: {
-      transform:
-        "translateX(40%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) ",
+      transform: isMobile ? mobileAnim[1] : desktopAnim[1],
     },
     config: { tension: 10, mass: 4 },
   })
@@ -167,6 +173,10 @@ const Content = ({
     }
   }
 
+  const containerIndex = status => {
+    return status ? 0 : 0
+  }
+
   return (
     <>
       <Container
@@ -175,16 +185,17 @@ const Content = ({
           position: "fixed",
           left: 0,
           top: 0,
-          height: "50%",
+          height: "50vh",
           width: "100%",
           willChange: "transform ",
-          opacity: inAnimation.opacity.interpolate(e => e),
-          zIndex: isActive ? 9999 : -2,
+          zIndex: containerIndex(isActive),
+          transform: inAnimation.slide.interpolate(e => slideCalcY(e, -1)),
         }}
         type="Flex"
         flexBasis="100%"
       >
         <SlantView
+          isMobile={isMobile}
           side="left"
           isActive={isActive}
           style={{
@@ -192,6 +203,7 @@ const Content = ({
             width: "100vw",
             height: "100%",
             overflow: "hidden",
+            background: "black",
           }}
         >
           {ProjectData.map((d, i) => (
@@ -206,8 +218,8 @@ const Content = ({
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
-                top: "-25%",
-                left: "-15%",
+                top: isMobile ? "0" : "-25%",
+                left: isMobile ? "0" : "-15%",
                 width: "100%",
                 minHeight: "100%",
                 opacity: d.poster === poster ? 1 : 0,
@@ -219,29 +231,47 @@ const Content = ({
         </SlantView>
 
         <SlantView
+          isMobile={isMobile}
           isActive={isActive}
           style={{
             position: "absolute",
             width: "100vw",
             height: "100%",
-            right: "-104%",
-            background: "#252525",
-            display: "none",
+            right: "-100%",
+            background: "black",
           }}
-        ></SlantView>
+        >
+          <Text
+            style={{
+              maxWidth: "30%",
+              textAlign: "left",
+              transition: "opacity 1s .4s",
+              transform:
+                "translateX(24%) matrix3d(1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1)",
+              position: "absolute",
+              bottom: 0,
+              top: "50%",
+              opacity: isActive ? 1 : 0,
+            }}
+            px={["1em", "3em"]}
+          >
+            {discription}
+          </Text>
+        </SlantView>
       </Container>
 
       <animated.div
         style={{
           willChange: "transform opacity",
           position: "fixed",
-          zIndex: 999,
+          zIndex: 0,
           left: 0,
           bottom: 0,
-          height: "50%",
+          height: "45%",
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          background: "black",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
@@ -253,7 +283,6 @@ const Content = ({
           style={{
             whiteSpace: "wrap",
             display: "flex",
-            justifyContent: "center",
             transition: "opacity 1s .3s",
             opacity: isActive ? 1 : 0,
             color: "#ffbdbd",
@@ -270,18 +299,6 @@ const Content = ({
           type="Flex"
           flexDirection={["column", "row"]}
         >
-          <Text
-            style={{
-              display: "flex",
-              flexBasis: "40%",
-              textAlign: "left",
-              transition: "opacity 1s .4s",
-              opacity: isActive ? 1 : 0,
-            }}
-            px={["1em", "3em"]}
-          >
-            {discription}
-          </Text>
           <Box style={{ flexBasis: "50%" }}></Box>
         </Container>
         <Container
@@ -294,6 +311,8 @@ const Content = ({
           style={{
             flexBasis: "38%",
             zIndex: 999,
+            position: "absoulte",
+            top: "50%",
           }}
         >
           <CircleButton
@@ -323,7 +342,7 @@ const Content = ({
         <BackButton
           isActive={isActive}
           onClick={() => {
-            setView({})
+            setView(false)
           }}
           text="Menu"
         />
@@ -374,29 +393,62 @@ const scrollEvent = offsetY => () =>
 
 export const Viewer = () => {
   const [view, setView] = useCustom()
-  const enterView = Object.entries(view).length > 0
+  const [enterView, setEnter] = useState()
+  const [pRef, setRef] = useState()
+
+  useEffect(() => {
+    if (Object.entries(view).length > 0) {
+      setEnter(true)
+    }
+
+    if (view.ref) {
+      setRef(pRef)
+    }
+  }, [view])
+
+  const showProject = () => {
+    if (view.ref) {
+      console.log("I should be lighting up ")
+    }
+  }
 
   const [animation, set, stop] = useSpring(() => ({
+    pRef: [2],
     slide: [100],
     opacity: [0],
+    onRest: ({ opacity }) => {
+      if (opacity[0] === 0) {
+        const el = document.querySelector(".projectContainer")
+
+        el.style.opacity = 1
+        setView({})
+      }
+    },
   }))
 
   useEffect(() => {
-    const offsetY = window.pageYOffset
-
     if (enterView) {
       set({ slide: [0], opacity: [1] })
-      // document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden"
       stop()
     } else {
-      // document.body.style.overflow = "scroll"
-      set({ slide: [100], opacity: [0] })
+      document.body.style.overflow = "scroll"
+      const icon = view.ref
+      console.log(icon)
+      if (icon) {
+        icon.current.style.transition = "opacity .7s"
+        icon.current.style.opacity = 0
+      }
+      set({
+        slide: [100],
+        opacity: [0],
+      })
     }
   }, [enterView])
 
   return (
     <ViewerComponent
-      setView={setView}
+      setView={setEnter}
       isActive={enterView}
       inAnimation={animation}
       data={view}

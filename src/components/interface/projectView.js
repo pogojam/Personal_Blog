@@ -46,12 +46,12 @@ const CardContainer = styled(Container)`
         return css`
           pointer-events: none;
           background-color: #d5fbff00 !important;
-          box-shadow: none;
+          box-shadow: none !important;
           h2 {
             opacity: 0;
           }
           img {
-            transform: translateY(-30%);
+            transform: translateY(0%);
           }
           &:before {
             opacity: 1 !important;
@@ -199,7 +199,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
       >
         <Box
           p="1em"
-          className=".imgBox"
+          className="imgBox"
           style={{
             flexBasis: "100%",
             display: "flex",

@@ -148,7 +148,7 @@ const Nav = ({ animation, avatar = true }) => {
         willChange: "height transform",
         display: "flex",
         flexDirection: "column",
-        borderBottomLeftRadius: "20px",
+        borderBottomLeftRadius: "3px",
         fontFamily: ' "Gruppo", cursive',
         fontWeight: 900,
       }}

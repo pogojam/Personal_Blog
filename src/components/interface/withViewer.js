@@ -38,6 +38,8 @@ const CircleButton = styled(Button)`
   align-items: center;
   justify-content: center;
   transition: transform 3s;
+  border-radius: 50%;
+  background: black;
 
   &:after {
     content: "";
@@ -48,6 +50,7 @@ const CircleButton = styled(Button)`
     left: 0;
     border-radius: 50%;
     border: 1px solid white;
+
     box-shadow: 0 0 18pt 2pt blue, 0 0 0pt 2pt blue inset;
     transition: transform 4s;
   }
@@ -71,8 +74,6 @@ const CircleButton = styled(Button)`
     &:after {
       transform: scale(1.3);
     }
-
-    transform: scale(0.9);
   }
 `
 
@@ -86,10 +87,33 @@ const BackButton = styled(Button)`
   font-size: 1.8em;
   top: 50%;
   height: 100%;
+  width: 25%;
+  max-width: 100px;
   display: flex;
   align-items: center;
   color: black;
-  background: bisque;
+
+  &:before {
+    content: "";
+    border-radius: 3px;
+    width: 0.2em;
+    height: 2em;
+    background: black;
+    position: absolute;
+    left: 50%;
+    transform: rotate(45deg) translate(0, 0);
+  }
+  &:after {
+    content: "";
+    left: 50%;
+    border-radius: 3px;
+    width: 0.2em;
+    height: 2em;
+    background: black;
+    position: absolute;
+    transform: rotate(-45deg) translate(0, 0);
+    /* transform: translateY(-1em) translateX(0em); */
+  }
 
   &:hover {
     /* &:after {
@@ -114,18 +138,14 @@ const SlantView = styled(Container)`
             transform: translateX(0%);
           `
         : css`
-            transform: translateX(${side === "left" ? "-50%" : "-52%"})
-              matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            transform: translateX(${side === "left" ? "0%" : "0%"});
           `
       : isMobile
       ? css`
-          transform: translateX(-40%);
+          transform: translateX(0%);
         `
       : css`
-          transform: translateX(
-              ${side === "left" ? "calc(-115% + 8em)" : "55%"}
-            )
-            matrix3d(1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+          transform: translateX(${side === "left" ? "-100%" : "100%"});
         `}
   &:after {
     content: "";
@@ -151,10 +171,7 @@ const Content = ({
   const detectMobile = useMobileDetect()
   const isMobile = detectMobile.isMobile()
   const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
-  const desktopAnim = [
-    `translateX(0%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) `,
-    `translateX(40%) matrix3d(1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)`,
-  ]
+  const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
   const backgroundSlide = useSpring({
     from: {
@@ -174,7 +191,7 @@ const Content = ({
   }
 
   const containerIndex = status => {
-    return status ? 0 : 0
+    return status ? 1 : 0
   }
 
   return (
@@ -199,8 +216,8 @@ const Content = ({
           side="left"
           isActive={isActive}
           style={{
-            position: "absolute",
-            width: "100vw",
+            position: "relative",
+            width: "50vw",
             height: "100%",
             overflow: "hidden",
             background: "black",
@@ -214,13 +231,11 @@ const Content = ({
               className="prjImg"
               ref={ref => playVideo(d.poster, ref)}
               style={{
-                ...backgroundSlide,
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
-                top: isMobile ? "0" : "-25%",
-                left: isMobile ? "0" : "-15%",
-                width: "100%",
+                top: isMobile ? "0" : "0",
+                right: isMobile ? "0" : "0",
                 minHeight: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
@@ -235,22 +250,20 @@ const Content = ({
           isActive={isActive}
           style={{
             position: "absolute",
-            width: "100vw",
+            width: "50vw",
             height: "100%",
-            right: "-100%",
+            right: "0%",
             background: "black",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Text
             style={{
               maxWidth: "30%",
-              textAlign: "left",
+              textAlign: "center",
               transition: "opacity 1s .4s",
-              transform:
-                "translateX(24%) matrix3d(1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1)",
-              position: "absolute",
-              bottom: 0,
-              top: "50%",
               opacity: isActive ? 1 : 0,
             }}
             px={["1em", "3em"]}
@@ -264,20 +277,20 @@ const Content = ({
         style={{
           willChange: "transform opacity",
           position: "fixed",
-          zIndex: 0,
+          zIndex: 1,
           left: 0,
           bottom: 0,
-          height: "45%",
+          height: "50%",
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "black",
+          background: "transparent",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
       >
         <Heading
-          fontSize="3.4em"
+          fontSize={["3em", "7em"]}
           fontWeight="900"
           textAlign={["left", "center"]}
           style={{
@@ -285,9 +298,10 @@ const Content = ({
             display: "flex",
             transition: "opacity 1s .3s",
             opacity: isActive ? 1 : 0,
-            color: "#ffbdbd",
+            color: "black",
+            textShadow: "2px 2px #2779a0",
           }}
-          fontWeight="100"
+          fontWeight="900"
           px="1em"
           py=".5em"
         >
@@ -329,9 +343,10 @@ const Content = ({
             }}
             className="hoverGrow"
             github={gitLink}
-            color="white"
+            color="black"
           />
           <Icon
+            color="black"
             style={{
               transition: "opacity 1s ",
               opacity: isActive ? 1 : 0,
@@ -344,7 +359,6 @@ const Content = ({
           onClick={() => {
             setView(false)
           }}
-          text="Menu"
         />
       </animated.div>
     </>

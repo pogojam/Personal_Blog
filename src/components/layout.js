@@ -10,15 +10,10 @@ import { useScroll } from "react-use-gesture"
 import Splash from "./elements/splash"
 
 const Layout = ({ children, navAnim = true, ...props }) => {
-  const bind = useScroll(() => {}, {
-    domTarget: window,
-  })
-
   const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
   return (
     <Box style={{ overflow: "hidden" }}>
       <Flex
-        {...bind()}
         id="MainContainer"
         ml={"10%"}
         mr={"10%"}

@@ -7,7 +7,6 @@ import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
 import styled, { keyframes, css } from "styled-components"
-import useMobileDetect from "use-mobile-detect-hook"
 import projects from "../../static/projects"
 
 const animation_slowFadeIn = keyframes`
@@ -131,18 +130,10 @@ const SlantView = styled(Container)`
   transition: transform 1.2s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
   z-index: 1;
 
-  ${({ isActive, isMobile, side }) =>
+  ${({ isActive, side }) =>
     isActive
-      ? isMobile
-        ? css`
-            transform: translateX(0%);
-          `
-        : css`
-            transform: translateX(${side === "left" ? "0%" : "0%"});
-          `
-      : isMobile
       ? css`
-          transform: translateX(0%);
+          transform: translateX(${side === "left" ? "0%" : "0%"});
         `
       : css`
           transform: translateX(${side === "left" ? "-100%" : "100%"});
@@ -162,23 +153,19 @@ const Content = ({
   data: { discription, poster, title, gitLink },
   stackObj,
   props,
-
   isActive,
   inAnimation,
-  color,
   setView,
 }) => {
-  const detectMobile = useMobileDetect()
-  const isMobile = detectMobile.isMobile()
-  const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
+  // const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
   const backgroundSlide = useSpring({
     from: {
-      transform: isMobile ? mobileAnim[0] : desktopAnim[0],
+      transform: desktopAnim[0],
     },
     to: {
-      transform: isMobile ? mobileAnim[1] : desktopAnim[1],
+      transform: desktopAnim[1],
     },
     config: { tension: 10, mass: 4 },
   })
@@ -212,7 +199,6 @@ const Content = ({
         flexBasis="100%"
       >
         <SlantView
-          isMobile={isMobile}
           side="left"
           isActive={isActive}
           style={{
@@ -234,8 +220,8 @@ const Content = ({
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
-                top: isMobile ? "0" : "0",
-                right: isMobile ? "0" : "0",
+                top: "0",
+                right: "0",
                 minHeight: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
@@ -246,7 +232,6 @@ const Content = ({
         </SlantView>
 
         <SlantView
-          isMobile={isMobile}
           isActive={isActive}
           style={{
             position: "absolute",

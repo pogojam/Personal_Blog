@@ -76,7 +76,6 @@ const Contact_Container = styled(Box)`
   &:hover {
     opacity: 1;
   }
-
   transition: opacity 1s linear;
 `
 

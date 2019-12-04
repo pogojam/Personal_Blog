@@ -98,7 +98,6 @@ function Stars(scean, count) {
 
   scean.add(stars)
 }
-const background = new CanvasBackground()
 
 const Background = () => {
   const [bg, setBg] = useState(null)
@@ -107,6 +106,7 @@ const Background = () => {
     domTarget: window,
   })
   useEffect(() => {
+    const background = new CanvasBackground()
     console.log("tick")
     setBg(background)
   }, [])

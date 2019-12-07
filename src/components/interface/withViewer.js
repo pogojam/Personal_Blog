@@ -6,6 +6,7 @@ import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
+import { FiGlobe } from "react-icons/fi"
 import styled, { keyframes, css } from "styled-components"
 import projects from "../../static/projects"
 
@@ -78,37 +79,36 @@ const CircleButton = styled(Button)`
 
 const BackButton = styled(Button)`
   position: absolute;
+  width: 3em;
+  height: 3em;
   right: 0;
   transform: translateY(-50%) translateX(0%);
   transition: transform opacity 1s 5s;
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
   font-family: "Monoton", cursive !important;
-  font-size: 1.8em;
-  top: 50%;
-  height: 100%;
-  width: 25%;
   max-width: 100px;
-  display: flex;
   align-items: center;
-  color: black;
 
   &:before {
     content: "";
     border-radius: 3px;
     width: 0.2em;
     height: 2em;
-    background: black;
+    background: white;
     position: absolute;
     left: 50%;
+    top: 50%;
     transform: rotate(45deg) translate(0, 0);
   }
   &:after {
     content: "";
     left: 50%;
     border-radius: 3px;
+
     width: 0.2em;
     height: 2em;
-    background: black;
+    top: 50%;
+    background: white;
     position: absolute;
     transform: rotate(-45deg) translate(0, 0);
     /* transform: translateY(-1em) translateX(0em); */
@@ -157,6 +157,8 @@ const Content = ({
   inAnimation,
   setView,
 }) => {
+  const [windowRec, setRec] = useState()
+
   // const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
@@ -178,20 +180,44 @@ const Content = ({
   }
 
   const containerIndex = status => {
-    return status ? 1 : 0
+    return status ? 0 : 0
   }
+
+  const DiscriptionText = styled(Text)`
+    &:after {
+      /* content: "";
+      position: absolute;
+      right: 50%;
+      background: beige;
+      width: 1px;
+      height: 3em;
+      transform: rotate(0deg); */
+    }
+
+    &:before {
+      /* content: "";
+      position: absolute;
+      right: 50%;
+      background: beige;
+      width: 1px;
+      height: 3em;
+      transform: rotate(0deg); */
+    }
+  `
 
   return (
     <>
       <Container
         animate
+        flexDirection={["column", "row"]}
         style={{
           position: "fixed",
           left: 0,
           top: 0,
-          height: "50vh",
+          height: "80%",
           width: "100%",
           willChange: "transform ",
+          display: "flex",
           zIndex: containerIndex(isActive),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, -1)),
         }}
@@ -202,11 +228,10 @@ const Content = ({
           side="left"
           isActive={isActive}
           style={{
-            position: "relative",
-            width: "50vw",
+            width: "100%",
             height: "100%",
             overflow: "hidden",
-            background: "black",
+            background: "beige",
           }}
         >
           {ProjectData.map((d, i) => (
@@ -217,6 +242,7 @@ const Content = ({
               className="prjImg"
               ref={ref => playVideo(d.poster, ref)}
               style={{
+                filter: "blur(3px)",
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
@@ -225,6 +251,7 @@ const Content = ({
                 minHeight: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
+              webkit-playsinline
             >
               <source src={d.video} type="video/mp4" />
             </Container>
@@ -234,29 +261,55 @@ const Content = ({
         <SlantView
           isActive={isActive}
           style={{
-            position: "absolute",
-            width: "50vw",
+            width: "100%",
             height: "100%",
-            right: "0%",
-            background: "black",
+            background: "#0d1315",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Text
+          <DiscriptionText
+            maxWidth={["", "30%"]}
+            m={["1em", ""]}
             style={{
-              maxWidth: "30%",
-              textAlign: "center",
+              letterSpacing: -1,
               transition: "opacity 1s .4s",
               opacity: isActive ? 1 : 0,
+              borderRadius: "4px",
             }}
-            px={["1em", "3em"]}
+            p="1em"
+            bg="beige"
+            color="black"
           >
             {discription}
-          </Text>
+          </DiscriptionText>
         </SlantView>
       </Container>
+
+      <Heading
+        width={["100%", "60%"]}
+        fontSize={["9vw"]}
+        fontWeight="900"
+        textAlign={["left", "center"]}
+        mt={["45%", "50vh"]}
+        style={{
+          whiteSpace: "nowrap",
+          display: "flex",
+          transition: "opacity 1s .3s",
+          opacity: isActive ? 1 : 0,
+          color: "#0c0c35",
+          background: "bisque",
+          position: "fixed",
+          // top: "45%",
+          left: 0,
+        }}
+        fontWeight="900"
+        px="1em"
+        py=".5em"
+      >
+        {title}
+      </Heading>
 
       <animated.div
         style={{
@@ -265,41 +318,15 @@ const Content = ({
           zIndex: 1,
           left: 0,
           bottom: 0,
-          height: "50%",
+          height: "20%",
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "transparent",
+          background: "#020519",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
       >
-        <Heading
-          fontSize={["3em", "7em"]}
-          fontWeight="900"
-          textAlign={["left", "center"]}
-          style={{
-            whiteSpace: "wrap",
-            display: "flex",
-            transition: "opacity 1s .3s",
-            opacity: isActive ? 1 : 0,
-            color: "black",
-            textShadow: "2px 2px #2779a0",
-          }}
-          fontWeight="900"
-          px="1em"
-          py=".5em"
-        >
-          {title}
-        </Heading>
-        <Container
-          style={{ alignItems: "flex-end" }}
-          flexBasis="100%"
-          type="Flex"
-          flexDirection={["column", "row"]}
-        >
-          <Box style={{ flexBasis: "50%" }}></Box>
-        </Container>
         <Container
           type="Flex"
           p={["0em", "1em"]}
@@ -308,7 +335,8 @@ const Content = ({
           justifyContent="center"
           alignItems="center"
           style={{
-            flexBasis: "38%",
+            position: "relative",
+            flexBasis: "100%",
             zIndex: 999,
             position: "absoulte",
             top: "50%",
@@ -319,7 +347,7 @@ const Content = ({
               transition: "opacity 1s .2s",
               opacity: isActive ? 1 : 0,
             }}
-            text="View"
+            text={FiGlobe()}
           />
           <Icon
             style={{
@@ -328,23 +356,23 @@ const Content = ({
             }}
             className="hoverGrow"
             github={gitLink}
-            color="black"
+            color="beige"
           />
           <Icon
-            color="black"
+            color="beige"
             style={{
               transition: "opacity 1s ",
               opacity: isActive ? 1 : 0,
             }}
             {...stackObj}
           />
+          <BackButton
+            isActive={isActive}
+            onClick={() => {
+              setView(false)
+            }}
+          />
         </Container>
-        <BackButton
-          isActive={isActive}
-          onClick={() => {
-            setView(false)
-          }}
-        />
       </animated.div>
     </>
   )

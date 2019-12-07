@@ -11,7 +11,7 @@ import { Icon, Button } from "../components/elements"
 import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
-
+import { width, height, transform } from "styled-system"
 //SCEAN Panels
 
 const Scean1 = ({ html, animation, ...props }, ref) => {
@@ -61,6 +61,8 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             Curious and humble , full stack developer and entrepreneur.
           </Text>
           <Text
+            fontWeight={200}
+            fontFamily='"Gruppo", cursive'
             p="1em"
             style={{
               maxWidth: "95vh",
@@ -108,14 +110,16 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
 
   const Background = animated(styled(Box)`
     left: 0;
-    width: 100%;
-    height: 150vw;
+    ${width}
+    ${height}
+    ${transform}
+    
     min-height: 100vh;
     background: #f10244;
     position: absolute;
     transition: opacity 0.3s;
     z-index: 0;
-    transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    /* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
   `)
 
   return (
@@ -133,6 +137,12 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
     >
       <Background
         className="scean2_Background"
+        width={["80vh", "100%"]}
+        height={["150vh"]}
+        transform={[
+          "matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
+          "matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)",
+        ]}
         style={{ ...animation.scean2 }}
       />
       <HeadingContainer

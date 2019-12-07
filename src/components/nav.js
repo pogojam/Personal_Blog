@@ -89,7 +89,7 @@ const Contact = animation => {
         position: "fixed",
         bottom: 0,
         right: 0,
-        width: "30%",
+        width: "100%",
         height: "1em",
         borderTop: "1px solid black",
         borderLeft: "1px solid  black",
@@ -141,8 +141,7 @@ const Nav = ({ animation, avatar = true }) => {
         position: "fixed",
         right: 0,
         top: 0,
-        height: "20%",
-        backgroundColor: "rgba(255, 2, 2, 0.72)",
+        backgroundColor: "bisque",
         // height: animation ? animation.height : "3em",
         willChange: "height transform",
         display: "flex",
@@ -152,7 +151,7 @@ const Nav = ({ animation, avatar = true }) => {
         fontWeight: 900,
       }}
     >
-      <Flex style={{ flexBasis: "100%" }} justifyContent="center" ref={navRef}>
+      <Flex justifyContent="center" ref={navRef}>
         {buildButtons(pages, animation)}
       </Flex>
       <Box m=".5em" style={{ borderTop: "1px solid black" }} />
@@ -174,9 +173,7 @@ const Nav = ({ animation, avatar = true }) => {
           alignItems: "center",
         }}
       />
-      <animated.div>
-        <Contact animation={animation} />
-      </animated.div>
+      <animated.div>{/* <Contact animation={animation} /> */}</animated.div>
     </animated.div>
   )
 }

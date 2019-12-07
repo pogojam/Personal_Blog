@@ -10,7 +10,10 @@ import styled from "styled-components"
 
 const WrappedButton = animated(Box)
 
-const pages = [{ path: "/", name: "Home" }, { path: "/blog", name: "Blog" }]
+const pages = [
+  { path: "/", name: "Home" },
+  // { path: "/blog", name: "Blog" }
+]
 
 const NavButton = ({ name, path, animation, ...props }) => (
   <Link to={path} style={{ textDecoration: "none" }}>

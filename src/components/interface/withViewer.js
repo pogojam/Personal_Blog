@@ -82,6 +82,7 @@ const BackButton = styled(Button)`
   width: 3em;
   height: 3em;
   right: 0;
+  top: 50%;
   transform: translateY(-50%) translateX(0%);
   transition: transform opacity 1s 5s;
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
@@ -150,7 +151,7 @@ const SlantView = styled(Container)`
 `
 
 const Content = ({
-  data: { discription, poster, title, gitLink },
+  data: { discription, poster, title, gitLink, link },
   stackObj,
   props,
   isActive,
@@ -343,13 +344,15 @@ const Content = ({
             top: "50%",
           }}
         >
-          <CircleButton
-            style={{
-              transition: "opacity 1s .2s",
-              opacity: isActive ? 1 : 0,
-            }}
-            text={FiGlobe()}
-          />
+          <a href={link}>
+            <CircleButton
+              style={{
+                transition: "opacity 1s .2s",
+                opacity: isActive ? 1 : 0,
+              }}
+              text={FiGlobe()}
+            />
+          </a>
           <Icon
             style={{
               transition: "opacity 1s .1s",

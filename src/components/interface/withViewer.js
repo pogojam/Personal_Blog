@@ -252,6 +252,7 @@ const Content = ({
                 opacity: d.poster === poster ? 1 : 0,
               }}
               webkit-playsinline
+              playsinline
             >
               <source src={d.video} type="video/mp4" />
             </Container>

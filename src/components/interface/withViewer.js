@@ -290,21 +290,23 @@ const Content = ({
       </Container>
 
       <Heading
-        width={["100%", "60%"]}
+        width={["inherit"]}
         fontSize={["9vw"]}
         fontWeight="900"
         textAlign={["left", "center"]}
         mt={["45%", "50vh"]}
         style={{
           whiteSpace: "nowrap",
+          boxShadow: "0px 5px 8px 3px #00000073",
           display: "flex",
-          transition: "opacity 1s .3s",
+          transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
+          transform: isActive ? "translateY(0%)" : "translateY(-90vh)",
           color: "#0c0c35",
           background: "bisque",
           position: "fixed",
-          // top: "45%",
           left: 0,
+          willChange: "transform opacity",
         }}
         fontWeight="900"
         px="1em"

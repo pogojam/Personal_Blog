@@ -354,18 +354,17 @@ const Scean_Interface = ({ index, ...props }) => {
     }
 
     if (inr) {
-      inr >= 0
-        ? set({
-            fadeIn: inr,
-            rotate: calcRotation(inr),
-            transform: calcXY(inr),
-            size: inr,
-            expand: inr,
-            h1: calcXY(inr / 2),
-            proj: calcXY(-inr),
-            scean2: inr,
-          })
-        : stop()
+      inr >= 0 &&
+        set({
+          fadeIn: inr,
+          rotate: calcRotation(inr),
+          transform: calcXY(inr),
+          size: inr,
+          expand: inr,
+          h1: calcXY(inr / 2),
+          proj: calcXY(-inr),
+          scean2: inr,
+        })
     }
   }, [entries.intersectionRatio, isActive])
 

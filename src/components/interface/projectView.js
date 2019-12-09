@@ -220,7 +220,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
         <Heading
           m="1em"
           style={{
-            background: "black",
+            background: "rgb(2, 5, 25)",
             color: "white",
             borderRadius: "3px",
             transition: "transform 0.6s",

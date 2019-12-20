@@ -144,7 +144,7 @@ const Nav = ({ animation, avatar = true }) => {
         position: "fixed",
         right: 0,
         top: 0,
-        backgroundColor: "bisque",
+        backgroundColor: "white",
         // height: animation ? animation.height : "3em",
         willChange: "height transform",
         display: "flex",

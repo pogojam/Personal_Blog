@@ -3,7 +3,7 @@ import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
 import Layout from "../components/layout"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import _ from "lodash"
 import { useTransition, animated, useSpring } from "react-spring"
 import { generateKey, useObserver, useSceanState } from "../components/util"
@@ -12,6 +12,8 @@ import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
 import { width, height, transform } from "styled-system"
+import LogoSvg from "../static/images/whiteLogo.svg"
+
 //SCEAN Panels
 
 const Scean1 = ({ html, animation, ...props }, ref) => {
@@ -311,7 +313,21 @@ const Scean_Interface = ({ index, ...props }) => {
   const activeThreshold = 0.6
 
   const [ref, entries] = useObserver({
-    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    threshold: [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      0.95,
+      1.0,
+    ],
     rootMargin: "0px 0px 0px 0px",
   })
   const [isActive, setActive] = useState(false)
@@ -381,21 +397,102 @@ const Scean_Interface = ({ index, ...props }) => {
   )
 }
 
+const Splash = () => {
+  const [inAnim, setAnim] = useSpring(() => ({
+    xy: [0, -100],
+  }))
+
+  const BackDrop = animated(styled(Box)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999999;
+  `)
+
+  useEffect(() => {
+    setAnim({
+      xy: [0, 150],
+    })
+
+    // setTimeout(
+    //   () =>
+    //     setAnim({
+    //       xy: [0, 100],
+    //     }),
+    //   2000
+    // )
+  }, [])
+
+  const flashAnim = keyframes`
+    0%{
+      opacity:0;
+      /* transform: translate(-30vw,-10%); */
+      
+    }
+
+
+    100%{
+      opacity:1;
+      /* transform:translate(0vw,-30%); */
+    }
+  
+  `
+
+  const LoadedImage = styled(Box)`
+    position: relative;
+    animation: ${flashAnim} 3s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+    width: 5em;
+    height: 5em;
+    background: url(${LogoSvg}) center;
+    background-size: cover;
+    will-change: transform;
+  `
+
+  return (
+    <BackDrop
+      bg="#171010"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "25vh",
+        width: "100%",
+        transform: inAnim.xy.interpolate((e, b) => `translate(${e}%,${b}%)`),
+      }}
+    >
+      <Box>
+        <LoadedImage style={{ inAnim }} src={LogoSvg} />
+        {/* <animated.div
+          style={{
+            position: "absolute",
+            background: "red",
+            width: "100%",
+            height: "100%",
+          }}
+        ></animated.div> */}
+      </Box>
+    </BackDrop>
+  )
+}
+
 const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
 
   return (
     <Layout>
+      <Splash />
       <Viewer />
-      {sceans.map((e, i) => (
-        <Scean_Interface
-          setScean={props.setScean}
-          key={generateKey(i)}
-          index={i}
-          html={html}
-        />
-      ))}
+      <animated.div>
+        {sceans.map((e, i) => (
+          <Scean_Interface
+            setScean={props.setScean}
+            key={generateKey(i)}
+            index={i}
+            html={html}
+          />
+        ))}
+      </animated.div>
     </Layout>
   )
 }

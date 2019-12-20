@@ -234,7 +234,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
   )
 }
 
-const Projects = ({ key, isActive, setHeading }) => {
+const Projects = ({ key, isActive: isScean, setHeading }) => {
   const [activeView, setView] = useCustom()
   const ref = useRef()
 
@@ -245,10 +245,10 @@ const Projects = ({ key, isActive, setHeading }) => {
   }
 
   useEffect(() => {
-    if (!isActive) {
+    if (!isScean) {
       setView({})
     }
-  }, [isActive])
+  }, [isScean])
 
   return (
     <Container

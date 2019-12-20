@@ -154,7 +154,6 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
   useEffect(() => {
     const backgroundNode = document.querySelector(".scean2_Background")
     if (showState === 2) {
-      console.log(backgroundNode)
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {

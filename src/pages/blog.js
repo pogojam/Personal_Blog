@@ -43,6 +43,7 @@ const BlogCard = ({ frontmatter }) => {
         backgroundSize: "cover",
         position: "relative",
         borderRadius: "3px",
+        cursor: "pointer",
       }}
       onClick={() => navigate(path)}
     >
@@ -58,7 +59,11 @@ const Blog = ({ data: { allMarkdownRemark } }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <Layout navAnim={false} my="6em">
+    <Layout
+      navAnim={false}
+      style={{ overflow: "hidden", borderRadius: "13px" }}
+      my="6em"
+    >
       <Hero img={data.img} title={data.title} caption={data.caption} />
       {edges.map(({ node }) => (
         <BlogCard {...node} />

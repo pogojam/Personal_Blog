@@ -20,7 +20,9 @@ function CanvasBackground() {
   const renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setClearColor("white")
   renderer.setSize(window.innerWidth, window.innerHeight)
+
   const canvas = renderer.domElement
+  canvas.classList = "BackgroundCanvas"
   canvas.style.position = "fixed"
   canvas.style.display = "block"
   canvas.style.zIndex = -1
@@ -102,13 +104,16 @@ function Stars(scean, count) {
 const Background = () => {
   const [bg, setBg] = useState(null)
 
+  // Check if canvas is already rendered
+
   useEffect(() => {
-    const background = new CanvasBackground()
-    console.log("tick")
-    setBg(background)
+    if (!document.querySelector(".BackgroundCanvas")) {
+      const background = new CanvasBackground()
+      setBg(background)
+    }
   }, [])
 
-  return bg ? <div /> : <div />
+  return <div />
 }
 
 export default Background

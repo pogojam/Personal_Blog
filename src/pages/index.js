@@ -315,6 +315,7 @@ const Scean_Interface = ({ index, ...props }) => {
   const [ref, entries] = useObserver({
     threshold: [
       0.0,
+      0.025,
       0.05,
       0.1,
       0.2,
@@ -326,6 +327,7 @@ const Scean_Interface = ({ index, ...props }) => {
       0.8,
       0.9,
       0.95,
+      0.975,
       1.0,
     ],
     rootMargin: "0px 0px 0px 0px",
@@ -397,7 +399,7 @@ const Scean_Interface = ({ index, ...props }) => {
   )
 }
 
-const Splash = () => {
+const Splash = ({ state }) => {
   const [inAnim, setAnim] = useSpring(() => ({
     xy: [0, -100],
   }))
@@ -410,9 +412,15 @@ const Splash = () => {
   `)
 
   useEffect(() => {
-    setAnim({
-      xy: [0, 150],
-    })
+    if (state === "active") {
+      setAnim({
+        xy: [0, 450],
+      })
+    } else {
+      setAnim({
+        xy: [0, 150],
+      })
+    }
 
     // setTimeout(
     //   () =>
@@ -421,7 +429,7 @@ const Splash = () => {
     //     }),
     //   2000
     // )
-  }, [])
+  }, [state])
 
   const flashAnim = keyframes`
     0%{
@@ -479,11 +487,41 @@ const IndexPage = ({ data, ...props }) => {
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
 
+  const [State, setState] = useState("loading")
+  const [Anim, setAnim] = useSpring(() => ({
+    body: [0],
+    splash: [0],
+  }))
+
+  useEffect(() => {
+    setTimeout(() => {
+      setState("active")
+    }, 1500)
+  }, [])
+
+  useEffect(() => {
+    switch (State) {
+      case "active":
+        setAnim({
+          body: [1],
+        })
+        break
+      case "loading":
+        setAnim({
+          body: [0],
+        })
+        break
+
+      default:
+        break
+    }
+  }, [State])
+
   return (
     <Layout>
-      <Splash />
       <Viewer />
-      <animated.div>
+      <Splash state={State} />
+      <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
         {sceans.map((e, i) => (
           <Scean_Interface
             setScean={props.setScean}

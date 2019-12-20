@@ -4,6 +4,7 @@ import { Button, Flex, Card, Image, Box, Heading, Text } from "rebass"
 import { useSprings, animated, useSpring, useTransition } from "react-spring"
 import { Icon } from "./elements/icons"
 import { MdPhonelinkRing, MdEmail } from "react-icons/md"
+import { FiBook } from "react-icons/fi"
 import Container from "./container"
 import Logo from "../static/images/logo.svg"
 import styled from "styled-components"
@@ -12,23 +13,28 @@ const WrappedButton = animated(Box)
 
 const pages = [
   { path: "/", name: "Home" },
-  // { path: "/blog", name: "Blog" }
+  { path: "/blog", name: "Blog", Icon: FiBook },
 ]
 
-const NavButton = ({ name, path, animation, ...props }) => (
+const NavButton = ({ name, Icon, path, animation, ...props }) => (
   <Link to={path} style={{ textDecoration: "none" }}>
     <WrappedButton
       my=".5em"
       style={{
         cursor: "pointer",
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         ...animation,
       }}
       fontFamily={'"Monoton", cursive !important'}
       {...props}
     >
       {path !== "/" ? (
-        name
+        <>
+          {name}
+          <Icon />
+        </>
       ) : (
         <Image
           style={{

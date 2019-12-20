@@ -89,6 +89,7 @@ const BackButton = styled(Button)`
   font-family: "Monoton", cursive !important;
   max-width: 100px;
   align-items: center;
+  margin-right: 2em;
 
   &:before {
     content: "";
@@ -233,6 +234,7 @@ const Content = ({
             height: "100%",
             overflow: "hidden",
             background: "beige",
+            position: "relative",
           }}
         >
           {ProjectData.map((d, i) => (
@@ -243,13 +245,12 @@ const Content = ({
               className="prjImg"
               ref={ref => playVideo(d.poster, ref)}
               style={{
-                filter: "blur(3px)",
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
                 top: "0",
                 right: "0",
-                minHeight: "100%",
+                height: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
               webkit-playsinline
@@ -418,12 +419,6 @@ const ViewerComponent = ({ inAnimation, data, isActive, setView }) => {
   )
 }
 
-const scrollEvent = offsetY => () =>
-  window.scrollTo({
-    top: offsetY,
-    behavior: "smooth",
-  })
-
 export const Viewer = () => {
   const [view, setView] = useCustom()
   const [enterView, setEnter] = useState()
@@ -432,6 +427,8 @@ export const Viewer = () => {
   useEffect(() => {
     if (Object.entries(view).length > 0) {
       setEnter(true)
+    } else {
+      setEnter(false)
     }
 
     if (view.ref) {
@@ -439,11 +436,30 @@ export const Viewer = () => {
     }
   }, [view])
 
-  const showProject = () => {
-    if (view.ref) {
-      console.log("I should be lighting up ")
+  useEffect(() => {
+    if (enterView) {
+      set({ slide: [0], opacity: [1] })
+      document.body.style.overflow = "hidden"
+      stop()
+    } else {
+      document.body.style.overflow = "scroll"
+      const icon = view.ref
+      if (icon) {
+        if (icon.current) {
+          icon.current.style.transition = "opacity .7s"
+          icon.current.style.opacity = 0
+        }
+      }
+      set({
+        slide: [100],
+        opacity: [0],
+      })
     }
-  }
+
+    return () => {
+      document.body.style.overflow = "scroll"
+    }
+  }, [enterView])
 
   const [animation, set, stop] = useSpring(() => ({
     pRef: [2],
@@ -458,26 +474,6 @@ export const Viewer = () => {
       }
     },
   }))
-
-  useEffect(() => {
-    if (enterView) {
-      set({ slide: [0], opacity: [1] })
-      document.body.style.overflow = "hidden"
-      stop()
-    } else {
-      document.body.style.overflow = "scroll"
-      const icon = view.ref
-      console.log(icon)
-      if (icon) {
-        icon.current.style.transition = "opacity .7s"
-        icon.current.style.opacity = 0
-      }
-      set({
-        slide: [100],
-        opacity: [0],
-      })
-    }
-  }, [enterView])
 
   return (
     <ViewerComponent

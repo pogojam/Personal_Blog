@@ -16,20 +16,22 @@ const Layout = ({ children, navAnim = true, ...props }) => {
 
   const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
   return (
-    <Flex
-      {...bind()}
-      id="MainContainer"
-      ml={"10%"}
-      mr={"10%"}
-      flexDirection="column"
-      {...props}
-      style={{ minHeight: "100vh", ...props.style }}
-    >
-      {/* <Splash /> */}
-      <Background />
-      <LayoutNav />
-      <Box>{children}</Box>
-    </Flex>
+    <Box style={{ maxWidth: "100vw", overflow: "hidden" }}>
+      <Flex
+        {...bind()}
+        id="MainContainer"
+        ml={"10%"}
+        mr={"10%"}
+        flexDirection="column"
+        {...props}
+        style={{ minHeight: "100vh", ...props.style }}
+      >
+        {/* <Splash /> */}
+        <Background />
+        <LayoutNav />
+        <Box>{children}</Box>
+      </Flex>
+    </Box>
   )
 }
 

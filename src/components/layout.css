@@ -42,8 +42,9 @@
 }
 
 * {
-  /* font-family: "Abel", sans-serif; */
-  font-family: "Gruppo", cursive;
+  font-family: "Abel", sans-serif;
+
+  /* font-family: "Gruppo", cursive; */
 }
 
 h1,
@@ -256,7 +257,7 @@ html {
   box-sizing: inherit;
 }
 body {
-  color: white;
+  color: bisque;
   font-family: georgia, serif;
   font-weight: normal;
   word-wrap: break-word;

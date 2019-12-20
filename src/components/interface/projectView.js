@@ -46,12 +46,12 @@ const CardContainer = styled(Container)`
         return css`
           pointer-events: none;
           background-color: #d5fbff00 !important;
-          box-shadow: none;
+          box-shadow: none !important;
           h2 {
             opacity: 0;
           }
           img {
-            transform: translateY(-30%);
+            transform: translateY(0%);
           }
           &:before {
             opacity: 1 !important;
@@ -199,7 +199,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
       >
         <Box
           p="1em"
-          className=".imgBox"
+          className="imgBox"
           style={{
             flexBasis: "100%",
             display: "flex",
@@ -220,7 +220,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
         <Heading
           m="1em"
           style={{
-            background: "black",
+            background: "rgb(2, 5, 25)",
             color: "white",
             borderRadius: "3px",
             transition: "transform 0.6s",
@@ -234,7 +234,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
   )
 }
 
-const Projects = ({ key, isActive, setHeading }) => {
+const Projects = ({ key, isActive: isScean, setHeading }) => {
   const [activeView, setView] = useCustom()
   const ref = useRef()
 
@@ -245,10 +245,10 @@ const Projects = ({ key, isActive, setHeading }) => {
   }
 
   useEffect(() => {
-    if (!isActive) {
+    if (!isScean) {
       setView({})
     }
-  }, [isActive])
+  }, [isScean])
 
   return (
     <Container

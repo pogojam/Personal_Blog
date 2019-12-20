@@ -98,20 +98,17 @@ function Stars(scean, count) {
 
   scean.add(stars)
 }
-const background = new CanvasBackground()
 
 const Background = () => {
   const [bg, setBg] = useState(null)
 
-  const bind = useScroll(bg ? bg.scrollEvent : null, {
-    domTarget: window,
-  })
   useEffect(() => {
+    const background = new CanvasBackground()
     console.log("tick")
     setBg(background)
   }, [])
 
-  return bg ? <div {...bind()} /> : <div />
+  return bg ? <div /> : <div />
 }
 
 export default Background

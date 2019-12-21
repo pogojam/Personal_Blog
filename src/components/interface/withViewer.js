@@ -152,7 +152,7 @@ const SlantView = styled(Container)`
 `
 
 const Content = ({
-  data: { discription, poster, title, gitLink, link },
+  data: { discription, poster, title, gitLink, link, type },
   stackObj,
   props,
   isActive,
@@ -161,7 +161,6 @@ const Content = ({
 }) => {
   const [windowRec, setRec] = useState()
 
-  // const mobileAnim = [`translateX(0%)`, `translateX(0%)`]
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
   const backgroundSlide = useSpring({
@@ -185,25 +184,21 @@ const Content = ({
     return status ? 0 : 0
   }
 
-  const DiscriptionText = styled(Text)`
-    &:after {
-      /* content: "";
-      position: absolute;
-      right: 50%;
-      background: beige;
-      width: 1px;
-      height: 3em;
-      transform: rotate(0deg); */
-    }
+  const DiscriptionText = styled(Text)``
 
-    &:before {
-      /* content: "";
-      position: absolute;
-      right: 50%;
-      background: beige;
-      width: 1px;
-      height: 3em;
-      transform: rotate(0deg); */
+  const PermissionForm = styled.form`
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 1em;
+    max-width: 35%;
+
+    input {
+      background: transparent;
+      color: white;
+      border: 1px solid #ffffff5e;
+      margin: 0.2em;
     }
   `
 
@@ -347,6 +342,37 @@ const Content = ({
             top: "50%",
           }}
         >
+          {type === "auth" && (
+            <PermissionForm
+              netlify-honeypot="bot-field"
+              data-netlify="true"
+              p="1em"
+              name="Project_Permission"
+              onSubmit={e => e.preventDefault()}
+            >
+              <input
+                type="hidden"
+                name="form-name"
+                value="Project_Permission"
+              />
+              <Text
+                m="0.2em"
+                p="0.2em"
+                lineHeight=".9em"
+                fontSize=".8em"
+                color="#ffffff5e"
+                textAlign={["center", "initial"]}
+                style={{ borderBottom: "1px solid #ffffff5e" }}
+              >
+                This project requires login credentials; please submit a request
+                for access.
+              </Text>
+              <input placeholder="Reason" type="text" />
+              <input placeholder="email" type="email" />
+              <input placeholder="email" type="submit" />
+            </PermissionForm>
+          )}
+
           <a href={link}>
             <CircleButton
               style={{

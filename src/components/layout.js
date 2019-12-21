@@ -19,7 +19,7 @@ const Layout = ({ children, navAnim = true, ...props }) => {
         mr={"10%"}
         flexDirection="column"
         {...props}
-        style={{ minHeight: "100vh", ...props.style }}
+        style={{ ...props.style }}
       >
         {/* <Splash /> */}
         <Background />

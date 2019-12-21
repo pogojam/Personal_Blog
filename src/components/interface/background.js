@@ -113,7 +113,7 @@ const Background = () => {
     }
   }, [])
 
-  return <div />
+  return <div style={{ display: "none" }} />
 }
 
 export default Background

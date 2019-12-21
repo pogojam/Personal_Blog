@@ -21,6 +21,7 @@ export default [
     video:
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1573718526/video/azbutler_4X1_High.mp4",
     color: "#fc0e34",
+    type: "web",
   },
   {
     title: "Bell Captain",
@@ -37,6 +38,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574027036/video/bellcaptian_Hight_4x1.mp4",
     tag: "Business asset allocation tool",
     color: "#0ff0fc",
+    type: "auth",
   },
   {
     title: "Home App",
@@ -50,6 +52,7 @@ export default [
     stack: ["linux", "database", "react", "javascript"],
     tag: "Smart Home Interface",
     color: "#252564",
+    type: "auth",
   },
   {
     title: "SlipJaw",
@@ -65,6 +68,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574025341/video/textbeast_4x1_raw.mp4",
     tag: "Bussiness Solution, Hyatt",
     color: "#FE463F",
+    type: "mobile",
   },
   {
     title: "Folder Importer",
@@ -80,6 +84,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574025341/video/textbeast_4x1_raw.mp4",
     tag: "Developer productivity tool",
     color: "#fc0e34",
+    type: "library",
   },
   {
     title: "React Grid Builder",
@@ -95,6 +100,7 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574025341/video/textbeast_4x1_raw.mp4",
     tag: "Developer npm library",
     color: "#dfff11",
+    type: "library",
   },
 
   {
@@ -112,5 +118,6 @@ export default [
     video:
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574026168/video/textbeast_4X1_High.mp4",
     color: "#6600ff",
+    type: "tool",
   },
 ]

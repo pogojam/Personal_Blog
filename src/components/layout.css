@@ -61,11 +61,16 @@ html {
 }
 body {
   margin: 0;
-  height: 100vh;
   width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+body,
+html {
+  height: 100%;
+}
+
 article,
 aside,
 details,

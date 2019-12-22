@@ -377,11 +377,6 @@ const Content = ({
               onSubmit={handleFormSubmit}
               isSubmit={isSubmit}
             >
-              <input
-                type="hidden"
-                name="form-name"
-                value="Project_Permission"
-              />
               <Text
                 m="0.2em"
                 p="0.2em"

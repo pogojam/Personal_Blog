@@ -160,6 +160,7 @@ const Content = ({
   setView,
 }) => {
   const [windowRec, setRec] = useState()
+  const [isSubmit, setSubmit] = useState(false)
 
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
@@ -193,14 +194,38 @@ const Content = ({
     position: absolute;
     left: 1em;
     max-width: 35%;
+    border-radius: 3px;
+    overflow: hidden;
 
     input {
       background: transparent;
       color: white;
       border: 1px solid #ffffff5e;
       margin: 0.2em;
+      font-size: 0.8em;
+    }
+    &:after {
+      content: "Thank You";
+      width: 100%;
+      height: 100%;
+      background: #00f951e8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      transition: transform 1s linear;
+      transform: ${({ isSubmit }) =>
+        isSubmit ? "translateY(0%)" : "translateY(100%)"};
     }
   `
+
+  const handleFormSubmit = e => {
+    e.preventDefault()
+    setSubmit(true)
+  }
 
   return (
     <>
@@ -244,7 +269,7 @@ const Content = ({
                 background: `url(${poster})`,
                 backgroundSize: "cover",
                 top: "0",
-                right: "0",
+                left: "-50%",
                 height: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
@@ -346,9 +371,11 @@ const Content = ({
             <PermissionForm
               netlify-honeypot="bot-field"
               data-netlify="true"
+              method="POST"
               p="1em"
               name="Project_Permission"
-              onSubmit={e => e.preventDefault()}
+              onSubmit={handleFormSubmit}
+              isSubmit={isSubmit}
             >
               <input
                 type="hidden"
@@ -367,8 +394,8 @@ const Content = ({
                 This project requires login credentials; please submit a request
                 for access.
               </Text>
-              <input placeholder="Reason" type="text" />
-              <input placeholder="email" type="email" />
+              <input placeholder="Reason" name="message" type="text" />
+              <input placeholder="email" name="email" type="email" />
               <input placeholder="email" type="submit" />
             </PermissionForm>
           )}
@@ -402,6 +429,7 @@ const Content = ({
           <BackButton
             isActive={isActive}
             onClick={() => {
+              setSubmit(false)
               setView(false)
             }}
           />

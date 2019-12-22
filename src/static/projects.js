@@ -28,7 +28,7 @@ export default [
     logo:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1574110239/Logos/bellcaptain_logo.svg",
     discription:
-      "Platform used to manage daily cash distribution for cash related businesses",
+      "Platform used to manage daily cash distribution for cash related businesses.",
     gitLink: "https://github.com/pogojam/bellcaptain",
     link: "https://bellcaptain.herokuapp.com/",
     poster:
@@ -49,6 +49,8 @@ export default [
     link: "https://github.com/pogojam/entertainmentCenter",
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571961583/git/Screen_Shot_2019-10-24_at_4.59.00_PM.png",
+    video:
+      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1577049569/video/homeApp_edited.mp4",
     stack: ["linux", "database", "react", "javascript"],
     tag: "Smart Home Interface",
     color: "#252564",
@@ -74,7 +76,7 @@ export default [
     title: "Folder Importer",
     logo: folderimporterSVG,
     discription:
-      "This is a tool to help manage frequently imported files for your project . In the settings file specify default imports for any of the directories that exist inside your project .",
+      "This is a tool to help manage frequently imported files for your project . In the settings file specify default imports for any of the directories that exist inside your project.",
     gitLink: "https://github.com/pogojam/folderImporter",
     link: "https://github.com/pogojam/folderImporter",
     poster:

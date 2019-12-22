@@ -177,6 +177,7 @@ const Content = ({
   const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
   const playVideo = (p, ref) => {
     if (p === poster && ref) {
+      ref.setAttribute("playsinline")
       ref.play()
     }
   }
@@ -273,8 +274,6 @@ const Content = ({
                 height: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}
-              webkit-playsinline
-              playsinline
             >
               <source src={d.video} type="video/mp4" />
             </Container>

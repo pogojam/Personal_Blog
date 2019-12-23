@@ -107,9 +107,17 @@ const Background = () => {
   // Check if canvas is already rendered
 
   useEffect(() => {
-    if (!document.querySelector(".BackgroundCanvas")) {
-      const background = new CanvasBackground()
-      setBg(background)
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      // some code..
+    } else {
+      if (!document.querySelector(".BackgroundCanvas")) {
+        const background = new CanvasBackground()
+        setBg(background)
+      }
     }
   }, [])
 

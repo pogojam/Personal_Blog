@@ -177,7 +177,7 @@ const Content = ({
   const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
   const playVideo = (p, ref) => {
     if (p === poster && ref) {
-      ref.setAttribute("playsinline")
+      ref.setAttribute("playsinline", true)
       ref.play()
     }
   }

@@ -245,11 +245,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
       </Container>
       {transition.map(({ item, key, props }) =>
         item ? (
-          <Container
-            key={key}
-            animate
-            style={{ position: "absolute", bottom: "2em", ...props }}
-          >
+          <Container key={key} animate style={{ ...props }}>
             <form
               style={{
                 display: "flex",

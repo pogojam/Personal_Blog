@@ -203,7 +203,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
   }
 
   const handleSubmit = async () => {
-    const data = await axios.post("/.netlify", {
+    const data = await axios.post("/.netlify/functions/server", {
       message: "hiii Ryan",
     })
 

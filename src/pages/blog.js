@@ -36,7 +36,7 @@ const BlogCard = ({ frontmatter }) => {
   const { title, path, poster, caption } = frontmatter
   return (
     <Card
-      pl="50%"
+      pl={["0%", "50%"]}
       width={[1]}
       style={{
         background: `url(${poster})`,
@@ -48,7 +48,7 @@ const BlogCard = ({ frontmatter }) => {
       onClick={() => navigate(path)}
     >
       <Card borderRadius="3px" p="1em" color="white" bg="#000000a8">
-        <Heading fontSize="3em">{title}</Heading>
+        <Heading fontSize={["1em", "3em"]}>{title}</Heading>
         <Text m=".5em">{caption}</Text>
       </Card>
     </Card>

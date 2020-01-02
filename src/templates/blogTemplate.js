@@ -16,7 +16,7 @@ const Template = ({ data }) => {
         flexDirection="column"
         width={[1]}
       >
-        <Heading fontSize="6em">{frontmatter.title}</Heading>
+        <Heading fontSize={"5vw"}>{frontmatter.title}</Heading>
         <Heading p="1em" fontWeight={100} fontSize="1em">
           {frontmatter.date}
         </Heading>

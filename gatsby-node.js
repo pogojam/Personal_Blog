@@ -1,3 +1,4 @@
+require("dotenv").config()
 const path = require(`path`)
 
 exports.createPages = async ({ actions, graphql, reporter }) => {

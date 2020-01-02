@@ -12,7 +12,7 @@ import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
 import { width, height, transform } from "styled-system"
-
+import axios from "axios"
 //SCEAN Panels
 
 const Scean1 = ({ html, animation, ...props }, ref) => {
@@ -253,6 +253,18 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 flexDirection: "column",
                 alignItems: "center",
               }}
+              method="post"
+              action="/.netlify/functions/server"
+              onSubmit={e => {
+                e.preventDefault()
+                axios
+                  .post("/.netlify/functions/server", {
+                    message: "hiii Ryan",
+                  })
+                  .then(res => {
+                    console.log(res)
+                  })
+              }}
             >
               <Input
                 maxWidth="60%"
@@ -268,13 +280,14 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 cols="50"
                 rows="5"
               ></Textarea>
-              <Button
+              <input
                 style={{
                   border: "1px solid black",
                 }}
                 m="1em"
                 p=".3em"
                 text="Submit"
+                type="submit"
               />
             </form>
           </Container>

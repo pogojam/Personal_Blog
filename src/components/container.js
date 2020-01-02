@@ -2,7 +2,7 @@ import { Card, Flex, Box } from "rebass"
 import React, { useEffect, useState } from "react"
 import _ from "lodash"
 import styled from "styled-components"
-import { gridTemplateAreas, height, flexBasis } from "styled-system"
+import { gridTemplateAreas, height, flexBasis, left } from "styled-system"
 import { useSpring, animated } from "react-spring"
 
 const Grid = styled(Box)`
@@ -17,6 +17,7 @@ Object.keys(types).map(
     (types[key] = styled(types[key])`
       ${height}
       ${flexBasis}
+      ${left}
     `)
 )
 

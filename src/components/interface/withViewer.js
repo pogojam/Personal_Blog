@@ -265,12 +265,12 @@ const Content = ({
               animate
               className="prjImg"
               ref={ref => playVideo(d.poster, ref)}
+              left={["0%", "-50%"]}
               style={{
                 position: "absolute",
                 background: `url(${poster})`,
                 backgroundSize: "cover",
                 top: "0",
-                left: "-50%",
                 height: "100%",
                 opacity: d.poster === poster ? 1 : 0,
               }}

@@ -247,12 +247,18 @@ const Scean3 = ({ animation, ...props }, ref) => {
         item ? (
           <Container key={key} animate style={{ ...props }}>
             <form
+              name="Project_Lead"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              mt="1em"
               style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
             >
+              <input type="hidden" name="bot-field" />
+              <input type="hidden" name="form-name" value="Project_Lead" />
               <Input
                 maxWidth="60%"
                 placeholder="Phone"
@@ -268,6 +274,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 rows="5"
               ></Textarea>
               <Button
+                type="submit"
                 style={{
                   border: "1px solid black",
                 }}

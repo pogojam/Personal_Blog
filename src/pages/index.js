@@ -202,6 +202,14 @@ const Scean3 = ({ animation, ...props }, ref) => {
     showForm(true)
   }
 
+  const handleSubmit = async () => {
+    const data = await axios.post("/.netlify", {
+      message: "hiii Ryan",
+    })
+
+    console.log(data)
+  }
+
   return (
     <Container
       type="Flex"
@@ -254,16 +262,9 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 alignItems: "center",
               }}
               method="post"
-              action="/.netlify/functions/server"
               onSubmit={e => {
                 e.preventDefault()
-                axios
-                  .post("/.netlify/functions/server", {
-                    message: "hiii Ryan",
-                  })
-                  .then(res => {
-                    console.log(res)
-                  })
+                handleSubmit()
               }}
             >
               <Input

@@ -273,7 +273,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 cols="50"
                 rows="5"
               ></Textarea>
-              <Button
+              <input
                 type="submit"
                 style={{
                   border: "1px solid black",

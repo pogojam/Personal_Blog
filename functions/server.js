@@ -6,9 +6,9 @@ const bodyParser = require("body-parser")
 const mailer = require("express-mailer")
 const twilio = require("twilio")
 
-// const twilloID = ACad678d8906a6419e29511e79cede8445
-// const twilloKey = env.process.Twillo_KEY
-// const twilioClient = twilio(twilloID, twilloKey)
+const twilloID = ACad678d8906a6419e29511e79cede8445
+const twilloKey = env.process.Twillo_KEY
+const twilioClient = twilio(twilloID, twilloKey)
 
 // mailer.extend(app, {
 //   from: "no-reply@example.com",
@@ -42,7 +42,7 @@ const twilio = require("twilio")
 // })
 
 const handleMessage = (event, context, callback) => {
-  console.log(event.body)
+  console.log(event.body, twilloKey)
   callback(null, {
     statusCode: 200,
     body: "Hello, World",

@@ -1,5 +1,5 @@
 [[redirects]]
-
 from = "/bellcaptian"
 to = "https://bellcaptain.herokuapp.com"
+[build]
 functions = "./functions"

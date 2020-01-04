@@ -50,10 +50,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build && cd ./server && npm start",
+    "build": "gatsby build ",
     "develop": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
-    "start": "npm run develop",
+    "start": "npm run develop & nodemon ./server/server.js",
     "serve": "gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },

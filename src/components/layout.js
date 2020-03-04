@@ -6,7 +6,6 @@ import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
 import Background from "./interface/background"
-import { useScroll } from "react-use-gesture"
 import Splash from "./elements/splash"
 
 const Layout = ({ children, navAnim = true, ...props }) => {
@@ -21,7 +20,6 @@ const Layout = ({ children, navAnim = true, ...props }) => {
         {...props}
         style={{ ...props.style }}
       >
-        {/* <Splash /> */}
         <Background />
         <LayoutNav />
         <Box>{children}</Box>

@@ -188,6 +188,9 @@ const Scean3 = ({ animation, ...props }, ref) => {
   ]
   const [form, showForm] = useState()
   const [isActive, setButton] = useState([false, false, false])
+  const [phone, setPhone] = useState(null)
+  const [message, setMessage] = useState(null)
+
   const transition = useTransition(form, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -203,9 +206,11 @@ const Scean3 = ({ animation, ...props }, ref) => {
   }
 
   const handleSubmit = async () => {
-    const data = await axios.post("/.netlify/functions/server", {
-      message: "hiii Ryan",
-    })
+    const val = JSON.stringify({ phone, message })
+    const data = await axios.post(
+      "http://localhost:57339/.netlify/functions/server",
+      val
+    )
 
     console.log(data)
   }
@@ -264,7 +269,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
               method="post"
               onSubmit={e => {
                 e.preventDefault()
-                handleSubmit()
+                handleSubmit(e.target.value)
               }}
             >
               <Input
@@ -273,6 +278,8 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 type="number"
                 style={{ cursor: "1em" }}
                 m=".5em"
+                name="Phone"
+                onChange={({ target }) => setPhone(target.value)}
               />
               <Textarea
                 m=".5em"
@@ -280,6 +287,7 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 placeholder="About your project"
                 cols="50"
                 rows="5"
+                onChange={({ target }) => setMessage(target.value)}
               ></Textarea>
               <input
                 style={{

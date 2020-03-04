@@ -6,7 +6,8 @@ import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
 import { Icon, Button } from "../elements/"
 import ProjectData from "../../static/projects"
-import { FiGlobe } from "react-icons/fi"
+import { FiGlobe, FiBookmark, FiLock } from "react-icons/fi"
+import { TiLockClosedOutline, TiLockOpenOutline } from "react-icons/ti"
 import styled, { keyframes, css } from "styled-components"
 import projects from "../../static/projects"
 
@@ -27,6 +28,17 @@ const animation_slideIn = keyframes`
 
   }
 `
+
+const Lock = ({ state, props }) => {
+  switch (state) {
+    case "locked":
+      return <FiLock {...props} />
+      break
+    case "open":
+      return <div> </div>
+      break
+  }
+}
 
 const CircleButton = styled(Button)`
   position: relative;
@@ -78,41 +90,48 @@ const CircleButton = styled(Button)`
 `
 
 const BackButton = styled(Button)`
-  position: absolute;
-  width: 3em;
-  height: 3em;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%) translateX(0%);
+  --icon-color: black;
+  --icon-pos-top: 25%;
+
+  position: fixed;
+  z-index: 9999;
+  width: 65px;
+  height: 65px;
+  bottom: 0;
+  left: 50%;
+  transform: translateY(0%) translateX(-50%);
   transition: transform opacity 1s 5s;
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
   font-family: "Monoton", cursive !important;
   max-width: 100px;
   align-items: center;
-  margin-right: 2em;
+  background: rgba(255, 15, 0, 0.79);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  backdrop-filter: blut(5px);
 
   &:before {
     content: "";
     border-radius: 3px;
     width: 0.2em;
     height: 2em;
-    background: white;
+    background: var(--icon-color);
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: rotate(45deg) translate(0, 0);
+    top: var(--icon-pos-top);
+    transform: rotate(45deg) translate(0, 0%);
   }
   &:after {
     content: "";
     left: 50%;
     border-radius: 3px;
-
+    background: var(--icon-color);
     width: 0.2em;
     height: 2em;
-    top: 50%;
-    background: white;
+    top: var(--icon-pos-top);
+    background: black;
     position: absolute;
-    transform: rotate(-45deg) translate(0, 0);
+    transform: rotate(-45deg) translate(0, 0%);
     /* transform: translateY(-1em) translateX(0em); */
   }
 
@@ -159,8 +178,8 @@ const Content = ({
   inAnimation,
   setView,
 }) => {
-  const [windowRec, setRec] = useState()
   const [isSubmit, setSubmit] = useState(false)
+  const [showModle, toggleModle] = useState(false)
 
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
@@ -192,9 +211,7 @@ const Content = ({
     color: white;
     display: flex;
     flex-direction: column;
-    position: absolute;
     left: 1em;
-    max-width: 35%;
     border-radius: 3px;
     overflow: hidden;
 
@@ -230,6 +247,33 @@ const Content = ({
 
   return (
     <>
+      {showModle && (
+        <PermissionForm
+          netlify-honeypot="bot-field"
+          data-netlify="true"
+          method="POST"
+          p="1em"
+          name="Project_Permission"
+          onSubmit={handleFormSubmit}
+          isSubmit={isSubmit}
+        >
+          <Text
+            m="0.2em"
+            p="0.2em"
+            lineHeight=".9em"
+            fontSize=".8em"
+            color="#ffffff5e"
+            textAlign={["center", "initial"]}
+            style={{ borderBottom: "1px solid #ffffff5e" }}
+          >
+            This project requires login credentials; please submit a request for
+            access.
+          </Text>
+          <input placeholder="Reason" name="message" type="text" />
+          <input placeholder="email" name="email" type="email" />
+          <input placeholder="email" type="submit" />
+        </PermissionForm>
+      )}
       <Container
         animate
         flexDirection={["column", "row"]}
@@ -237,7 +281,7 @@ const Content = ({
           position: "fixed",
           left: 0,
           top: 0,
-          height: "80%",
+          height: "100%",
           width: "100%",
           willChange: "transform ",
           display: "flex",
@@ -285,36 +329,25 @@ const Content = ({
           style={{
             width: "100%",
             height: "100%",
-            background: "#0d1315",
+
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
-        >
-          <DiscriptionText
-            maxWidth={["", "30%"]}
-            m={["1em", ""]}
-            style={{
-              letterSpacing: -1,
-              transition: "opacity 1s .4s",
-              opacity: isActive ? 1 : 0,
-              borderRadius: "4px",
-            }}
-            p="1em"
-            bg="beige"
-            color="black"
-          >
-            {discription}
-          </DiscriptionText>
-        </SlantView>
+        ></SlantView>
       </Container>
-
+      <BackButton
+        isActive={isActive}
+        onClick={() => {
+          setSubmit(false)
+          setView(false)
+        }}
+      />
       <Heading
         width={["inherit"]}
-        fontSize={["9vw"]}
+        fontSize={["9vh"]}
         fontWeight="900"
         textAlign={["left", "center"]}
-        mt={["45%", "50vh"]}
         style={{
           whiteSpace: "nowrap",
           boxShadow: "0px 5px 8px 3px #00000073",
@@ -322,15 +355,18 @@ const Content = ({
           transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
           transform: isActive ? "translateY(0%)" : "translateY(-90vh)",
-          color: "#0c0c35",
-          background: "bisque",
+          color: "black",
+          background: "rgba(126, 124, 127, 0.47)",
           position: "fixed",
           left: 0,
+          top: 0,
           willChange: "transform opacity",
+          "border-bottom-right-radius": "12px",
+          backdropFilter: "blur(5px)",
         }}
         fontWeight="900"
         px="1em"
-        py=".5em"
+        py=".1em"
       >
         {title}
       </Heading>
@@ -339,14 +375,14 @@ const Content = ({
         style={{
           willChange: "transform opacity",
           position: "fixed",
-          zIndex: 1,
-          left: 0,
+          zIndex: 0,
+          right: 0,
           bottom: 0,
-          height: "20%",
-          width: "100%",
+          height: "100%",
+          width: "50%",
           display: "flex",
           flexDirection: "column",
-          background: "#020519",
+          background: "black",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
@@ -356,43 +392,64 @@ const Content = ({
           p={["0em", "1em"]}
           alignItems="center"
           flexDirection="column"
-          justifyContent="center"
+          justifyContent="flex-end"
           alignItems="center"
           style={{
+            paddingTop: "20%",
             position: "relative",
             flexBasis: "100%",
-            zIndex: 999,
+            zIndex: 0,
             position: "absoulte",
             top: "50%",
           }}
         >
-          {type === "auth" && (
-            <PermissionForm
-              netlify-honeypot="bot-field"
-              data-netlify="true"
-              method="POST"
-              p="1em"
-              name="Project_Permission"
-              onSubmit={handleFormSubmit}
-              isSubmit={isSubmit}
+          <DiscriptionText
+            maxWidth={["", "30%"]}
+            m={["1em", ""]}
+            style={{
+              position: "relative",
+              letterSpacing: -1,
+              transition: "opacity 1s .4s",
+              opacity: isActive ? 1 : 0,
+              borderRadius: "4px",
+              height: "100%",
+              maxWidth: "350px",
+              fontSize: ".9em",
+            }}
+            p="1em"
+            bg="rgba(126, 124, 127, 0.47)"
+            color="#ffffff7a"
+          >
+            <h2
+              style={{
+                paddingBottom: "1em",
+                color: "white",
+                borderBottom: "1px solid #ffffff7a",
+              }}
             >
-              <Text
-                m="0.2em"
-                p="0.2em"
-                lineHeight=".9em"
-                fontSize=".8em"
-                color="#ffffff5e"
-                textAlign={["center", "initial"]}
-                style={{ borderBottom: "1px solid #ffffff5e" }}
-              >
-                This project requires login credentials; please submit a request
-                for access.
-              </Text>
-              <input placeholder="Reason" name="message" type="text" />
-              <input placeholder="email" name="email" type="email" />
-              <input placeholder="email" type="submit" />
-            </PermissionForm>
-          )}
+              Purpose
+            </h2>
+
+            {type === "auth" && (
+              <FiLock
+                style={{
+                  color: "red",
+                  position: "absolute",
+                  top: "10px",
+                  right: "30px",
+                }}
+              />
+            )}
+            <FiBookmark
+              style={{
+                color: "red",
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+              }}
+            />
+            {discription}
+          </DiscriptionText>
 
           <a href={link}>
             <CircleButton
@@ -400,12 +457,15 @@ const Content = ({
                 transition: "opacity 1s .2s",
                 opacity: isActive ? 1 : 0,
               }}
-              text={FiGlobe()}
+              text={type === "auth" ? FiLock() : FiGlobe()}
             />
           </a>
           <Icon
             style={{
               transition: "opacity 1s .1s",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               opacity: isActive ? 1 : 0,
             }}
             className="hoverGrow"
@@ -416,16 +476,12 @@ const Content = ({
             color="beige"
             style={{
               transition: "opacity 1s ",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               opacity: isActive ? 1 : 0,
             }}
             {...stackObj}
-          />
-          <BackButton
-            isActive={isActive}
-            onClick={() => {
-              setSubmit(false)
-              setView(false)
-            }}
           />
         </Container>
       </animated.div>
@@ -516,7 +572,6 @@ export const Viewer = () => {
     onRest: ({ opacity }) => {
       if (opacity[0] === 0) {
         const el = document.querySelector(".projectContainer")
-
         el.style.opacity = 1
         setView({})
       }

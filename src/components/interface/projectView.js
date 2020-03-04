@@ -157,6 +157,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {
+        backgroundNode.style.border = "1px solid white"
         // backgroundNode.style.opacity = 1
       }
     }
@@ -174,6 +175,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
           e.preventDefault()
+          console.log(e.target)
           handleClick({ ref: containerRef, ...data })
         }}
         alignItems="center"

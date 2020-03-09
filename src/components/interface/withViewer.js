@@ -436,7 +436,7 @@ const Content = ({
               fontSize: ".9em",
             }}
             p="1em"
-            bg="rgba(126, 124, 127, 0.47)"
+            bg="rgb(64,64,64)"
             color="#ffffff7a"
           >
             <h2

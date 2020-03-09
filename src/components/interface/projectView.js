@@ -122,12 +122,13 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
   }
 
   const calcCenter = () => {
+    const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
     const tx = window.innerWidth / 2 - (rect.width / 2 + rect.left)
-    const ty =
-      window.innerHeight -
-      boxRef.current.getBoundingClientRect().bottom +
-      -(window.innerHeight / 5)
+    console.log(rect)
+    const ty = isMobile
+      ? window.innerHeight / 2 - (rect.bottom - rect.height / 2)
+      : window.innerHeight - rect.bottom + -(window.innerHeight / 5)
     return { xy: [tx, ty] }
   }
 
@@ -170,7 +171,6 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
       <CardContainer
         animate
         ring={data.color}
-        ref={boxRef}
         onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
@@ -201,14 +201,16 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
         <Box
           p="1em"
           className="imgBox"
+          ref={boxRef}
           style={{
             flexBasis: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             gridArea: "space1",
-            background: "black",
+            backgroundColor: showState === 2 ? "transparent" : "black",
             borderRadius: "11px",
+            transition: "backgroundColor .7s linear",
           }}
         >
           <CardImage

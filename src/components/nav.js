@@ -52,7 +52,7 @@ const NavButton = ({ name, Icon, path, animation, ...props }) => (
 const buildButtons = (pages, animation) => {
   return pages.map((e, i) => (
     <NavButton
-      animation={{ color: "black" }}
+      animation={{ color: "white" }}
       bg="transparent"
       key={e.name + i}
       {...e}
@@ -150,7 +150,7 @@ const Nav = ({ animation, avatar = true }) => {
         position: "fixed",
         right: 0,
         top: 0,
-        backgroundColor: "rgba(126,124,127,0.47)",
+        backgroundColor: "rgb(64, 64, 64)",
         // height: animation ? animation.height : "3em",
         willChange: "height transform",
         display: "flex",
@@ -163,7 +163,7 @@ const Nav = ({ animation, avatar = true }) => {
       <Flex justifyContent="center" ref={navRef}>
         {buildButtons(pages, animation)}
       </Flex>
-      <Box m=".5em" style={{ borderTop: "1px solid black" }} />
+      <Box m=".5em" style={{ borderTop: "1px solid white" }} />
       {avatar && (
         <Avatar
           animation={animation}
@@ -174,7 +174,7 @@ const Nav = ({ animation, avatar = true }) => {
         linkedin="https://linkedin.com/in/ryan-breaux-4603396a"
         github="https://github.com/pogojam"
         size="1.3em"
-        color="black"
+        color="white"
         style={{
           display: "flex",
           zIndex: 9999,

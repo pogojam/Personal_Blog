@@ -40,6 +40,21 @@ const Lock = ({ state, props }) => {
   }
 }
 
+const ViewHeading = styled(Heading)`
+  transform: ${({ isActive }) =>
+    isActive ? "translateY(0%)" : "translateY(-90vh)"};
+  color: black;
+  border-bottom-right-radius: "12px";
+
+  @media (max-width: 900px) {
+    color: white;
+    transform: ${({ isActive }) =>
+      isActive ? "translateY(15vh)" : "translateY(-90vh)"};
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+`
+
 const CircleButton = styled(Button)`
   position: relative;
   width: 3em;
@@ -90,7 +105,7 @@ const CircleButton = styled(Button)`
 `
 
 const BackButton = styled(Button)`
-  --icon-color: black;
+  --icon-color: white;
   --icon-pos-top: 25%;
 
   position: fixed;
@@ -105,10 +120,16 @@ const BackButton = styled(Button)`
   font-family: "Monoton", cursive !important;
   max-width: 100px;
   align-items: center;
-  background: rgba(255, 15, 0, 0.79);
+  background: rgb(64, 64, 64);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   backdrop-filter: blut(5px);
+
+  @media (max-width: 900px) {
+    left: 0;
+    transform: translateY(0%) translateX(0%);
+    border-top-left-radius: 0;
+  }
 
   &:before {
     content: "";
@@ -129,7 +150,7 @@ const BackButton = styled(Button)`
     width: 0.2em;
     height: 2em;
     top: var(--icon-pos-top);
-    background: black;
+
     position: absolute;
     transform: rotate(-45deg) translate(0, 0%);
     /* transform: translateY(-1em) translateX(0em); */
@@ -329,7 +350,7 @@ const Content = ({
           style={{
             width: "100%",
             height: "100%",
-
+            background: "black",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -343,25 +364,23 @@ const Content = ({
           setView(false)
         }}
       />
-      <Heading
+      <ViewHeading
         width={["inherit"]}
-        fontSize={["9vh"]}
+        fontSize={["4vh", "9vh"]}
         fontWeight="900"
         textAlign={["left", "center"]}
+        isActive={isActive}
         style={{
           whiteSpace: "nowrap",
           boxShadow: "0px 5px 8px 3px #00000073",
           display: "flex",
           transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
-          transform: isActive ? "translateY(0%)" : "translateY(-90vh)",
-          color: "black",
           background: "rgba(126, 124, 127, 0.47)",
           position: "fixed",
           left: 0,
           top: 0,
           willChange: "transform opacity",
-          "border-bottom-right-radius": "12px",
           backdropFilter: "blur(5px)",
         }}
         fontWeight="900"
@@ -369,7 +388,7 @@ const Content = ({
         py=".1em"
       >
         {title}
-      </Heading>
+      </ViewHeading>
 
       <animated.div
         style={{
@@ -382,7 +401,7 @@ const Content = ({
           width: "50%",
           display: "flex",
           flexDirection: "column",
-          background: "black",
+          // background: "black",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
@@ -398,7 +417,7 @@ const Content = ({
             paddingTop: "20%",
             position: "relative",
             flexBasis: "100%",
-            zIndex: 0,
+            zIndex: 1,
             position: "absoulte",
             top: "50%",
           }}

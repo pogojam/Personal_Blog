@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans|Raleway:300&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Josefin+Slab|Julius+Sans+One|Monoton|Poiret+One|Gruppo&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Heebo:900&display=swap");
-
+@import url("https://fonts.googleapis.com/css?family=Poiret+One&display=swap")
 .hoverGrow {
   transition: transform 1s linear;
 }

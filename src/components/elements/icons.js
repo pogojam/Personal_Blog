@@ -13,7 +13,7 @@ import {
 } from "react-icons/di"
 
 const link = (path, component) => (
-  <a style={{ color: "initial" }} href={path}>
+  <a style={{ color: "initial", display: "flex" }} href={path}>
     {component}
   </a>
 )

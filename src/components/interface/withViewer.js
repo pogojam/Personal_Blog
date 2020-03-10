@@ -40,6 +40,17 @@ const Lock = ({ state, props }) => {
   }
 }
 
+const DiscriptionContainer = styled(animated.div)`
+  height: 100%;
+  width: 50%;
+
+  @media (max-width: 900px) {
+    height: 50%;
+    width: 100%;
+    padding-top: 0px;
+  }
+`
+
 const ViewHeading = styled(Heading)`
   transform: ${({ isActive }) =>
     isActive ? "translateY(0%)" : "translateY(-90vh)"};
@@ -390,18 +401,15 @@ const Content = ({
         {title}
       </ViewHeading>
 
-      <animated.div
+      <DiscriptionContainer
         style={{
           willChange: "transform opacity",
           position: "fixed",
-          zIndex: 0,
+          zIndex: 1,
           right: 0,
           bottom: 0,
-          height: "100%",
-          width: "50%",
           display: "flex",
           flexDirection: "column",
-          // background: "black",
           opacity: props.opacity.interpolate(e => e),
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, 1)),
         }}
@@ -414,9 +422,9 @@ const Content = ({
           justifyContent="flex-end"
           alignItems="center"
           style={{
-            paddingTop: "20%",
             position: "relative",
             flexBasis: "100%",
+            justifyContent: "center",
             zIndex: 1,
             position: "absoulte",
             top: "50%",
@@ -431,7 +439,6 @@ const Content = ({
               transition: "opacity 1s .4s",
               opacity: isActive ? 1 : 0,
               borderRadius: "4px",
-              height: "100%",
               maxWidth: "350px",
               fontSize: ".9em",
             }}
@@ -449,25 +456,57 @@ const Content = ({
               Purpose
             </h2>
 
-            {type === "auth" && (
-              <FiLock
-                style={{
-                  color: "red",
-                  position: "absolute",
-                  top: "10px",
-                  right: "30px",
-                }}
-              />
-            )}
-            <FiBookmark
+            <Box
               style={{
-                color: "red",
                 position: "absolute",
                 top: "10px",
                 right: "10px",
+                display: "flex",
+                alignItems: "center",
               }}
-            />
+            >
+              {type === "auth" && (
+                <FiLock
+                  style={{
+                    color: "red",
+                  }}
+                />
+              )}
+              <Icon
+                mx="10px"
+                style={{
+                  transition: "opacity 1s .1s",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "red",
+                  opacity: isActive ? 1 : 0,
+                }}
+                className="hoverGrow"
+                github={gitLink}
+                color="red"
+              />
+              <FiBookmark
+                style={{
+                  color: "red",
+                }}
+              />
+            </Box>
+
             {discription}
+
+            <Icon
+              color="beige"
+              my="20px"
+              style={{
+                transition: "opacity 1s ",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: isActive ? 1 : 0,
+              }}
+              {...stackObj}
+            />
           </DiscriptionText>
 
           <a href={link}>
@@ -479,31 +518,8 @@ const Content = ({
               text={type === "auth" ? FiLock() : FiGlobe()}
             />
           </a>
-          <Icon
-            style={{
-              transition: "opacity 1s .1s",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              opacity: isActive ? 1 : 0,
-            }}
-            className="hoverGrow"
-            github={gitLink}
-            color="beige"
-          />
-          <Icon
-            color="beige"
-            style={{
-              transition: "opacity 1s ",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              opacity: isActive ? 1 : 0,
-            }}
-            {...stackObj}
-          />
         </Container>
-      </animated.div>
+      </DiscriptionContainer>
     </>
   )
 }

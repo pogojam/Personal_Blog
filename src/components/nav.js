@@ -175,6 +175,7 @@ const Nav = ({ animation, avatar = true }) => {
         github="https://github.com/pogojam"
         size="1.3em"
         color="white"
+        subStyle={{ marginTop: "5px", marginBottom: "5px" }}
         style={{
           display: "flex",
           zIndex: 9999,
@@ -182,6 +183,7 @@ const Nav = ({ animation, avatar = true }) => {
           alignItems: "center",
         }}
       />
+
       <animated.div>{/* <Contact animation={animation} /> */}</animated.div>
     </animated.div>
   )

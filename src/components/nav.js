@@ -82,6 +82,13 @@ const Avatar = ({ link, animation }) => {
 
 const Contact_Container = styled(Box)`
   opacity: 0.4;
+
+  width: 50%;
+
+  @media (maxwidth: 900px) {
+    width: 100%;
+  }
+
   &:hover {
     opacity: 1;
   }
@@ -91,14 +98,13 @@ const Contact_Container = styled(Box)`
 const Contact = animation => {
   return (
     <Contact_Container
-      p="1em"
+      p=".8em"
       style={{
-        fontSize: ".8vw",
+        fontSize: "1em",
         alignItems: "center",
         position: "fixed",
         bottom: 0,
         right: 0,
-        width: "100%",
         height: "1em",
         borderTop: "1px solid black",
         borderLeft: "1px solid  black",
@@ -113,7 +119,6 @@ const Contact = animation => {
       <Text style={{ justifyContent: "space-between" }}>Ryan Breaux</Text>
       <Text
         style={{
-          display: "flex",
           alignItems: "center",
         }}
       >
@@ -122,7 +127,6 @@ const Contact = animation => {
       </Text>
       <Text
         style={{
-          display: "flex",
           alignItems: "center",
         }}
       >
@@ -184,7 +188,7 @@ const Nav = ({ animation, avatar = true }) => {
         }}
       />
 
-      <animated.div>{/* <Contact animation={animation} /> */}</animated.div>
+      {/* <animated.div>{<Contact animation={animation} />}</animated.div> */}
     </animated.div>
   )
 }

@@ -212,6 +212,7 @@ const Content = ({
 }) => {
   const [isSubmit, setSubmit] = useState(false)
   const [showModle, toggleModle] = useState(false)
+  const [message, setMessage] = useState()
 
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
 
@@ -446,6 +447,25 @@ const Content = ({
             bg="rgb(64,64,64)"
             color="#ffffff7a"
           >
+            {message && (
+              <Box
+                style={{
+                  position: "absolute",
+                  top: "-25px",
+                  right: 0,
+                  height: "25px",
+                  background: "rgb(25, 20, 20)",
+                  borderTopRightRadius: "3px",
+                  borderTopLeftRadius: "3px",
+                  color: "#ffffff7a",
+                  zIndex: "-1",
+                }}
+                px="10px"
+                className="animated fadeInUp"
+              >
+                {message}
+              </Box>
+            )}
             <h2
               style={{
                 paddingBottom: "1em",
@@ -465,15 +485,7 @@ const Content = ({
                 alignItems: "center",
               }}
             >
-              {type === "auth" && (
-                <FiLock
-                  style={{
-                    color: "red",
-                  }}
-                />
-              )}
               <Icon
-                mx="10px"
                 style={{
                   transition: "opacity 1s .1s",
                   display: "flex",
@@ -486,6 +498,19 @@ const Content = ({
                 github={gitLink}
                 color="red"
               />
+              {type === "auth" && (
+                <FiLock
+                  style={{
+                    color: "red",
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                  }}
+                  onMouseEnter={() =>
+                    setMessage("This app is private, request to view")
+                  }
+                  onMouseLeave={() => setMessage(null)}
+                />
+              )}
               <FiBookmark
                 style={{
                   color: "red",
@@ -516,6 +541,11 @@ const Content = ({
                 opacity: isActive ? 1 : 0,
               }}
               text={type === "auth" ? FiLock() : FiGlobe()}
+              onMouseEnter={() =>
+                type === "auth" &&
+                setMessage("This app is private, request to view")
+              }
+              onMouseLeave={() => type === "auth" && setMessage(null)}
             />
           </a>
         </Container>

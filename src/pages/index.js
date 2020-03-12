@@ -13,6 +13,8 @@ import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
 import { width, height, transform } from "styled-system"
 import axios from "axios"
+import { default as NumberFormat } from "react-number-format"
+import "animate.css"
 //SCEAN Panels
 
 const Scean1 = ({ html, animation, ...props }, ref) => {
@@ -191,6 +193,29 @@ const Scean3 = ({ animation, ...props }, ref) => {
   const [phone, setPhone] = useState(null)
   const [message, setMessage] = useState(null)
 
+  const formatPhone = val => {
+    const entry = val.split("")
+    const filteredArray = entry.filter(e => e !== ")" && e !== "(" && e !== "-")
+
+    if (!Number(filteredArray[filteredArray.length - 1])) return
+    if (filteredArray.length > 10) return
+
+    const phonenumber = filteredArray.reduce((acc, num, i) => {
+      if (i === 0) {
+        return (acc = acc + "(" + num)
+      }
+      if (i === 2) return (acc = acc + num + ")-")
+      if (i === 5) {
+        return (acc = acc + num + "-")
+      } else {
+        acc = acc + num
+      }
+      return acc
+    }, "")
+
+    setPhone(phonenumber)
+  }
+
   const transition = useTransition(form, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -272,14 +297,14 @@ const Scean3 = ({ animation, ...props }, ref) => {
                 handleSubmit(e.target.value)
               }}
             >
-              <Input
+              <NumberFormat
                 maxWidth="60%"
                 placeholder="Phone"
-                type="number"
                 style={{ cursor: "1em" }}
                 m=".5em"
                 name="Phone"
-                onChange={({ target }) => setPhone(target.value)}
+                format="+1 (###) ###-####"
+                mask="_"
               />
               <Textarea
                 m=".5em"

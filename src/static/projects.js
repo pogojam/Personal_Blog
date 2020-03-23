@@ -8,25 +8,43 @@ import gridbuilderSVG from "./images/GridBuilder.svg"
 
 export default [
   {
-    title: "AZButler",
+    title: "Market Maker Bot",
     logo:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866361/Logos/Asset_3.svg",
-    link: "https://azbutler.herokuapp.com/",
-    discription: "Simple business website build in React",
-    gitLink: "https://github.com/pogojam/AZButler",
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1585002757/Logos/16_machine_generator_paper_bulb_idea_creative_computer.svg",
+    link: "",
+    discription:
+      "A market maker bot for coinbase featuring pluggable trading strategies and on the fly calculations for all major market indicators.",
+    gitLink: "",
     poster:
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
-    stack: ["javascript", "react"],
-    tag: "Business Website",
+    stack: ["javascript"],
+    tag: "HFT Tooling",
     video:
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1573718526/video/azbutler_4X1_High.mp4",
     color: "#fc0e34",
-    type: "web",
+    type: "auth",
+  },
+  {
+    title: "Home App",
+    logo:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1585005478/Logos/home_app_logo.svg",
+    discription:
+      "This application was built to serve as a dedicated home IOT hub/house management app for your Asus TinkerBoard. Home App features a netflix like experience for movies , bill pay and chore monitoring. Movies uploaded are referenced to imdb and sorted by category. Authenticated users are able to use roommate management features and set automatic payments for all rents and recurring bills and also keep roommates accountable with the completion of chores .",
+    gitLink: "https://github.com/pogojam/entertainmentCenter",
+    link: "https://github.com/pogojam/entertainmentCenter",
+    poster:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571961583/git/Screen_Shot_2019-10-24_at_4.59.00_PM.png",
+    video:
+      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1577049569/video/homeApp_edited.mp4",
+    stack: ["linux", "database", "react", "javascript"],
+    tag: "Smart Home Interface",
+    color: "#252564",
+    type: "auth",
   },
   {
     title: "Bell Captain",
     logo:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1574110239/Logos/bellcaptain_logo.svg",
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1585005310/Logos/BellCaptain.svg",
     discription:
       "Platform used to manage daily cash distribution for cash related businesses.",
     gitLink: "https://github.com/pogojam/bellcaptain",
@@ -40,22 +58,7 @@ export default [
     color: "#0ff0fc",
     type: "auth",
   },
-  {
-    title: "Home App",
-    logo: homeappSVG,
-    discription:
-      "This application was built to take care of all home entertainment needs. Currently Home App only runs on a Asus TinkerBoard S  . After deploying the Docker file your Asus will be turned into a dedicated linux server connecting all smarthome devices on the local network.",
-    gitLink: "https://github.com/pogojam/entertainmentCenter",
-    link: "https://github.com/pogojam/entertainmentCenter",
-    poster:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571961583/git/Screen_Shot_2019-10-24_at_4.59.00_PM.png",
-    video:
-      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1577049569/video/homeApp_edited.mp4",
-    stack: ["linux", "database", "react", "javascript"],
-    tag: "Smart Home Interface",
-    color: "#252564",
-    type: "auth",
-  },
+
   {
     title: "SlipJaw",
     logo: slipjawSVG,
@@ -121,5 +124,21 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/video/upload/v1574026168/video/textbeast_4X1_High.mp4",
     color: "#6600ff",
     type: "tool",
+  },
+  {
+    title: "AZButler",
+    logo:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866361/Logos/Asset_3.svg",
+    link: "https://azbutler.herokuapp.com/",
+    discription: "Simple business website build in React",
+    gitLink: "https://github.com/pogojam/AZButler",
+    poster:
+      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
+    stack: ["javascript", "react"],
+    tag: "Business Website",
+    video:
+      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1573718526/video/azbutler_4X1_High.mp4",
+    color: "#fc0e34",
+    type: "web",
   },
 ]

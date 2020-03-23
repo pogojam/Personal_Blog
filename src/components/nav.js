@@ -41,8 +41,11 @@ const NavButton = ({ name, Icon, path, animation, ...props }) => (
             position: "fixed",
             top: "10px",
             left: "10px",
+            width: "40px",
           }}
-          src={Logo}
+          src={
+            "https://res.cloudinary.com/dxjse9tsv/image/upload/v1585001996/Logos/personal_logo.png"
+          }
         />
       )}
     </WrappedButton>

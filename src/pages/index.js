@@ -61,7 +61,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             fontSize=".7em"
             style={{ maxWidth: "95vh" }}
           >
-            Curious and humble , full stack developer and entrepreneur.
+            Curious and humble , full stack developer, entrepreneur.
           </Text>
           <Text
             fontWeight={200}

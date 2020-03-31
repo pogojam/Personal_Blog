@@ -13,14 +13,13 @@ export default [
       "https://res.cloudinary.com/dxjse9tsv/image/upload/v1585002757/Logos/16_machine_generator_paper_bulb_idea_creative_computer.svg",
     link: "",
     discription:
-      "A market maker bot for coinbase featuring pluggable trading strategies and on the fly calculations for all major market indicators.",
+      "A market maker bot using HFT strategies implemented on coinbase, featuring pluggable trading algorithms and on the fly calculations for all major market indicators.",
     gitLink: "",
-    poster:
-      "https://res.cloudinary.com/dxjse9tsv/image/upload/v1571866219/git/Screen_Shot_2019-10-23_at_2.29.37_PM.png",
+    poster: "",
     stack: ["javascript"],
     tag: "HFT Tooling",
     video:
-      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1573718526/video/azbutler_4X1_High.mp4",
+      "https://res.cloudinary.com/dxjse9tsv/video/upload/v1585619532/video/coinbase_bot_imovie_v2.mp4",
     color: "#fc0e34",
     type: "auth",
   },

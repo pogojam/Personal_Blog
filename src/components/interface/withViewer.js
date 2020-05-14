@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useLayoutEffect } from "react"
 import Container from "../container"
-import generateKey from "../util"
+import { MdClose } from "react-icons/md"
 import useCustom from "../hooks/useCustom"
 import { Text, Box, Heading, Image } from "rebass"
 import { useSpring, useTransition, config, animated } from "react-spring"
@@ -12,21 +12,21 @@ import styled, { keyframes, css } from "styled-components"
 import projects from "../../static/projects"
 
 const animation_slowFadeIn = keyframes`
-  from{
-      opacity:1;
-  }
-  to{
-    opacity:.6;
-  }
+from{
+    opacity:1;
+}
+to{
+  opacity:.6;
+}
 `
 
 const animation_slideIn = keyframes`
-  from:{
-    transition:translateX('')
-  }
-  to{
+from:{
+  transition:translateX('')
+}
+to{
 
-  }
+}
 `
 
 const Lock = ({ state, props }) => {
@@ -115,14 +115,14 @@ const CircleButton = styled(Button)`
   }
 `
 
-const BackButton = styled(Button)`
+const BackButton_Styles = styled(Button)`
   --icon-color: white;
   --icon-pos-top: 25%;
 
   position: fixed;
   z-index: 9999;
-  width: 65px;
-  height: 65px;
+  width: 55px;
+  height: 55px;
   bottom: 0;
   left: 50%;
   transform: translateY(0%) translateX(-50%);
@@ -134,49 +134,23 @@ const BackButton = styled(Button)`
   background: rgb(64, 64, 64);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  backdrop-filter: blut(5px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 900px) {
     left: 0;
     transform: translateY(0%) translateX(0%);
     border-top-left-radius: 0;
   }
-
-  &:before {
-    content: "";
-    border-radius: 3px;
-    width: 0.2em;
-    height: 2em;
-    background: var(--icon-color);
-    position: absolute;
-    left: 50%;
-    top: var(--icon-pos-top);
-    transform: rotate(45deg) translate(0, 0%);
-  }
-  &:after {
-    content: "";
-    left: 50%;
-    border-radius: 3px;
-    background: var(--icon-color);
-    width: 0.2em;
-    height: 2em;
-    top: var(--icon-pos-top);
-
-    position: absolute;
-    transform: rotate(-45deg) translate(0, 0%);
-    /* transform: translateY(-1em) translateX(0em); */
-  }
-
-  &:hover {
-    /* &:after {
-      transform: translateY(-1em) translateX(0em);
-    }
-
-    &:before {
-      transform: translateY(1em) translateX(0em);
-    } */
-  }
 `
+
+const BackButton = props => (
+  <BackButton_Styles {...props}>
+    <MdClose color="white" />
+  </BackButton_Styles>
+)
 
 const SlantView = styled(Container)`
   will-change: transform;

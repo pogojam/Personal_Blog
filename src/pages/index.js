@@ -15,6 +15,7 @@ import { width, height, transform } from "styled-system"
 import axios from "axios"
 import { default as NumberFormat } from "react-number-format"
 import "animate.css"
+import { Hero } from "../components/interface/hero"
 //SCEAN Panels
 
 const Scean1 = ({ html, animation, ...props }, ref) => {
@@ -23,7 +24,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
       className="heading"
       pt={["40%", 0]}
       style={{
-        color: "black",
+        color: "rgb(193, 1, 89)",
         ...animation.fadeIn(4),
         ...animation.slideIn(-1),
         ...props.style,
@@ -63,7 +64,7 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
           >
             Curious and humble , full stack developer, entrepreneur.
           </Text>
-          <Text
+          {/* <Text
             fontWeight={200}
             fontFamily='"Gruppo", cursive'
             p="1em"
@@ -80,17 +81,37 @@ const Scean1 = ({ html, animation, ...props }, ref) => {
             selling clothing online through an e-commerce website. I have since
             learned more advanced techniques building tools for lead generation
             and business productivity.
-          </Text>
+          </Text> */}
         </animated.div>
       </About>
     </Container>
   )
 }
 
-const Scean2 = ({ animation, isActive, ...props }, ref) => {
-  const HeadingContainer = styled(Container)`
-    &:after {
-      /* content: "";
+const Background = animated(styled(Box)`
+left: 0;
+${width}
+${height}
+${transform}
+
+min-height: 100vh;
+background: #f10244;
+position: absolute;
+transition: opacity 0.3s;
+background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 17%,
+    rgba(0, 0, 0, 0.5840750773993808) 50%,
+    rgba(0, 0, 0, 0.21875) 69%,
+    rgba(0, 0, 0, 0) 95%
+  );
+z-index: 0;
+/* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
+`)
+
+const HeadingContainer = styled(Container)`
+  &:after {
+    /* content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -100,9 +121,10 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
       z-index: -1;
       transform:matrix3d(1, 0, 0, 1, 25, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
       will-change: transform; */
-    }
-  `
+  }
+`
 
+const Scean2 = ({ animation, isActive, ...props }, ref) => {
   const animateProjects = useSpring(
     isActive
       ? { opacity: 1, transform: "scale(1)" }
@@ -110,20 +132,6 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
   )
 
   const [headingState, setHeading] = useState(true)
-
-  const Background = animated(styled(Box)`
-    left: 0;
-    ${width}
-    ${height}
-    ${transform}
-    
-    min-height: 100vh;
-    background: #f10244;
-    position: absolute;
-    transition: opacity 0.3s;
-    z-index: 0;
-    /* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
-  `)
 
   return (
     <Container
@@ -476,8 +484,9 @@ const IndexPage = ({ data, ...props }) => {
   }, [State])
 
   return (
-    <Layout>
+    <Layout style={{ Background: "black" }}>
       <Viewer />
+      <Hero />
       <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
         {sceans.map((e, i) => (
           <Scean_Interface

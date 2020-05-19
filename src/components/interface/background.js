@@ -17,8 +17,8 @@ function CanvasBackground() {
   camera.position.z = 20
 
   // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setClearColor("white")
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  renderer.setClearColor(0xffffff, 0)
   renderer.setSize(window.innerWidth, window.innerHeight)
 
   const canvas = renderer.domElement
@@ -31,7 +31,7 @@ function CanvasBackground() {
   canvas.style.backfaceVisibility = "none"
   canvas.style.willChange = "transform"
 
-  document.body.appendChild(canvas)
+  document.getElementById("BackgroundCanvas").appendChild(canvas)
 
   window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight)

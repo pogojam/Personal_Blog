@@ -158,7 +158,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {
-        backgroundNode.style.border = "1px solid white"
+        // backgroundNode.style.border = "1px solid white"
         // backgroundNode.style.opacity = 1
       }
     }

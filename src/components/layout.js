@@ -6,7 +6,7 @@ import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
 import Background from "./interface/background"
-import Splash from "./elements/splash"
+// import Splash from "./elements/splash"
 
 const Layout = ({ children, navAnim = true, ...props }) => {
   const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
@@ -14,8 +14,6 @@ const Layout = ({ children, navAnim = true, ...props }) => {
     <Box style={{ overflow: "hidden" }}>
       <Flex
         id="MainContainer"
-        ml={"10%"}
-        mr={"10%"}
         flexDirection="column"
         {...props}
         style={{ ...props.style }}

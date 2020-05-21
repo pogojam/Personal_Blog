@@ -1,3 +1,4 @@
+import { RecoilRoot } from "recoil"
 import React from "react"
 import PropTypes from "prop-types"
 import { Nav_Animation } from "./animations"
@@ -12,16 +13,18 @@ const Layout = ({ children, navAnim = true, ...props }) => {
   const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
   return (
     <Box style={{ overflow: "hidden" }}>
-      <Flex
-        id="MainContainer"
-        flexDirection="column"
-        {...props}
-        style={{ ...props.style }}
-      >
-        <Background />
-        <LayoutNav />
-        <Box>{children}</Box>
-      </Flex>
+      <RecoilRoot>
+        <Flex
+          id="MainContainer"
+          flexDirection="column"
+          {...props}
+          style={{ ...props.style }}
+        >
+          <Background />
+          <LayoutNav />
+          <Box>{children}</Box>
+        </Flex>
+      </RecoilRoot>
     </Box>
   )
 }

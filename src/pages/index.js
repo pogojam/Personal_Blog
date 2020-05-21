@@ -6,7 +6,12 @@ import Layout from "../components/layout"
 import styled, { keyframes } from "styled-components"
 import _ from "lodash"
 import { useTransition, animated, useSpring } from "react-spring"
-import { generateKey, useObserver, useSceanState } from "../components/util"
+import {
+  generateKey,
+  useObserver,
+  buildThresholdList,
+  useSceanState,
+} from "../components/util"
 import { Icon, Button } from "../components/elements"
 import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
@@ -15,76 +20,100 @@ import { width, height, transform } from "styled-system"
 import axios from "axios"
 import { default as NumberFormat } from "react-number-format"
 import "animate.css"
+import { About } from "../components/interface/about"
 import { Hero } from "../components/interface/hero"
 //SCEAN Panels
 
-const Scean1 = ({ html, animation, ...props }, ref) => {
+const Styles = styled.div`
+  color: white;
+  height: 250vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+
+  .Caption {
+    width: 68%;
+    z-index: 99;
+  }
+`
+
+const Scean1 = ({ html, animation, ...props }) => {
+  const [{ x, scale }, setAnim] = useSpring(() => ({
+    x: [0],
+    scale: [1],
+  }))
+
+  const [ref, entries] = useObserver({
+    threshold: buildThresholdList(40),
+    rootMargin: "0px 0px 0px 0px",
+  })
+
+  if (entries) {
+    const ir = entries.intersectionRatio
+
+    setAnim({ x: [ir], scale: [_.clamp(ir, 0.6, 1)] })
+  }
+
+  const fickerItems = []
   return (
-    <Container
-      className="heading"
-      pt={["40%", 0]}
-      style={{
-        color: "rgb(193, 1, 89)",
-        ...animation.fadeIn(4),
-        ...animation.slideIn(-1),
-        ...props.style,
-      }}
-      alignItems="center"
-      justifyContent="center"
-      flexDirection="column"
-      animate
-      type="Flex"
-      ref={ref}
-    >
-      <About>
-        <animated.div style={(animation.slideIn(-1), animation.rotate)}>
-          <h1>Ryan Breaux</h1>
-        </animated.div>
-        <animated.div style={(animation.slideIn(1), animation.rotate)}>
-          <Heading m="1em" style={{ fontSize: ".9em", whiteSpace: "nowrap" }}>
-            {" "}
-            Front-End/Back-End Developer
-          </Heading>
-        </animated.div>
+    <Styles>
+      <Background size={scale} />
+      <animated.div
+        ref={ref}
+        style={{
+          transform: x.interpolate(e => `translate(0px,${e * 100}px)`),
+          opacity: x.interpolate(e => e),
+          position: "absolute",
+          top: "0",
+          height: "60vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+        }}
+        className="Caption"
+      >
         <animated.div
           style={{
-            willChange: "transform,opacity",
-            ...animation.fadeIn(14),
-            ...animation.size([0, 30, "vw"]),
+            transform: x.interpolate(e => `translate(${e * 20}px,${0}px)`),
           }}
         >
-          <Box m="1em" style={{ borderTop: "1px solid black" }} />
+          <Heading>Ryan Breaux</Heading>
         </animated.div>
-        <animated.div style={(animation.slideIn(1, 0), animation.rotate)}>
-          <Text
-            fontWeight="100"
-            pl="1em"
-            fontSize=".7em"
-            style={{ maxWidth: "95vh" }}
-          >
-            Curious and humble , full stack developer, entrepreneur.
-          </Text>
-          {/* <Text
-            fontWeight={200}
-            fontFamily='"Gruppo", cursive'
-            p="1em"
+        <div>
+          <animated.div
             style={{
-              maxWidth: "95vh",
-              borderRadius: "3px",
+              transform: x.interpolate(e => `translate(${e * 40}px,${0}px)`),
             }}
           >
-            {" "}
-            Big on design and lightning fast code. Found my love for JS
-            developing on Node , leveraging the power of Non-Blocking I/O and
-            npm’s rich package eco system. Out of necessity I first started
-            learning web development in college when I started my first business
-            selling clothing online through an e-commerce website. I have since
-            learned more advanced techniques building tools for lead generation
-            and business productivity.
-          </Text> */}
-        </animated.div>
-      </About>
-    </Container>
+            <Heading type="Sub">Front-End/Back-End Developer</Heading>
+          </animated.div>
+          <animated.div
+            style={{
+              transform: x.interpolate(
+                e => `translate(${e * 100}px,${e * 0}px)`
+              ),
+            }}
+          >
+            <span
+              style={{
+                fontWeight: 900,
+                letterSpacing: "3px",
+
+                color: "blanchedalmond",
+              }}
+            >
+              {" "}
+              Curious and humble , full stack developer, entrepreneur.
+            </span>
+          </animated.div>
+        </div>
+      </animated.div>
+      <About />
+    </Styles>
   )
 }
 
@@ -98,13 +127,7 @@ min-height: 100vh;
 background: #f10244;
 position: absolute;
 transition: opacity 0.3s;
-background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 1) 17%,
-    rgba(0, 0, 0, 0.5840750773993808) 50%,
-    rgba(0, 0, 0, 0.21875) 69%,
-    rgba(0, 0, 0, 0) 95%
-  );
+background-color:'red';
 z-index: 0;
 /* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
 `)
@@ -143,6 +166,8 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         flexDirection: "column",
         justifyContent: "center",
         position: "relative",
+        backgroundColor: "black",
+        marginTop: "20vh",
         ...props.style,
       }}
     >
@@ -170,7 +195,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
             whiteSpace: "nowrap",
             margin: "auto",
             transition: "opacity 1s",
-            color: "black",
+            color: "white",
             opacity: headingState ? 1 : 0,
           }}
         >
@@ -500,12 +525,6 @@ const IndexPage = ({ data, ...props }) => {
     </Layout>
   )
 }
-
-const About = animated(styled(Box)`
-  h2 {
-    font-size: 3em;
-  }
-`)
 
 // Page Querys
 

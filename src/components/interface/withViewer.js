@@ -209,7 +209,7 @@ const Content = ({
   }
 
   const containerIndex = status => {
-    return status ? 0 : 0
+    return status ? 1 : 0
   }
 
   const DiscriptionText = styled(Text)``
@@ -459,7 +459,7 @@ const Content = ({
                 alignItems: "center",
               }}
             >
-              <Icon
+              {/* <Icon
                 style={{
                   transition: "opacity 1s .1s",
                   display: "flex",
@@ -471,7 +471,7 @@ const Content = ({
                 className="hoverGrow"
                 github={gitLink}
                 color="red"
-              />
+              /> */}
               {type === "auth" && (
                 <FiLock
                   style={{
@@ -494,7 +494,7 @@ const Content = ({
 
             {discription}
 
-            <Icon
+            {/* <Icon
               color="beige"
               my="20px"
               style={{
@@ -505,7 +505,7 @@ const Content = ({
                 opacity: isActive ? 1 : 0,
               }}
               {...stackObj}
-            />
+            /> */}
           </DiscriptionText>
 
           <a href={link}>

@@ -1,31 +1,22 @@
 import React, { useState, useEffect } from "react"
+import { activeSectionState } from "../atoms/atoms"
 import { useMove, useScroll } from "react-use-gesture"
 import { Claw1, Claw2 } from "../../static/claw"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
-import { Heading } from "../elements/heading"
 import { useObserver, buildThresholdList } from "../util"
 import BackgroundCanvas from "./background"
 import _ from "lodash"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 const BackgroundStyle = animated(styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590101077/apple-background-desk-electronics-399161.jpg");
   background-size: cover;
   filter: url("#water");
   position: absolute;
   width: 100%;
-
-  height: 100%;
-
-  .Claw {
-    height: 100%;
-    width: 160%;
-    top: 0;
-    position: absolute;
-  }
-
-  .BackgroundCanvas {
-  }
+  height: 117vh;
+  top: 0%;
 `)
 
 const AnimFeTurbulence = animated("feTurbulence")
@@ -85,25 +76,72 @@ const Ripple = () => {
   )
 }
 
-const Background = ({ size }) => {
+const Background = () => {
+  const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
+    scale: [1, 0],
+    opacity: [1],
+  }))
+
+  const [ref, entries] = useObserver({
+    threshold: buildThresholdList(40),
+    rootMargin: "0px 0px 0px 0px",
+  })
+
+  if (entries.intersectionRatio) {
+    const offset = window.innerHeight * 0.7
+    const ir = entries.intersectionRatio
+    const yVal = _.clamp(offset / ir - offset, 0, offset)
+    const scaleVal = _.clamp(ir + 0.2, 0.5, 1.2)
+    const opacityVal = ir < 0.38 ? 0 : 1
+    console.log(yVal)
+    console.log(ir)
+    setAnim({ scale: [scaleVal, yVal], opacityVal })
+  }
+
   return (
-    <BackgroundStyle
-      style={{ transform: size.interpolate(s => `scale(${s})`) }}
-    >
-      {/* <Claw1 index={2} className={"Claw"} />
+    <>
+      <BackgroundStyle
+        style={{
+          transform: scale.interpolate(
+            (s, y) => `scale(${s}) translate(0px,${y}px) `
+          ),
+          opacity,
+        }}
+      >
+        {/* <Claw1 index={2} className={"Claw"} />
       <Claw2 className="Claw" /> */}
-      <div id="BackgroundCanvas" />
-      {/* <span
+      </BackgroundStyle>
+      <div
+        ref={ref}
         style={{
           width: "100%",
-          height: "100%",
-          background: "#00000038",
+          height: "100vh",
+          top: 0,
           position: "absolute",
         }}
-      /> */}
-      <Ripple />
-    </BackgroundStyle>
+      />
+    </>
   )
+}
+
+const Background2_Styles = styled.div`
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
+  background-size: cover;
+  filter: url("#water");
+  position: absolute;
+  width: 100%;
+  height: 117vh;
+  position: absolute;
+  transition: opacity 1s linear;
+  opacity: ${({ show }) => (show ? 1 : 0)};
+  bottom: 0;
+`
+const Background2 = () => {
+  const [show, setShow] = useRecoilState(activeSectionState)
+  const globalID = "about"
+  console.log(show, "BACKGROUND HERO")
+
+  return <Background2_Styles show={show === globalID}></Background2_Styles>
 }
 
 const Styles = styled.div`
@@ -111,7 +149,7 @@ const Styles = styled.div`
 
   color: white;
   background: black;
-  height: 200vh;
+  height: 270vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -126,80 +164,12 @@ const Styles = styled.div`
 `
 
 export const Hero = ({ children }) => {
-  const [{ x, scale }, setAnim] = useSpring(() => ({
-    x: [0],
-    scale: [1],
-  }))
-
-  const [ref, entries] = useObserver({
-    threshold: buildThresholdList(40),
-    rootMargin: "0px 0px 0px 0px",
-  })
-
-  if (entries) {
-    const ir = entries.intersectionRatio
-    console.log(_.clamp(ir, 0.6, 1))
-
-    setAnim({ x: [ir], scale: [_.clamp(ir, 0.6, 1)] })
-  }
-
-  const fickerItems = []
-
   return (
     <Styles>
-      <Background size={scale} />
-
-      {/* <animated.div
-        ref={ref}
-        style={{
-          transform: x.interpolate(e => `translate(0px,${e * 100}px)`),
-          opacity: x.interpolate(e => e),
-          position: "absolute",
-          top: "0",
-          height: "60vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-        }}
-        className="Caption"
-      >
-        <animated.div
-          style={{
-            transform: x.interpolate(e => `translate(${e * 20}px,${0}px)`),
-          }}
-        >
-          <Heading>Ryan Breaux</Heading>
-        </animated.div>
-        <div>
-          <animated.div
-            style={{
-              transform: x.interpolate(e => `translate(${e * 40}px,${0}px)`),
-            }}
-          >
-            <Heading type="Sub">Front-End/Back-End Developer</Heading>
-          </animated.div>
-          <animated.div
-            style={{
-              transform: x.interpolate(
-                e => `translate(${e * 100}px,${e * 0}px)`
-              ),
-            }}
-          >
-            <span
-              style={{
-                fontWeight: 900,
-                letterSpacing: "3px",
-
-                color: "blanchedalmond",
-              }}
-            >
-              {" "}
-              Curious and humble , full stack developer, entrepreneur.
-            </span>
-          </animated.div>
-        </div>
-      </animated.div>
-      {children} */}
+      <Background />
+      <Background2 />
+      <div id="BackgroundCanvas" />
+      <Ripple />
     </Styles>
   )
 }

@@ -31,10 +31,7 @@ const NavButton = ({ name, Icon, path, animation, ...props }) => (
       {...props}
     >
       {path !== "/" ? (
-        <>
-          {name}
-          <Icon />
-        </>
+        <>{name}</>
       ) : (
         <Image
           style={{
@@ -177,7 +174,7 @@ const Nav = ({ animation, avatar = true }) => {
           link="https://res.cloudinary.com/dxjse9tsv/image/upload/v1573081599/ryansWebsite/ryansWebsite_Selfi_B_W_Center-removebg-preview.png"
         />
       )}
-      <Icon
+      {/* <Icon
         linkedin="https://linkedin.com/in/ryan-breaux-4603396a"
         github="https://github.com/pogojam"
         size="1.3em"
@@ -189,7 +186,7 @@ const Nav = ({ animation, avatar = true }) => {
           flexDirection: "column",
           alignItems: "center",
         }}
-      />
+      /> */}
 
       {/* <animated.div>{<Contact animation={animation} />}</animated.div> */}
     </animated.div>

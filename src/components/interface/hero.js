@@ -87,7 +87,7 @@ const Background = () => {
   const globalID = "hero"
 
   useEffect(() => {
-    if (entries.intersectionRatio) {
+    if (entries.intersectionRatio && window) {
       const offset = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
       const yVal = _.clamp(offset / ir - offset, 0, offset)

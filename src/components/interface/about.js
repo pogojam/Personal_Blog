@@ -69,7 +69,7 @@ const TechIcons = React.memo(({ show }) => {
     iconList.length,
 
     iconList.map((name, i) => {
-      if (window) {
+      if (typeof window !== `undefined`) {
         const paddingX = window.innerWidth / 2
         const paddingY = window.innerHeight / 2
 
@@ -98,6 +98,8 @@ const TechIcons = React.memo(({ show }) => {
             opacity: o,
           },
         }
+      } else {
+        return
       }
     })
   )

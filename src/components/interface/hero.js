@@ -4,12 +4,13 @@ import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
 import { useObserver, buildThresholdList } from "../util"
 import _ from "lodash"
+import { detect } from "detect-browser"
 
 const BackgroundStyle = animated(styled.video`
-  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg"); */
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
   background-size: cover;
   object-fit: cover;
-  filter: url("#water");
+  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -101,19 +102,23 @@ const Background = () => {
     }
   }, [entries])
 
+  const browser = detect()
+
   return (
     <>
       <BackgroundStyle
+        isSafari={browser.name === "safari"}
         autoPlay
         muted
         src="https://res.cloudinary.com/dxjse9tsv/video/upload/v1590118317/video/Follow-the-Tree.mp4"
         style={{
+          willChange: "transform opacity",
           transform: scale.interpolate(
             (s, y) => `scale(${s}) translate(0px,${y}px) `
           ),
           opacity,
         }}
-      ></BackgroundStyle>
+      />
       <div
         ref={ref}
         style={{
@@ -131,7 +136,7 @@ const Background2_Styles = styled.div`
   background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
   background-size: cover;
   will-change: filter;
-  filter: url("#water");
+  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
   position: absolute;
   width: 100%;
   height: 130vh;
@@ -143,9 +148,12 @@ const Background2_Styles = styled.div`
 const Background2 = () => {
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "about"
-
+  const browser = detect()
   return (
-    <Background2_Styles show={store.active === globalID}></Background2_Styles>
+    <Background2_Styles
+      isSafari={browser.name === "safari"}
+      show={store.active === globalID}
+    ></Background2_Styles>
   )
 }
 

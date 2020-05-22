@@ -9,6 +9,7 @@
     "animate.css": "^3.7.2",
     "axios": "^0.19.0",
     "chance": "^1.1.5",
+    "detect-browser": "^5.1.0",
     "dotenv": "^8.2.0",
     "gatsby": "^2.22.6",
     "gatsby-image": "^2.2.4",

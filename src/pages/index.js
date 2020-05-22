@@ -537,7 +537,7 @@ const IndexPage = ({ data, ...props }) => {
           }}
           store={store}
         />
-        <Viewer />
+        {/* <Viewer /> */}
         <Hero />
         <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
           {sceans.map((e, i) => (

@@ -1,22 +1,11 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useRef } from "react"
 import { PageState_Context } from "./context"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
 import { useObserver, buildThresholdList } from "../util"
+import { useScroll } from "react-use-gesture"
 import _ from "lodash"
 import { detect } from "detect-browser"
-
-const BackgroundStyle = animated(styled.video`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
-  background-size: cover;
-  object-fit: cover;
-  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  height: 50%;
-  top: 0%;
-`)
 
 const AnimFeTurbulence = animated("feTurbulence")
 const AnimFeDisplacementMap = animated("feDisplacementMap")
@@ -74,6 +63,18 @@ const Ripple = () => {
   )
 }
 
+const BackgroundStyle = animated(styled.video`
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
+  background-size: cover;
+  object-fit: cover;
+  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: -5%;
+`)
+
 const Background = () => {
   const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
     scale: [1, 0],
@@ -87,19 +88,20 @@ const Background = () => {
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
   const browser = detect()
+  const isIOS = browser.name === "ios"
+  const isSafari = browser.name === "safari" || browser.name === "ios"
+  const bgRef = useRef()
 
   useEffect(() => {
     if (entries.intersectionRatio && window) {
-      const isIOS = browser.name === "ios"
-      const offset = isIOS ? -100 : 0
+      const offset = isIOS ? -200 : 0
       const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
-      const yVal = _.clamp(skew / ir - skew, 0, skew)
+      const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
       const scaleVal = isIOS ? 1 : _.clamp(ir + 0.2, 0.5, 1.2)
-      const opacityVal = ir < 0.38 ? 0 : 1
+      // const opacityVal = ir < 0.38 ? 0 : 1
+      const opacityVal = ir
       setAnim({ scale: [scaleVal, yVal + offset], opacity: opacityVal })
-
-      console.log(yVal)
 
       if (ir > 0.2 && store.active !== globalID) {
         dispatch({ type: "SET_ACTIVE", input: globalID })
@@ -107,14 +109,24 @@ const Background = () => {
     }
   }, [entries])
 
-  console.log(browser.name === "safari" || browser.name === "ios")
+  useEffect(() => {
+    bgRef.current.setAttribute("playsinline", true)
+    bgRef.current.play()
+  }, [])
+
   return (
     <>
       <BackgroundStyle
-        isSafari={browser.name === "safari" || browser.name === "ios"}
+        ref={bgRef}
+        isSafari={isSafari}
         autoPlay
         muted
-        src="https://res.cloudinary.com/dxjse9tsv/video/upload/v1590118317/video/Follow-the-Tree.mp4"
+        loop
+        src={
+          isSafari
+            ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590187785/video/video_3.mp4"
+            : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590189267/video/Pexels_Videos_2278095.mp4"
+        }
         style={{
           willChange: "transform opacity",
           transform: scale.interpolate(
@@ -139,7 +151,7 @@ const Background = () => {
 const Background2_Styles = styled.div`
   background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
   background-size: cover;
-  will-change: filter;
+  will-change: opacity filter;
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
   position: absolute;
   width: 100%;
@@ -148,6 +160,7 @@ const Background2_Styles = styled.div`
   transition: opacity 1s linear;
   opacity: ${({ show }) => (show ? 1 : 0)};
   bottom: 0;
+  background-position: center;
 `
 const Background2 = () => {
   const [store, dispatch] = useContext(PageState_Context)
@@ -172,7 +185,10 @@ const Styles = styled.div`
   align-items: center;
   justify-content: flex-end;
   flex-direction: column;
-  overflow: hidden;
+
+  @media (min-width: 600px) {
+    overflow-x: hidden;
+  }
 
   .Caption {
     width: 68%;

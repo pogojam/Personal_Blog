@@ -16,7 +16,6 @@ const AboutStyles = styled.div`
   align-items: center;
   justify-content: center;
 
-  background: black;
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 7%,
@@ -35,7 +34,6 @@ const AboutStyles = styled.div`
     padding: 15px;
     background: #0000000a;
     backdrop-filter: blur(3px);
-    letter-spacing: 4px;
   }
 `
 
@@ -104,7 +102,7 @@ const TechIcons = React.memo(({ show }) => {
     <animated.div
       style={{ ...props, left: "50%", top: "50%", position: "absolute" }}
     >
-      <Icon size="60px" type={iconList[i]} />
+      <Icon size="5em" type={iconList[i]} />
     </animated.div>
   ))
 })

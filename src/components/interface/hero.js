@@ -13,7 +13,7 @@ const BackgroundStyle = animated(styled.video`
   z-index: 1;
   position: absolute;
   width: 100%;
-  height: 117vh;
+  height: 50%;
   top: 0%;
 `)
 
@@ -130,10 +130,11 @@ const Background = () => {
 const Background2_Styles = styled.div`
   background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
   background-size: cover;
+  will-change: filter;
   filter: url("#water");
   position: absolute;
   width: 100%;
-  height: 117vh;
+  height: 130vh;
   position: absolute;
   transition: opacity 1s linear;
   opacity: ${({ show }) => (show ? 1 : 0)};

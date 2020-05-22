@@ -65,41 +65,37 @@ const TechIcons = React.memo(({ show }) => {
     "#CAFAFE",
   ]
 
+  const paddingX = window ? window.innerWidth / 2 : 0
+  const paddingY = window ? window.innerHeight / 2 : 0
+
   const springs = useSprings(
     iconList.length,
 
     iconList.map((name, i) => {
-      if (typeof window !== `undefined`) {
-        const paddingX = window.innerWidth / 2
-        const paddingY = window.innerHeight / 2
+      const Chance = chance()
+      let x = Chance.integer({ min: 100, max: paddingX })
+      let y = Chance.integer({ min: 100, max: paddingY })
+      let rotation = Chance.integer({ min: 0, max: 360 })
+      const color = colors[Chance.integer({ min: 0, max: colors.length - 1 })]
 
-        const Chance = chance()
-        let x = Chance.integer({ min: 100, max: paddingX })
-        let y = Chance.integer({ min: 100, max: paddingY })
-        let rotation = Chance.integer({ min: 0, max: 360 })
-        const color = colors[Chance.integer({ min: 0, max: colors.length - 1 })]
+      const o = Chance.floating({ min: 0.5, max: 0.9 })
+      const scale = Chance.floating({ min: 1, max: 2.5 })
+      const plusOrMinus = num => (Math.random() < 0.5 ? -num : num)
 
-        const o = Chance.floating({ min: 0.5, max: 0.9 })
-        const scale = Chance.floating({ min: 1, max: 2.5 })
-        const plusOrMinus = num => (Math.random() < 0.5 ? -num : num)
-
-        return {
-          reverse: !show,
-          from: {
-            transform: `translate(0px,0px) scale(1) rotate(3deg) `,
-            color: "#000000",
-            opacity: 0,
-          },
-          to: {
-            transform: `translate(${plusOrMinus(x)}px,${plusOrMinus(
-              y
-            )}px)  scale(${scale}) rotate(${i * 10}deg) `,
-            color: color,
-            opacity: o,
-          },
-        }
-      } else {
-        return
+      return {
+        reverse: !show,
+        from: {
+          transform: `translate(0px,0px) scale(1) rotate(3deg) `,
+          color: "#000000",
+          opacity: 0,
+        },
+        to: {
+          transform: `translate(${plusOrMinus(x)}px,${plusOrMinus(
+            y
+          )}px)  scale(${scale}) rotate(${i * 10}deg) `,
+          color: color,
+          opacity: o,
+        },
       }
     })
   )

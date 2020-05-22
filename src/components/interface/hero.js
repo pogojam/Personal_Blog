@@ -64,7 +64,7 @@ const Ripple = () => {
 }
 
 const BackgroundStyle = animated(styled.video`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
+  background-color: black;
   background-size: cover;
   object-fit: cover;
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};

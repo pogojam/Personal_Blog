@@ -30,9 +30,10 @@ const AboutStyles = styled.div`
   /* box-shadow: 2px 0px 47px 24px rgba(0, 0, 0, 0.75); */
   p {
     max-width: 500px;
-    margin: 0;
+    margin: 1em;
+    border-radius: 29px;
     padding: 15px;
-    background: #0000000a;
+    background: #2e314ac7;
     backdrop-filter: blur(3px);
   }
 `

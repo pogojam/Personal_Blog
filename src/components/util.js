@@ -13,11 +13,13 @@ export const useObserver = ({ root = null, rootMargin, threshold = 0 }) => {
   const isWindow = typeof window !== `undefined`
 
   const observer = useRef(
-    new window.IntersectionObserver(([entry]) => updateEntry(entry), {
-      root,
-      rootMargin,
-      threshold,
-    })
+    isWindow
+      ? new window.IntersectionObserver(([entry]) => updateEntry(entry), {
+          root,
+          rootMargin,
+          threshold,
+        })
+      : null
   )
 
   useEffect(() => {

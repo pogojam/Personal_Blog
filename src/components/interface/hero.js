@@ -86,15 +86,20 @@ const Background = () => {
   })
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
+  const browser = detect()
 
   useEffect(() => {
     if (entries.intersectionRatio && window) {
-      const offset = window.innerHeight * 0.7
+      const isIOS = browser.name === "ios"
+      const offset = isIOS ? -100 : 0
+      const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
-      const yVal = _.clamp(offset / ir - offset, 0, offset)
-      const scaleVal = _.clamp(ir + 0.2, 0.5, 1.2)
+      const yVal = _.clamp(skew / ir - skew, 0, skew)
+      const scaleVal = isIOS ? 1 : _.clamp(ir + 0.2, 0.5, 1.2)
       const opacityVal = ir < 0.38 ? 0 : 1
-      setAnim({ scale: [scaleVal, yVal], opacity: opacityVal })
+      setAnim({ scale: [scaleVal, yVal + offset], opacity: opacityVal })
+
+      console.log(yVal)
 
       if (ir > 0.2 && store.active !== globalID) {
         dispatch({ type: "SET_ACTIVE", input: globalID })
@@ -102,12 +107,11 @@ const Background = () => {
     }
   }, [entries])
 
-  const browser = detect()
-
+  console.log(browser.name === "safari" || browser.name === "ios")
   return (
     <>
       <BackgroundStyle
-        isSafari={browser.name === "safari"}
+        isSafari={browser.name === "safari" || browser.name === "ios"}
         autoPlay
         muted
         src="https://res.cloudinary.com/dxjse9tsv/video/upload/v1590118317/video/Follow-the-Tree.mp4"
@@ -151,7 +155,7 @@ const Background2 = () => {
   const browser = detect()
   return (
     <Background2_Styles
-      isSafari={browser.name === "safari"}
+      isSafari={browser.name === "safari" || browser.name === "ios"}
       show={store.active === globalID}
     ></Background2_Styles>
   )

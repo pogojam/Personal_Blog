@@ -3,9 +3,9 @@ import { PageState_Context } from "./context"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
 import { useObserver, buildThresholdList } from "../util"
-import { useScroll } from "react-use-gesture"
 import _ from "lodash"
 import { detect } from "detect-browser"
+import useMobileDetect from "use-mobile-detect-hook"
 
 const AnimFeTurbulence = animated("feTurbulence")
 const AnimFeDisplacementMap = animated("feDisplacementMap")
@@ -88,6 +88,7 @@ const Background = () => {
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
   const browser = detect()
+  const detectMobile = useMobileDetect()
   const isIOS = browser.name === "ios"
   const isSafari = browser.name === "safari" || browser.name === "ios"
   const bgRef = useRef()
@@ -123,7 +124,7 @@ const Background = () => {
         muted
         loop
         src={
-          isSafari
+          isSafari || detectMobile.isMobile()
             ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590187785/video/video_3.mp4"
             : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590189267/video/Pexels_Videos_2278095.mp4"
         }

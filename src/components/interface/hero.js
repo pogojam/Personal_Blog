@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react"
-import { activeSectionState } from "../atoms/atoms"
-import { useMove, useScroll } from "react-use-gesture"
-import { Claw1, Claw2 } from "../../static/claw"
+import React, { useState, useEffect, useContext } from "react"
+import { PageState_Context } from "./context"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
 import { useObserver, buildThresholdList } from "../util"
-import BackgroundCanvas from "./background"
 import _ from "lodash"
-import { useRecoilValue, useRecoilState } from "recoil"
 
-const BackgroundStyle = animated(styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590101077/apple-background-desk-electronics-399161.jpg");
+const BackgroundStyle = animated(styled.video`
+  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg"); */
   background-size: cover;
+  object-fit: cover;
   filter: url("#water");
+  z-index: 1;
   position: absolute;
   width: 100%;
   height: 117vh;
@@ -34,7 +32,6 @@ const Ripple = () => {
     },
     to: { scale: 150, opacity: 1, transform: "scale(1)", freq: "0.35, 0.3" },
     onRest: () => {
-      console.log("object")
       toggle(!open)
     },
     config: { duration: 16000, tension: 1 },
@@ -86,31 +83,37 @@ const Background = () => {
     threshold: buildThresholdList(40),
     rootMargin: "0px 0px 0px 0px",
   })
+  const [store, dispatch] = useContext(PageState_Context)
+  const globalID = "hero"
 
-  if (entries.intersectionRatio) {
-    const offset = window.innerHeight * 0.7
-    const ir = entries.intersectionRatio
-    const yVal = _.clamp(offset / ir - offset, 0, offset)
-    const scaleVal = _.clamp(ir + 0.2, 0.5, 1.2)
-    const opacityVal = ir < 0.38 ? 0 : 1
-    console.log(yVal)
-    console.log(ir)
-    setAnim({ scale: [scaleVal, yVal], opacityVal })
-  }
+  useEffect(() => {
+    if (entries.intersectionRatio) {
+      const offset = window.innerHeight * 0.7
+      const ir = entries.intersectionRatio
+      const yVal = _.clamp(offset / ir - offset, 0, offset)
+      const scaleVal = _.clamp(ir + 0.2, 0.5, 1.2)
+      const opacityVal = ir < 0.38 ? 0 : 1
+      setAnim({ scale: [scaleVal, yVal], opacity: opacityVal })
+
+      if (ir > 0.2 && store.active !== globalID) {
+        dispatch({ type: "SET_ACTIVE", input: globalID })
+      }
+    }
+  }, [entries])
 
   return (
     <>
       <BackgroundStyle
+        autoPlay
+        muted
+        src="https://res.cloudinary.com/dxjse9tsv/video/upload/v1590118317/video/Follow-the-Tree.mp4"
         style={{
           transform: scale.interpolate(
             (s, y) => `scale(${s}) translate(0px,${y}px) `
           ),
           opacity,
         }}
-      >
-        {/* <Claw1 index={2} className={"Claw"} />
-      <Claw2 className="Claw" /> */}
-      </BackgroundStyle>
+      ></BackgroundStyle>
       <div
         ref={ref}
         style={{
@@ -137,11 +140,12 @@ const Background2_Styles = styled.div`
   bottom: 0;
 `
 const Background2 = () => {
-  const [show, setShow] = useRecoilState(activeSectionState)
+  const [store, dispatch] = useContext(PageState_Context)
   const globalID = "about"
-  console.log(show, "BACKGROUND HERO")
 
-  return <Background2_Styles show={show === globalID}></Background2_Styles>
+  return (
+    <Background2_Styles show={store.active === globalID}></Background2_Styles>
+  )
 }
 
 const Styles = styled.div`
@@ -163,7 +167,7 @@ const Styles = styled.div`
   }
 `
 
-export const Hero = ({ children }) => {
+export const Hero = () => {
   return (
     <Styles>
       <Background />

@@ -608,13 +608,6 @@ export const Viewer = () => {
     pRef: [2],
     slide: [100],
     opacity: [0],
-    onRest: ({ opacity }) => {
-      if (opacity[0] === 0) {
-        const el = document.querySelector(".projectContainer")
-        el.style.opacity = 1
-        setView({})
-      }
-    },
   }))
 
   return (

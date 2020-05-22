@@ -48,7 +48,9 @@ export const setAnimation = anim => {
   }
 }
 
-export const Nav_Animation = Nav => ({ animation, ...props }) => {
+export const Nav_Animation = Nav => props => <NavContent {...props} Nav={Nav} />
+
+function NavContent({ animation, Nav, ...props }) {
   const [isTop, setTop] = useState(true)
 
   const topScroll = useSpring({

@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useRef, forwardRef } from "react"
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useReducer,
+} from "react"
+import { PageState_Context } from "../components/interface/context"
+import { PageState } from "../components/interface/reducers"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
 import { Textarea, Input } from "@rebass/forms"
 import Container from "../components/container"
@@ -12,6 +20,7 @@ import {
   buildThresholdList,
   useSceanState,
 } from "../components/util"
+import { Logo } from "../static/logo"
 import { Icon, Button } from "../components/elements"
 import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
@@ -52,13 +61,13 @@ const Scean1 = ({ html, animation, ...props }) => {
     rootMargin: "0px 0px 0px 0px",
   })
 
-  if (entries) {
-    const ir = entries.intersectionRatio
+  useEffect(() => {
+    if (entries) {
+      const ir = entries.intersectionRatio
+      setAnim({ x: [ir], scale: [_.clamp(ir, 0.6, 1)] })
+    }
+  }, [entries])
 
-    setAnim({ x: [ir], scale: [_.clamp(ir, 0.6, 1)] })
-  }
-
-  const fickerItems = []
   return (
     <Styles>
       <Background size={scale} />
@@ -66,7 +75,6 @@ const Scean1 = ({ html, animation, ...props }) => {
         ref={ref}
         style={{
           transform: x.interpolate(e => `translate(0px,${e * 100}px)`),
-          opacity: x.interpolate(e => e),
           position: "absolute",
           top: "0",
           height: "60vh",
@@ -127,25 +135,12 @@ min-height: 100vh;
 background: #f10244;
 position: absolute;
 transition: opacity 0.3s;
-background-color:'red';
+
 z-index: 0;
 /* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
 `)
 
-const HeadingContainer = styled(Container)`
-  &:after {
-    /* content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 30vh;
-      width: 100%;
-      background-color: blue;
-      z-index: -1;
-      transform:matrix3d(1, 0, 0, 1, 25, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-      will-change: transform; */
-  }
-`
+const HeadingContainer = styled(Container)``
 
 const Scean2 = ({ animation, isActive, ...props }, ref) => {
   const animateProjects = useSpring(
@@ -166,11 +161,18 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         flexDirection: "column",
         justifyContent: "center",
         position: "relative",
-        backgroundColor: "black",
-        marginTop: "20vh",
         ...props.style,
       }}
     >
+      <div
+        style={{
+          backgroundColor: "black",
+          height: "50%",
+          width: "100%",
+          position: "absolute",
+          top: 0,
+        }}
+      />
       <Background
         className="scean2_Background"
         width={["80vh", "100%"]}
@@ -186,7 +188,7 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
       >
         <Heading
-          fontSize={["2em", "10.25rem"]}
+          fontSize={["2em", "37.25rem"]}
           style={{
             width: "40%",
             position: "absolute",
@@ -202,7 +204,14 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
           Apps
         </Heading>
       </HeadingContainer>
-      <animated.div style={{ maxHeight: "100%", ...animateProjects }}>
+      <animated.div
+        style={{
+          marginLeft: "5vw",
+          marginRight: "5vw",
+          maxHeight: "100%",
+          ...animateProjects,
+        }}
+      >
         <Projects setHeading={setHeading} isActive={isActive} />
       </animated.div>
     </Container>
@@ -475,7 +484,10 @@ const Scean_Interface = ({ index, ...props }) => {
   )
 }
 
+const invertList = ["about"]
+
 const IndexPage = ({ data, ...props }) => {
+  const [store, dispatch] = useReducer(PageState, { active: "hero" })
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
 
@@ -510,18 +522,34 @@ const IndexPage = ({ data, ...props }) => {
 
   return (
     <Layout style={{ Background: "black" }}>
-      <Viewer />
-      <Hero />
-      <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
-        {sceans.map((e, i) => (
-          <Scean_Interface
-            setScean={props.setScean}
-            key={generateKey(i)}
-            index={i}
-            html={html}
-          />
-        ))}
-      </animated.div>
+      <PageState_Context.Provider value={[store, dispatch]}>
+        <Logo
+          invert={invertList.includes(store.active) ? true : false}
+          style={{
+            position: "fixed",
+            transition: "fill .4s linear",
+            width: "40px",
+            height: "40px",
+            top: "10px",
+            left: "10px",
+            zIndex: 9999,
+            fontFamily: "PoiretOne-Regular, Poiret One !important",
+          }}
+          store={store}
+        />
+        <Viewer />
+        <Hero />
+        <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
+          {sceans.map((e, i) => (
+            <Scean_Interface
+              setScean={props.setScean}
+              key={generateKey(i)}
+              index={i}
+              html={html}
+            />
+          ))}
+        </animated.div>
+      </PageState_Context.Provider>
     </Layout>
   )
 }

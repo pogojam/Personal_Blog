@@ -1,12 +1,11 @@
 import _ from "lodash"
-import { atom, useRecoilState, useRecoilValue } from "recoil"
 import Icon from "../elements/icons"
 import chance from "chance"
 import { useObserver, buildThresholdList, useToggle } from "../util"
 import { useSpring, animated, config, useSprings } from "react-spring"
 import styled from "styled-components"
-import React, { useEffect, useState } from "react"
-import { activeSectionState } from "../atoms/atoms"
+import React, { useEffect, useContext, useState, useReducer } from "react"
+import { PageState_Context } from "./context"
 const AboutStyles = styled.div`
   position: absolute;
   bottom: 0;
@@ -20,20 +19,23 @@ const AboutStyles = styled.div`
   background: black;
   background: linear-gradient(
     0deg,
-    rgba(0, 0, 0, 1) 17%,
-    rgba(0, 0, 0, 1) 40%,
-    rgba(0, 0, 0, 0.7574496904024768) 58%,
-    rgba(0, 0, 0, 0.6986261609907121) 67%,
-    rgba(0, 0, 0, 0.5469233746130031) 79%,
-    rgba(0, 0, 0, 0) 95%
+    rgba(0, 0, 0, 1) 7%,
+    rgba(0, 0, 0, 0.6676664086687307) 20%,
+    rgba(0, 0, 0, 0) 43%,
+    rgba(0, 0, 0, 0.6274187306501549) 58%,
+    rgba(0, 0, 0, 0.7326818885448916) 70%,
+    rgba(0, 0, 0, 0.8781927244582043) 81%,
+    rgba(0, 0, 0, 0.872000773993808) 96%
   );
 
   /* box-shadow: 2px 0px 47px 24px rgba(0, 0, 0, 0.75); */
   p {
     max-width: 500px;
     margin: 0;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding: 15px;
+    background: #0000000a;
+    backdrop-filter: blur(3px);
+    letter-spacing: 4px;
   }
 `
 
@@ -106,10 +108,11 @@ const TechIcons = React.memo(({ show }) => {
   ))
 })
 
-export const About = () => {
-  const [active, setActive] = useRecoilState(activeSectionState)
+export const About = React.memo(() => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [show, toggle] = useToggle(false)
+  const [store, dispatch] = useContext(PageState_Context)
+
   const { transform, opacity } = useSpring(
     show
       ? {
@@ -138,8 +141,9 @@ export const About = () => {
   }, [entries])
 
   useEffect(() => {
-    console.log(show, "TEST")
-    show && setActive("about")
+    if (show && store.active !== "about") {
+      dispatch({ type: "SET_ACTIVE", input: "about" })
+    }
   }, [show])
 
   return (
@@ -166,4 +170,4 @@ export const About = () => {
       </animated.div>
     </AboutStyles>
   )
-}
+})

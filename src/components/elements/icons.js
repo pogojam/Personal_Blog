@@ -42,7 +42,12 @@ import {
   DiReact,
   DiNodejsSmall,
 } from "react-icons/di"
-import { FaCashRegister, FaSwimmer, FaRegCreditCard } from "react-icons/fa"
+import {
+  FaCashRegister,
+  FaSwimmer,
+  FaRegCreditCard,
+  FaLinkedin,
+} from "react-icons/fa"
 import styled from "styled-components"
 
 const DragHandle = styled(MdDragHandle)``
@@ -98,6 +103,8 @@ const Shirt = ({ size }) => {
 
 const Icon = ({ type, ...props }) => {
   switch (type) {
+    case "linkedin":
+      return withProps(FaLinkedin, props)
     case "react":
       return withProps(DiReact, props)
     case "rust":

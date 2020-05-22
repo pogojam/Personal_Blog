@@ -65,8 +65,8 @@ const TechIcons = React.memo(({ show }) => {
     "#CAFAFE",
   ]
 
-  const paddingX = window ? window.innerWidth / 2 : 0
-  const paddingY = window ? window.innerHeight / 2 : 0
+  const paddingX = typeof window !== `undefined` ? window.innerWidth / 2 : 0
+  const paddingY = typeof window !== `undefined` ? window.innerHeight / 2 : 0
 
   const springs = useSprings(
     iconList.length,

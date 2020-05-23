@@ -5,6 +5,7 @@ import Container from "../container"
 import projectData from "../../static/projects"
 import { Box, Text, Heading, Image } from "rebass"
 import useCustom from "../hooks/useCustom"
+import chance from "chance"
 
 import { generateKey } from "../util"
 
@@ -108,7 +109,13 @@ const CardContainer = styled(Container)`
   } */
 `
 
-const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
+const ProjectCard = ({
+  containerRef,
+  data,
+  color,
+  handleClick,
+  activeView,
+}) => {
   const [showState, setState] = useState(1)
   const boxRef = useRef()
 
@@ -125,7 +132,6 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
     const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
     const tx = window.innerWidth / 2 - (rect.width / 2 + rect.left)
-    console.log(rect)
     const ty = isMobile
       ? window.innerHeight / 2 - (rect.bottom - rect.height / 2)
       : window.innerHeight - rect.bottom + -(window.innerHeight / 5)
@@ -184,6 +190,7 @@ const ProjectCard = ({ containerRef, data, handleClick, activeView }) => {
         showState={showState}
         className="activeIcon"
         style={{
+          backgroundColor: color,
           color: "black",
           willChange: "transform",
           display: "flex",
@@ -252,6 +259,15 @@ const Projects = ({ key, isActive: isScean, setHeading }) => {
       setView({})
     }
   }, [isScean])
+  const Chance = chance()
+  const colors = [
+    "rgba(133, 220, 190,.6)",
+    "rgba(65, 178, 163,.6)",
+    "rgba(85, 61, 103,.6)",
+    "rgba(246, 76, 114.6)",
+    "rgba(252, 68, 69.6)",
+    "rgba(202, 250, 254.6)",
+  ]
 
   return (
     <Container
@@ -268,15 +284,19 @@ const Projects = ({ key, isActive: isScean, setHeading }) => {
         willChange: "opacity",
       }}
     >
-      {projectData.map((data, i) => (
-        <ProjectCard
-          containerRef={ref}
-          activeView={activeView}
-          handleClick={setView}
-          key={generateKey(i)}
-          data={{ index: i, ...data }}
-        />
-      ))}
+      {projectData.map((data, i) => {
+        const color = colors[Chance.integer({ min: 0, max: colors.length - 1 })]
+        return (
+          <ProjectCard
+            color={""}
+            containerRef={ref}
+            activeView={activeView}
+            handleClick={setView}
+            key={generateKey(i)}
+            data={{ index: i, ...data }}
+          />
+        )
+      })}
     </Container>
   )
 }

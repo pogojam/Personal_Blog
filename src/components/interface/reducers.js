@@ -4,5 +4,7 @@ export function PageState(state, action) {
   switch (action.type) {
     case "SET_ACTIVE":
       return Object.assign({}, state, { active: action.input })
+    case "SET_VIEW":
+      return Object.assign({}, state, { view: action.input })
   }
 }

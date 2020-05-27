@@ -1,5 +1,5 @@
 import styled, { keyframes, css } from "styled-components"
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useContext, useEffect, useState } from "react"
 import { useSpring, animated } from "react-spring"
 import Container from "../container"
 import projectData from "../../static/projects"
@@ -8,6 +8,7 @@ import useCustom from "../hooks/useCustom"
 import chance from "chance"
 
 import { generateKey } from "../util"
+import { PageState_Context } from "./context"
 
 const CardImage = animated(Image)
 
@@ -118,7 +119,7 @@ const ProjectCard = ({
 }) => {
   const [showState, setState] = useState(1)
   const boxRef = useRef()
-
+  const [store, dispatch] = useContext(PageState_Context)
   const calc = (x, y) => {
     const con = boxRef.current.getBoundingClientRect()
     return [
@@ -127,7 +128,6 @@ const ProjectCard = ({
       1.1,
     ]
   }
-
   const calcCenter = () => {
     const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
@@ -150,13 +150,13 @@ const ProjectCard = ({
   }))
 
   useEffect(() => {
-    if (Object.entries(activeView).length > 0) {
-      setState(activeView.index === data.index ? 2 : 0)
+    if (store.view) {
+      setState(store.view.index === data.index ? 2 : 0)
     }
     if (showState === 2) {
       setClick(calcCenter())
     }
-  }, [showState])
+  }, [store.view])
 
   useEffect(() => {
     const backgroundNode = document.querySelector(".scean2_Background")
@@ -181,8 +181,8 @@ const ProjectCard = ({
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
           e.preventDefault()
-          console.log(e.target)
-          handleClick({ ref: containerRef, ...data })
+          dispatch({ type: "SET_VIEW", input: data })
+          handleClick({ ref: containerRef })
         }}
         alignItems="center"
         width="100%"
@@ -244,8 +244,8 @@ const ProjectCard = ({
   )
 }
 
-const Projects = ({ key, isActive: isScean, setHeading }) => {
-  const [activeView, setView] = useCustom()
+const Projects = ({ key, setHeading }) => {
+  const [activeView, setView] = useCustom({})
   const ref = useRef()
 
   if (Object.entries(activeView).length > 0) {
@@ -254,11 +254,6 @@ const Projects = ({ key, isActive: isScean, setHeading }) => {
     setHeading(true)
   }
 
-  useEffect(() => {
-    if (!isScean) {
-      setView({})
-    }
-  }, [isScean])
   const Chance = chance()
   const colors = [
     "rgba(133, 220, 190,.6)",

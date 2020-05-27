@@ -347,7 +347,7 @@ const Content = ({
         isActive={isActive}
         onClick={() => {
           setSubmit(false)
-          setView(false)
+          setView({ type: "SET_VIEW", input: {} })
         }}
       />
       <ViewHeading
@@ -562,9 +562,9 @@ const ViewerComponent = ({ inAnimation, data, isActive, setView }) => {
   )
 }
 
-export const Viewer = () => {
-  const [view, setView] = useCustom()
+export const Viewer = ({ store, dispatch }) => {
   const [enterView, setEnter] = useState()
+  const { view = {} } = store
   const [pRef, setRef] = useState()
 
   useEffect(() => {
@@ -612,7 +612,7 @@ export const Viewer = () => {
 
   return (
     <ViewerComponent
-      setView={setEnter}
+      setView={dispatch}
       isActive={enterView}
       inAnimation={animation}
       data={view}

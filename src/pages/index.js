@@ -1,3 +1,5 @@
+import { RecoilRoot } from "recoil"
+import { useWheel, useScroll } from "react-use-gesture"
 import React, {
   useState,
   useEffect,
@@ -5,6 +7,7 @@ import React, {
   forwardRef,
   useReducer,
 } from "react"
+import { SubCaption } from "../components/interface/SubCaption"
 import { PageState_Context } from "../components/interface/context"
 import { PageState } from "../components/interface/reducers"
 import { Flex, Box, Heading, Image, Card, Text } from "rebass"
@@ -13,7 +16,7 @@ import Container from "../components/container"
 import Layout from "../components/layout"
 import styled, { keyframes } from "styled-components"
 import _ from "lodash"
-import { useTransition, animated, useSpring } from "react-spring"
+import { useTransition, animated, useSpring, useSprings } from "react-spring"
 import {
   generateKey,
   useObserver,
@@ -21,7 +24,8 @@ import {
   useSceanState,
 } from "../components/util"
 import { Logo } from "../static/logo"
-import { Icon, Button } from "../components/elements"
+import { Button } from "../components/elements"
+import Icon from "../components/elements/icons"
 import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
@@ -31,11 +35,13 @@ import { default as NumberFormat } from "react-number-format"
 import "animate.css"
 import { About } from "../components/interface/about"
 import { Hero } from "../components/interface/hero"
+import chance from "chance"
+import useSpace from "../components/spacer"
 //SCEAN Panels
 
 const Styles = styled.div`
   color: white;
-  height: 250vh;
+  height: 370vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -50,76 +56,163 @@ const Styles = styled.div`
   }
 `
 
-const Scean1 = ({ html, animation, ...props }) => {
-  const [{ x, scale }, setAnim] = useSpring(() => ({
-    x: [0],
-    scale: [1],
+const Scean1 = ({ html, animation }) => {
+  const captions = [...Array(4)]
+  const [location, setLocation] = useState()
+  const calc = (transform, index, p, tieY) => {
+    const polarity = index % 2 === 1 ? -1 : 1
+    switch (transform) {
+      case "r":
+        return 0
+      case "y":
+        if (location && index === 1) return
+        return p * window.innerHeight * 0.7
+      case "x":
+        if (index == 3) {
+          return 0
+        } else {
+          return index * p * window.innerWidth * 0.3
+        }
+    }
+  }
+
+  const [anims, setAnim] = useSprings(captions.length, () => ({
+    immediate: true,
+    x: [0, 0, 0],
+    opacity: [1],
+    color: "#ffffff",
+    config: { tension: 200, friction: 10 },
   }))
 
-  const [ref, entries] = useObserver({
-    threshold: buildThresholdList(40),
-    rootMargin: "0px 0px 0px 0px",
+  const transitionHeading = useTransition(location, null, {
+    from: { position: "absolute", opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
   })
+  const bind = useScroll(
+    e => {
+      if (window) {
+        const maxDis = window.innerHeight * 0.8
+        const tieY = 300
+        const percentAnimated = _.clamp(window.scrollY / maxDis, 0, maxDis)
+        if (!location) {
+          setAnim(i => ({
+            x: [
+              calc("x", i, percentAnimated),
+              calc("y", i, percentAnimated, tieY),
+              calc("r", i, percentAnimated),
+            ],
+            color: percentAnimated > 0.3 ? "#000000" : "#ffffff",
+          }))
+        }
+        if (!location && percentAnimated > 0.6) {
+          setLocation(true)
+        }
 
-  useEffect(() => {
-    if (entries) {
-      const ir = entries.intersectionRatio
-      setAnim({ x: [ir], scale: [_.clamp(ir, 0.6, 1)] })
+        if (location && percentAnimated < 0.6) {
+          setLocation(false)
+        }
+      }
+    },
+    {
+      domTarget: window,
     }
-  }, [entries])
+  )
+  useEffect(bind, [bind])
 
   return (
     <Styles>
-      <Background size={scale} />
       <animated.div
-        ref={ref}
         style={{
-          transform: x.interpolate(e => `translate(0px,${e * 100}px)`),
           position: "absolute",
           top: "0",
-          height: "60vh",
+          left: "6em",
+          height: "89vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
+          opacity: anims[0].opacity.interpolate(p => p),
         }}
         className="Caption"
       >
-        <animated.div
+        {" "}
+        <Heading
           style={{
-            transform: x.interpolate(e => `translate(${e * 20}px,${0}px)`),
+            fontSize: "14vw",
+            lineHeight: ".8em",
+
+            textAlign: "left",
+            margin: 0,
+            zIndex: 3,
+            color: "white",
           }}
         >
-          <Heading>Ryan Breaux</Heading>
+          <Heading style={{ display: "block" }}>Ryan</Heading>
+          <Heading style={{ display: "block" }}> Breaux</Heading>
+        </Heading>
+        <animated.div
+          style={{
+            willChange: "transform",
+            transform: anims[3].x.interpolate((x, y, r) => {
+              return `translate(${x}px,${y}px) rotate3d(0,0,1,${r}deg)`
+            }),
+            color: anims[3].color.interpolate(c => c),
+          }}
+        >
+          <Icon size="3.7em" type="tie" />
+          {transitionHeading.map(({ item, key, props }) => {
+            return (
+              item && (
+                <animated.div style={props}>
+                  {" "}
+                  {/* <Heading>For Hire</Heading> */}
+                </animated.div>
+              )
+            )
+          })}
         </animated.div>
         <div>
           <animated.div
             style={{
-              transform: x.interpolate(e => `translate(${e * 40}px,${0}px)`),
-            }}
-          >
-            <Heading type="Sub">Front-End/Back-End Developer</Heading>
-          </animated.div>
-          <animated.div
-            style={{
-              transform: x.interpolate(
-                e => `translate(${e * 100}px,${e * 0}px)`
-              ),
+              willChange: "transform opacity color",
+              transform: anims[1].x.interpolate((x, y, r) => {
+                return `translate(${x}px,${y}px) rotate3d(1,1,1,${r}deg)`
+              }),
+
+              opacity: anims[1].opacity.interpolate(p => p),
+              color: anims[1].color,
             }}
           >
             <span
               style={{
                 fontWeight: 900,
                 letterSpacing: "3px",
-
-                color: "blanchedalmond",
               }}
             >
-              {" "}
-              Curious and humble , full stack developer, entrepreneur.
+              {transitionHeading.map(({ item, key, props }) =>
+                item ? (
+                  <animated.span
+                    style={{
+                      lineHeight: "84px",
+                      fontSize: "4em",
+                      letterSpacing: "6px",
+                      ...props,
+                    }}
+                    key={key}
+                  >
+                    <Heading>Tempe AZ</Heading>
+                  </animated.span>
+                ) : (
+                  <animated.span key={key} style={props}>
+                    Curious and humble , full stack developer, entrepreneur.
+                  </animated.span>
+                )
+              )}
             </span>
           </animated.div>
         </div>
       </animated.div>
+      <SubCaption />
       <About />
     </Styles>
   )
@@ -130,9 +223,9 @@ left: 0;
 ${width}
 ${height}
 ${transform}
-
+will-change:transform;
 min-height: 100vh;
-background: #f10244;
+background: #75927e6b;
 position: absolute;
 transition: opacity 0.3s;
 
@@ -142,14 +235,38 @@ z-index: 0;
 
 const HeadingContainer = styled(Container)``
 
-const Scean2 = ({ animation, isActive, ...props }, ref) => {
+const Scean2 = ({ animation, isActive, ...props }) => {
+  const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const animateProjects = useSpring(
     isActive
       ? { opacity: 1, transform: "scale(1)" }
       : { opacity: 0, transform: "scale(0)" }
   )
+  const [appsAnim, setAppAnim] = useSprings(4, i => ({
+    color: "rgba(51, 29, 43, 0.67)",
+    rotate: [0],
+    slide: [0],
+  }))
 
   const [headingState, setHeading] = useState(true)
+
+  useEffect(() => {
+    if (entries.intersectionRatio) {
+      setAppAnim({ rotate: entries.intersectionRatio })
+    }
+  }, [entries])
+
+  useEffect(() => {
+    if (isActive) {
+      setAppAnim(i => {
+        return {
+          color: "rgba(51, 29, 43, 1)",
+          slide: [0],
+          delay: i * 200,
+        }
+      })
+    }
+  }, [isActive])
 
   return (
     <Container
@@ -164,15 +281,6 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
         ...props.style,
       }}
     >
-      <div
-        style={{
-          backgroundColor: "black",
-          height: "50%",
-          width: "100%",
-          position: "absolute",
-          top: 0,
-        }}
-      />
       <Background
         className="scean2_Background"
         width={["80vh", "100%"]}
@@ -181,27 +289,43 @@ const Scean2 = ({ animation, isActive, ...props }, ref) => {
           "matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
           "matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)",
         ]}
-        style={{ ...animation.scean2 }}
+        style={{
+          transform: appsAnim[0].rotate.interpolate(
+            e =>
+              `rotate(${e *
+                -40}deg) matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)`
+          ),
+        }}
       />
       <HeadingContainer
         animate
-        style={{ ...animation.fadeIn(1), ...animation.slideIn(-1) }}
+        style={{
+          transform: appsAnim[0].slide.interpolate(x => `translate(${x}px)`),
+        }}
       >
         <Heading
           fontSize={["2em", "37.25rem"]}
           style={{
             width: "40%",
             position: "absolute",
-            top: "-.6em",
+            top: "-.2em",
             textAlign: "center",
             whiteSpace: "nowrap",
             margin: "auto",
             transition: "opacity 1s",
-            color: "white",
             opacity: headingState ? 1 : 0,
           }}
         >
-          Apps
+          {"Apps".split("").map((l, i) => (
+            <animated.span
+              style={{
+                display: "inline-block",
+                colort: appsAnim[i],
+              }}
+            >
+              {l}
+            </animated.span>
+          ))}
         </Heading>
       </HeadingContainer>
       <animated.div
@@ -490,7 +614,6 @@ const IndexPage = ({ data, ...props }) => {
   const [store, dispatch] = useReducer(PageState, { active: "hero" })
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
-
   const [State, setState] = useState("loading")
   const [Anim, setAnim] = useSpring(() => ({
     body: [0],
@@ -521,36 +644,39 @@ const IndexPage = ({ data, ...props }) => {
   }, [State])
 
   return (
-    <Layout style={{ Background: "black" }}>
-      <PageState_Context.Provider value={[store, dispatch]}>
-        <Logo
-          invert={invertList.includes(store.active) ? true : false}
-          style={{
-            position: "fixed",
-            transition: "fill .4s linear",
-            width: "40px",
-            height: "40px",
-            top: "10px",
-            left: "10px",
-            zIndex: 9999,
-            fontFamily: "PoiretOne-Regular, Poiret One !important",
-          }}
-          store={store}
-        />
-        {/* <Viewer /> */}
-        <Hero />
-        <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
-          {sceans.map((e, i) => (
-            <Scean_Interface
-              setScean={props.setScean}
-              key={generateKey(i)}
-              index={i}
-              html={html}
-            />
-          ))}
-        </animated.div>
-      </PageState_Context.Provider>
-    </Layout>
+    <RecoilRoot>
+      <Layout style={{ Background: "black" }}>
+        <PageState_Context.Provider value={[store, dispatch]}>
+          <Logo
+            invert={invertList.includes(store.active) ? true : false}
+            style={{
+              position: "fixed",
+              transition: "fill .4s linear",
+              width: "40px",
+              height: "40px",
+              top: "10px",
+              left: "10px",
+              zIndex: 9999,
+              fontFamily: "PoiretOne-Regular, Poiret One !important",
+            }}
+            store={store}
+          />
+          <Viewer store={store} dispatch={dispatch} />
+          <Hero />
+
+          <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
+            {sceans.map((e, i) => (
+              <Scean_Interface
+                setScean={props.setScean}
+                key={generateKey(i)}
+                index={i}
+                html={html}
+              />
+            ))}
+          </animated.div>
+        </PageState_Context.Provider>
+      </Layout>
+    </RecoilRoot>
   )
 }
 

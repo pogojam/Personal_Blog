@@ -47,6 +47,7 @@ import {
   FaSwimmer,
   FaRegCreditCard,
   FaLinkedin,
+  FaBlackTie,
 } from "react-icons/fa"
 import styled from "styled-components"
 
@@ -103,6 +104,8 @@ const Shirt = ({ size }) => {
 
 const Icon = ({ type, ...props }) => {
   switch (type) {
+    case "tie":
+      return withProps(FaBlackTie, props)
     case "linkedin":
       return withProps(FaLinkedin, props)
     case "react":

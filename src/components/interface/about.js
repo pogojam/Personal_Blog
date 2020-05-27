@@ -4,19 +4,27 @@ import chance from "chance"
 import { useObserver, buildThresholdList, useToggle } from "../util"
 import { useSpring, animated, config, useSprings } from "react-spring"
 import styled from "styled-components"
-import React, { useEffect, useContext, useState, useReducer } from "react"
+import React, {
+  useEffect,
+  useContext,
+  useState,
+  useReducer,
+  useRef,
+  useCallback,
+} from "react"
 import { PageState_Context } from "./context"
+import { useScroll, useWheel } from "react-use-gesture"
 const AboutStyles = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50%;
+  height: 120vh;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: linear-gradient(
+  /* background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 7%,
     rgba(0, 0, 0, 0.6676664086687307) 20%,
@@ -25,7 +33,7 @@ const AboutStyles = styled.div`
     rgba(0, 0, 0, 0.7326818885448916) 70%,
     rgba(0, 0, 0, 0.8781927244582043) 81%,
     rgba(0, 0, 0, 0.872000773993808) 96%
-  );
+  ); */
 
   /* box-shadow: 2px 0px 47px 24px rgba(0, 0, 0, 0.75); */
   p {
@@ -33,7 +41,7 @@ const AboutStyles = styled.div`
     margin: 1em;
     border-radius: 29px;
     padding: 15px;
-    background: #2e314ac7;
+
     backdrop-filter: blur(3px);
   }
 `
@@ -69,14 +77,11 @@ const TechIcons = React.memo(({ show }) => {
 
   const springs = useSprings(
     iconList.length,
-
     iconList.map((name, i) => {
       const Chance = chance()
       let x = Chance.integer({ min: 100, max: paddingX })
       let y = Chance.integer({ min: 100, max: paddingY })
-      let rotation = Chance.integer({ min: 0, max: 360 })
       const color = colors[Chance.integer({ min: 0, max: colors.length - 1 })]
-
       const o = Chance.floating({ min: 0.5, max: 0.9 })
       const scale = Chance.floating({ min: 1, max: 2.5 })
       const plusOrMinus = num => (Math.random() < 0.5 ? -num : num)
@@ -95,6 +100,7 @@ const TechIcons = React.memo(({ show }) => {
           color: color,
           opacity: o,
         },
+        config: { friction: 100, tension: 40 },
       }
     })
   )
@@ -103,7 +109,9 @@ const TechIcons = React.memo(({ show }) => {
     <animated.div
       style={{ ...props, left: "50%", top: "50%", position: "absolute" }}
     >
-      <Icon size="5em" type={iconList[i]} />
+      <animated.div>
+        <Icon size="5em" type={iconList[i]} />
+      </animated.div>
     </animated.div>
   ))
 })
@@ -111,7 +119,7 @@ const TechIcons = React.memo(({ show }) => {
 export const About = React.memo(() => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [show, toggle] = useToggle(false)
-  const [store, dispatch] = useContext(PageState_Context)
+  // const [store, dispatch] = useContext(PageState_Context)
 
   const { transform, opacity } = useSpring(
     show
@@ -128,12 +136,11 @@ export const About = React.memo(() => {
 
   useEffect(() => {
     const ir = entries.intersectionRatio
-
     if (entries.intersectionRatio) {
       if (ir > 0.6 && !show) {
         toggle()
       }
-      if (ir < 0.6 && show) {
+      if (ir < 0.4 && show) {
         toggle()
       } else {
       }
@@ -141,9 +148,9 @@ export const About = React.memo(() => {
   }, [entries])
 
   useEffect(() => {
-    if (show && store.active !== "about") {
-      dispatch({ type: "SET_ACTIVE", input: "about" })
-    }
+    // if (show && store.active !== "about") {
+    //   dispatch({ type: "SET_ACTIVE", input: "about" })
+    // }
   }, [show])
 
   return (
@@ -157,7 +164,8 @@ export const About = React.memo(() => {
       >
         <TechIcons show={show} />
         <Line index={1} show={show} />
-        <p>
+
+        <animated.p>
           Big on design and lightning fast code. Found my love for JS developing
           on Node , leveraging the power of Non-Blocking I/O and npm’s rich
           package eco system. Out of necessity I first started learning web
@@ -165,7 +173,7 @@ export const About = React.memo(() => {
           clothing online through an e-commerce website. I have since learned
           more advanced techniques building tools for lead generation and
           business productivity.
-        </p>
+        </animated.p>
         <Line index={2} show={show} />
       </animated.div>
     </AboutStyles>

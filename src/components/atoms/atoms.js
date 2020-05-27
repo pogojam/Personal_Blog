@@ -3,3 +3,8 @@ export const activeSectionState = atom({
   id: "ActiveSection",
   default: "hero",
 })
+
+export const scrollState = atom({
+  id: "Scroll",
+  default: null,
+})

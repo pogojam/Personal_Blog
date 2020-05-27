@@ -3,6 +3,7 @@ import { PageState_Context } from "./context"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
 import { useObserver, buildThresholdList } from "../util"
+import { useScroll, useHover } from "react-use-gesture"
 import _ from "lodash"
 import { detect } from "detect-browser"
 import useMobileDetect from "use-mobile-detect-hook"
@@ -64,21 +65,26 @@ const Ripple = () => {
 }
 
 const BackgroundStyle = animated(styled.video`
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
   background-color: black;
+  background-position: center;
   background-size: cover;
   object-fit: cover;
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
-  z-index: 1;
+  /* z-index: 1; */
   position: absolute;
   width: 100%;
-  height: 50%;
+  height: 40%;
   top: -5%;
+  border-radius: 11%;
+  z-index: 10;
 `)
 
 const Background = () => {
   const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
-    scale: [1, 0],
+    scale: [1, 0, 0],
     opacity: [1],
+    config: { tension: 500 },
   }))
 
   const [ref, entries] = useObserver({
@@ -99,10 +105,11 @@ const Background = () => {
       const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
       const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
-      const scaleVal = isIOS ? 1 : _.clamp(ir + 0.2, 0.5, 1.2)
+      // const scaleVal = _.clamp(1 * ir, 0.5, 1)
+      const scaleVal = 1
       // const opacityVal = ir < 0.38 ? 0 : 1
-      const opacityVal = ir
-      setAnim({ scale: [scaleVal, yVal + offset], opacity: opacityVal })
+      const opacityVal = ir > 0.7 ? ir : 0
+      setAnim({ scale: [scaleVal, yVal + offset, 0], opacity: opacityVal })
 
       if (ir > 0.2 && store.active !== globalID) {
         dispatch({ type: "SET_ACTIVE", input: globalID })
@@ -123,15 +130,15 @@ const Background = () => {
         autoPlay
         muted
         loop
-        src={
-          isSafari || detectMobile.isMobile()
-            ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590187785/video/video_3.mp4"
-            : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590189267/video/Pexels_Videos_2278095.mp4"
-        }
+        // src={
+        //   isSafari || detectMobile.isMobile()
+        //     ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
+        //     : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
+        // }
         style={{
           willChange: "transform opacity",
           transform: scale.interpolate(
-            (s, y) => `scale(${s}) translate(0px,${y}px) `
+            (s, y, x) => `scale(${s}) translate(${x}px,0px) `
           ),
           opacity,
         }}
@@ -150,7 +157,7 @@ const Background = () => {
 }
 
 const Background2_Styles = styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
+  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"); */
   background-size: cover;
   will-change: opacity filter;
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
@@ -177,10 +184,9 @@ const Background2 = () => {
 
 const Styles = styled.div`
   position: absolute;
-
+  overflow: hidden;
   color: white;
-  background: black;
-  height: 270vh;
+  height: 620vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -194,6 +200,11 @@ const Styles = styled.div`
   .Caption {
     width: 68%;
     z-index: 99;
+  }
+  #BackgroundCanvas {
+    height: 100%;
+    position: relative;
+    top: 250vh;
   }
 `
 

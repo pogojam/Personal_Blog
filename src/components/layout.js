@@ -1,4 +1,6 @@
-import { RecoilRoot } from "recoil"
+import { scrollState } from "./atoms/atoms"
+import { RecoilRoot, useRecoilValue, useRecoilState } from "recoil"
+import { animated, useSpring } from "react-spring"
 import React from "react"
 import PropTypes from "prop-types"
 import { Nav_Animation } from "./animations"
@@ -6,25 +8,44 @@ import { pipe } from "./util"
 import Nav from "./nav"
 import { Flex, Box } from "rebass"
 import "./layout.css"
+import { useScroll, useWheel, useHover } from "react-use-gesture"
+
 import Background from "./interface/background"
+import useSpace from "./spacer"
 // import Splash from "./elements/splash"
 
-const Layout = ({ children, navAnim = true, ...props }) => {
-  const LayoutNav = navAnim ? pipe(Nav)(Nav_Animation) : Nav
+const BackgroundDirections = {
+  downRight: v => [
+    { polarity: "-", side: "y", velocity: v[0] * 0.001 },
+    { polarity: "+", side: "x", velocity: v[1] * 0.001 },
+  ],
+  downLeft: v => [
+    { polarity: "-", side: "y", velocity: v[0] * 0.001 },
+    { polarity: "-", side: "x", velocity: v[1] * 0.001 },
+  ],
+  upLeft: v => [
+    { polarity: "+", side: "y", velocity: v[0] * 0.001 },
+    { polarity: "-", side: "x", velocity: v[1] * 0.001 },
+  ],
+  upRight: v => [
+    { polarity: "+", side: "y", velocity: v[0] * 0.001 },
+    { polarity: "+", side: "x", velocity: v[1] * 0.001 },
+  ],
+}
+
+function Layout({ children, navAnim = true, ...props }) {
   return (
     <Box style={{ overflow: "hidden" }}>
-      <RecoilRoot>
-        <Flex
-          id="MainContainer"
-          flexDirection="column"
-          {...props}
-          style={{ ...props.style }}
-        >
-          <Background />
-          <LayoutNav />
-          <Box>{children}</Box>
-        </Flex>
-      </RecoilRoot>
+      <Flex
+        id="MainContainer"
+        flexDirection="column"
+        {...props}
+        style={{ ...props.style }}
+      >
+        <Background />
+        <Nav />
+        <Box>{children}</Box>
+      </Flex>
     </Box>
   )
 }

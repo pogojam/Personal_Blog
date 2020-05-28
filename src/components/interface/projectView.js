@@ -1,3 +1,5 @@
+import { PageState_Context } from "./context"
+
 import styled, { keyframes, css } from "styled-components"
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useSpring, animated } from "react-spring"
@@ -6,9 +8,8 @@ import projectData from "../../static/projects"
 import { Box, Text, Heading, Image } from "rebass"
 import useCustom from "../hooks/useCustom"
 import chance from "chance"
-
+import { Viewer } from "./withViewer"
 import { generateKey } from "../util"
-import { PageState_Context } from "./context"
 
 const CardImage = animated(Image)
 
@@ -110,13 +111,7 @@ const CardContainer = styled(Container)`
   } */
 `
 
-const ProjectCard = ({
-  containerRef,
-  data,
-  color,
-  handleClick,
-  activeView,
-}) => {
+const ProjectCard = ({ containerRef, data, color }) => {
   const [showState, setState] = useState(1)
   const boxRef = useRef()
   const [store, dispatch] = useContext(PageState_Context)
@@ -128,6 +123,7 @@ const ProjectCard = ({
       1.1,
     ]
   }
+  console.log(showState)
   const calcCenter = () => {
     const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
@@ -156,7 +152,10 @@ const ProjectCard = ({
     if (showState === 2) {
       setClick(calcCenter())
     }
-  }, [store.view])
+    if (Object.keys(store.view).length === 0) {
+      setState(1)
+    }
+  }, [store.view, showState])
 
   useEffect(() => {
     const backgroundNode = document.querySelector(".scean2_Background")
@@ -164,8 +163,7 @@ const ProjectCard = ({
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {
-        // backgroundNode.style.border = "1px solid white"
-        // backgroundNode.style.opacity = 1
+        backgroundNode.style.opacity = 1
       }
     }
   }, [showState])
@@ -181,8 +179,8 @@ const ProjectCard = ({
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
           e.preventDefault()
+          console.log("hi")
           dispatch({ type: "SET_VIEW", input: data })
-          handleClick({ ref: containerRef })
         }}
         alignItems="center"
         width="100%"
@@ -191,6 +189,7 @@ const ProjectCard = ({
         className="activeIcon"
         style={{
           backgroundColor: color,
+          zIndex: showState === 2 ? 99 : 0,
           color: "black",
           willChange: "transform",
           display: "flex",
@@ -245,14 +244,14 @@ const ProjectCard = ({
 }
 
 const Projects = ({ key, setHeading }) => {
-  const [activeView, setView] = useCustom({})
+  const [store, dispatch] = useContext(PageState_Context)
   const ref = useRef()
 
-  if (Object.entries(activeView).length > 0) {
-    setHeading(false)
-  } else {
-    setHeading(true)
-  }
+  // if (Object.entries(activeView).length > 0) {
+  //   setHeading(false)
+  // } else {
+  //   setHeading(true)
+  // }
 
   const Chance = chance()
   const colors = [
@@ -279,14 +278,14 @@ const Projects = ({ key, setHeading }) => {
         willChange: "opacity",
       }}
     >
+      <Viewer store={store} dispatch={dispatch} />
       {projectData.map((data, i) => {
         const color = colors[Chance.integer({ min: 0, max: colors.length - 1 })]
         return (
           <ProjectCard
             color={""}
             containerRef={ref}
-            activeView={activeView}
-            handleClick={setView}
+            // handleClick={setView}
             key={generateKey(i)}
             data={{ index: i, ...data }}
           />

@@ -22,7 +22,7 @@ const NavStyles = animated(styled.div`
   padding-bottom: 10px;
   font-size: 1.7em;
   backdrop-filter: blur(10px);
-  background-color: #0affc685;
+  background-color: #ffffff85;
   border-bottom-left-radius: 3px;
   display: flex;
   align-items: center;

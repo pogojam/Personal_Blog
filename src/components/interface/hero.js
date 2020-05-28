@@ -156,37 +156,11 @@ const Background = () => {
   )
 }
 
-const Background2_Styles = styled.div`
-  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"); */
-  background-size: cover;
-  will-change: opacity filter;
-  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
-  position: absolute;
-  width: 100%;
-  height: 130vh;
-  position: absolute;
-  transition: opacity 1s linear;
-  opacity: ${({ show }) => (show ? 1 : 0)};
-  bottom: 0;
-  background-position: center;
-`
-const Background2 = () => {
-  const [store, dispatch] = useContext(PageState_Context)
-  const globalID = "about"
-  const browser = detect()
-  return (
-    <Background2_Styles
-      isSafari={browser.name === "safari" || browser.name === "ios"}
-      show={store.active === globalID}
-    ></Background2_Styles>
-  )
-}
-
 const Styles = styled.div`
   position: absolute;
   overflow: hidden;
   color: white;
-  height: 620vh;
+  height: 550vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -204,7 +178,6 @@ const Styles = styled.div`
   #BackgroundCanvas {
     height: 100%;
     position: relative;
-    top: 250vh;
   }
 `
 
@@ -212,7 +185,7 @@ export const Hero = () => {
   return (
     <Styles>
       <Background />
-      <Background2 />
+      {/* <Background2 /> */}
       <div id="BackgroundCanvas" />
       <Ripple />
     </Styles>

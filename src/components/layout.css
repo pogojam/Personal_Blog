@@ -65,6 +65,7 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
+  background-color: #000;
   margin: 0;
   width: 100vw;
   -webkit-font-smoothing: antialiased;

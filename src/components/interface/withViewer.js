@@ -163,7 +163,7 @@ const SlantView = styled(Container)`
           transform: translateX(${side === "left" ? "0%" : "0%"});
         `
       : css`
-          transform: translateX(${side === "left" ? "-100%" : "100%"});
+          transform: translateX(${side === "left" ? "-150%" : "150%"});
         `}
   &:after {
     content: "";
@@ -292,7 +292,8 @@ const Content = ({
           width: "100%",
           willChange: "transform ",
           display: "flex",
-          zIndex: containerIndex(isActive),
+          // zIndex: containerIndex(isActive),
+          zIndex: 0,
           transform: inAnimation.slide.interpolate(e => slideCalcY(e, -1)),
         }}
         type="Flex"
@@ -359,6 +360,8 @@ const Content = ({
         style={{
           whiteSpace: "nowrap",
           boxShadow: "0px 5px 8px 3px #00000073",
+          fontFamily: "inherit",
+          letterSpacing: "5px",
           display: "flex",
           transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
@@ -380,7 +383,7 @@ const Content = ({
         style={{
           willChange: "transform opacity",
           position: "fixed",
-          zIndex: 1,
+          zIndex: 0,
           right: 0,
           bottom: 0,
           display: "flex",
@@ -400,7 +403,7 @@ const Content = ({
             position: "relative",
             flexBasis: "100%",
             justifyContent: "center",
-            zIndex: 1,
+            zIndex: 0,
             position: "absoulte",
             top: "50%",
           }}

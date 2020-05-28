@@ -1,6 +1,9 @@
 import { RecoilRoot } from "recoil"
 import { useWheel, useScroll } from "react-use-gesture"
+
+import { detect } from "detect-browser"
 import React, {
+  useContext,
   useState,
   useEffect,
   useRef,
@@ -56,7 +59,8 @@ const Styles = styled.div`
   }
 `
 
-const Scean1 = ({ html, animation }) => {
+const Scean1 = () => {
+  console.log("Scean 1 Update")
   const captions = [...Array(4)]
   const [location, setLocation] = useState()
   const calc = (transform, index, p, tieY) => {
@@ -72,6 +76,12 @@ const Scean1 = ({ html, animation }) => {
           return 0
         } else {
           return index * p * window.innerWidth * 0.3
+        }
+      case "o":
+        if (index === 1) {
+          return 1 - p
+        } else {
+          return 1
         }
     }
   }
@@ -95,21 +105,22 @@ const Scean1 = ({ html, animation }) => {
         const maxDis = window.innerHeight * 0.8
         const tieY = 300
         const percentAnimated = _.clamp(window.scrollY / maxDis, 0, maxDis)
-        if (!location) {
+        if (!location && percentAnimated < 3) {
           setAnim(i => ({
             x: [
               calc("x", i, percentAnimated),
               calc("y", i, percentAnimated, tieY),
               calc("r", i, percentAnimated),
             ],
-            color: percentAnimated > 0.3 ? "#000000" : "#ffffff",
+            color: percentAnimated > 0.3 ? "#ffffff" : "#ffffff",
+            opacity: calc("o", i, percentAnimated),
           }))
         }
-        if (!location && percentAnimated > 0.6) {
+        if (!location && percentAnimated > 1.4) {
           setLocation(true)
         }
 
-        if (location && percentAnimated < 0.6) {
+        if (location && percentAnimated < 1.4) {
           setLocation(false)
         }
       }
@@ -136,20 +147,28 @@ const Scean1 = ({ html, animation }) => {
         className="Caption"
       >
         {" "}
-        <Heading
+        <animated.div
           style={{
-            fontSize: "14vw",
-            lineHeight: ".8em",
-
-            textAlign: "left",
-            margin: 0,
-            zIndex: 3,
-            color: "white",
+            transform: anims[3].x.interpolate(
+              (x, y, r) => `translate(${x}px,${y}px) rotate3d(0,0,1,${r}deg)`
+            ),
           }}
         >
-          <Heading style={{ display: "block" }}>Ryan</Heading>
-          <Heading style={{ display: "block" }}> Breaux</Heading>
-        </Heading>
+          <Heading
+            style={{
+              fontSize: "13.7em",
+              lineHeight: ".8em",
+              textAlign: "left",
+              margin: ["1em", "-7px"],
+              zIndex: 3,
+              color: "bisque",
+              fontFamily: "Heebo",
+            }}
+          >
+            <span style={{ fontFamily: "Heebo" }}>Ryan</span>
+            <span style={{ fontFamily: "Heebo" }}> Breaux</span>
+          </Heading>
+        </animated.div>
         <animated.div
           style={{
             willChange: "transform",
@@ -163,9 +182,8 @@ const Scean1 = ({ html, animation }) => {
           {transitionHeading.map(({ item, key, props }) => {
             return (
               item && (
-                <animated.div style={props}>
-                  {" "}
-                  {/* <Heading>For Hire</Heading> */}
+                <animated.div key={generateKey(key)} style={props}>
+                  <Heading>For Hire</Heading>
                 </animated.div>
               )
             )
@@ -225,7 +243,7 @@ ${height}
 ${transform}
 will-change:transform;
 min-height: 100vh;
-background: #75927e6b;
+background: #7d4800;
 position: absolute;
 transition: opacity 0.3s;
 
@@ -235,8 +253,9 @@ z-index: 0;
 
 const HeadingContainer = styled(Container)``
 
-const Scean2 = ({ animation, isActive, ...props }) => {
+const Scean2 = ({ animation, ...props }) => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
+  const [isActive, setActive] = useState(false)
   const animateProjects = useSpring(
     isActive
       ? { opacity: 1, transform: "scale(1)" }
@@ -253,6 +272,12 @@ const Scean2 = ({ animation, isActive, ...props }) => {
   useEffect(() => {
     if (entries.intersectionRatio) {
       setAppAnim({ rotate: entries.intersectionRatio })
+      if (entries.intersectionRatio > 0.6 && !isActive) {
+        setActive(true)
+      }
+      if (entries.intersectionRatio < 0.6 && isActive) {
+        setActive(false)
+      }
     }
   }, [entries])
 
@@ -312,6 +337,7 @@ const Scean2 = ({ animation, isActive, ...props }) => {
             textAlign: "center",
             whiteSpace: "nowrap",
             margin: "auto",
+            color: "bisque",
             transition: "opacity 1s",
             opacity: headingState ? 1 : 0,
           }}
@@ -332,17 +358,43 @@ const Scean2 = ({ animation, isActive, ...props }) => {
         style={{
           marginLeft: "5vw",
           marginRight: "5vw",
+
           maxHeight: "100%",
           ...animateProjects,
         }}
       >
-        <Projects setHeading={setHeading} isActive={isActive} />
+        <Projects setHeading={setHeading} />
       </animated.div>
     </Container>
   )
 }
 
-const Scean3 = ({ animation, ...props }, ref) => {
+const Background2_Styles = styled.div`
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1589916967/Backgrounds/1.jpg");
+  background-size: cover;
+  will-change: opacity filter;
+  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  transition: opacity 1s linear;
+  opacity: ${({ show }) => (show ? 1 : 0)};
+  bottom: 0;
+  background-position: center;
+`
+const Background2 = () => {
+  // const [store, dispatch] = useContext(PageState_Context)
+  const globalID = "about"
+  const browser = detect()
+  return (
+    <Background2_Styles
+      isSafari={browser.name === "safari" || browser.name === "ios"}
+      // show={store.active === globalID}
+    ></Background2_Styles>
+  )
+}
+const Scean3 = () => {
   const choices = [
     {
       text: "Desktop",
@@ -402,8 +454,6 @@ const Scean3 = ({ animation, ...props }, ref) => {
       "http://localhost:57339/.netlify/functions/server",
       val
     )
-
-    console.log(data)
   }
 
   return (
@@ -416,17 +466,15 @@ const Scean3 = ({ animation, ...props }, ref) => {
       style={{
         position: "relative",
         willChange: "transform",
-        ...animation.fadeIn(1),
-        ...props.style,
-        color: "black",
+        color: "white",
+        background: "black",
       }}
-      ref={ref}
       animate
     >
-      <animated.div style={{ position: "relative", ...animation.slideIn(1) }}>
+      <animated.div>
         <h1>let me build you something.</h1>
       </animated.div>
-
+      {/* <Background2 /> */}
       <Container type="Flex">
         {choices.map((data, i) => (
           <animated.div key={i}>
@@ -496,26 +544,15 @@ const Scean3 = ({ animation, ...props }, ref) => {
     </Container>
   )
 }
-const sceans = [forwardRef(Scean1), forwardRef(Scean2), forwardRef(Scean3)]
+const sceans = [
+  React.memo(forwardRef(Scean1)),
+  forwardRef(Scean2),
+  forwardRef(Scean3),
+]
 
 // SCEAN INTERFACE
 
-const Scean_Interface = ({ index, ...props }) => {
-  // function roundNumber(number, decimals) {
-  //   var newnumber = new Number(number + "").toFixed(parseInt(decimals))
-  //   return parseFloat(newnumber)
-  // }
-  // const incArr = inc => {
-  //   let length = 1 / inc
-  //   let output = []
-
-  //   for (let i = 0; i < length - 1; ++i) {
-  //     output.length === 0 && output.push(0 + inc)
-  //     output.push(roundNumber(output[i] + inc, 12))
-  //   }
-  //   return output
-  // }
-
+const Scean_Interface = ({ index, Component, ...props }) => {
   const windowHeight = useRef(
     typeof window !== "undefined" ? `${window.innerHeight}px` : "80vh"
   )
@@ -595,23 +632,13 @@ const Scean_Interface = ({ index, ...props }) => {
     }
   }, [entries.intersectionRatio, isActive])
 
-  const Component = sceans[index]
-
-  return (
-    <Component
-      isActive={isActive}
-      animation={setAnimation(animations)}
-      ref={ref}
-      style={{ height: windowHeight.current }}
-      {...props}
-    />
-  )
+  return <Component style={{ height: windowHeight.current }} {...props} />
 }
 
 const invertList = ["about"]
 
-const IndexPage = ({ data, ...props }) => {
-  const [store, dispatch] = useReducer(PageState, { active: "hero" })
+const IndexPage = ({ data }) => {
+  const [store, dispatch] = useReducer(PageState, { active: "hero", view: {} })
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
   const [State, setState] = useState("loading")
@@ -648,7 +675,7 @@ const IndexPage = ({ data, ...props }) => {
       <Layout style={{ Background: "black" }}>
         <PageState_Context.Provider value={[store, dispatch]}>
           <Logo
-            invert={invertList.includes(store.active) ? true : false}
+            invert={invertList.includes(store.active) ? true : true}
             style={{
               position: "fixed",
               transition: "fill .4s linear",
@@ -661,14 +688,14 @@ const IndexPage = ({ data, ...props }) => {
             }}
             store={store}
           />
-          <Viewer store={store} dispatch={dispatch} />
+
           <Hero />
 
           <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
             {sceans.map((e, i) => (
               <Scean_Interface
-                setScean={props.setScean}
-                key={generateKey(i)}
+                Component={sceans[i]}
+                key={i}
                 index={i}
                 html={html}
               />

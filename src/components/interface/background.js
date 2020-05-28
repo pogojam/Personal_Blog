@@ -18,12 +18,12 @@ function CanvasBackground() {
     1000
   )
 
-  camera.position.z = 20
+  camera.position.z = 2
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setClearColor(0x000000, 1)
-  renderer.setSize(window.innerWidth, window.innerHeight * 1.5)
+  renderer.setSize(window.innerWidth, window.innerHeight * 4.5)
 
   const canvas = renderer.domElement
   canvas.classList = "BackgroundCanvas"
@@ -39,7 +39,7 @@ function CanvasBackground() {
 
   window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth / window.innerHeight
+    camera.aspect = (window.innerWidth * 2) / (window.innerHeight * 4.5)
     camera.updateProjectionMatrix()
   })
 
@@ -56,23 +56,22 @@ function CanvasBackground() {
         velocity
       )
     })
-
+    // SceanStars.animate()
     // camera.rotation.y += 0.001
     // camera.rotation.x -= 0.001
   }
-  this.setCamera = ([x, y, z]) => {
-    camera.rotation.x = x
-    camera.rotation.y = y
-    camera.rotation.z = z
+  this.setCamera = input => {
+    this.acceleration = input
   }
 
   // Add to scean
-  const SceanStars = new Stars(scene, 6000)
+  const SceanStars = new Stars(scene, 8000)
 
   const update = () => {
     // this.scrollEvent()
+
     renderer.render(scene, camera)
-    // SceanStars.animate()
+    SceanStars.animate([0.00005, 0])
 
     requestAnimationFrame(update)
   }
@@ -94,26 +93,47 @@ function Stars(scean, count) {
   // Animations vals
 
   const stars = new THREE.Points(starGeo, starMaterial)
-
+  const v1 = -1000
+  const v2 = 1000
   for (let i = 0; i < count; i++) {
     const vector = new THREE.Vector3(
-      getRandomInt(-300, 600),
-      getRandomInt(-300, 600),
-      getRandomInt(-300, 600)
+      getRandomInt(v1, v2),
+      getRandomInt(v1, v2),
+      getRandomInt(v1, v2)
     )
-    vector.velocity = 0.3
-    vector.acceleration = 0.005
+    vector.velocity = {}
+    vector.velocity.y = 0.03
+    vector.velocity.x = 0.03
+    vector.acceleration = 0.0
     starGeo.vertices.push(vector)
   }
 
-  this.animate = () => {
+  this.animate = acceleration => {
     starGeo.vertices.forEach(vert => {
-      vert.velocity += vert.acceleration
-      vert.y -= vert.velocity
+      vert.velocity.y += acceleration[0]
+      vert.velocity.x += acceleration[1]
+      vert.y -= vert.velocity.y
+      vert.x -= vert.velocity.x
 
-      if (vert.y < -400) {
-        vert.y = 200
-        vert.velocity = 0
+      if (vert.y < v1) {
+        vert.velocity.y = getRandomInt(v1, v2)
+        vert.velocity.x = getRandomInt(v1, v2)
+        vert.velocity.z = getRandomInt(v1, v2)
+        vert.acceleration = 0
+      }
+
+      if (vert.x < v1) {
+        vert.velocity.y = getRandomInt(v1, v2)
+        vert.velocity.x = getRandomInt(v1, v2)
+        vert.velocity.z = getRandomInt(v1, v2)
+        vert.acceleration = 0
+      }
+
+      if (vert.z < v1) {
+        vert.velocity.y = getRandomInt(v1, v2)
+        vert.velocity.x = getRandomInt(v1, v2)
+        vert.velocity.z = getRandomInt(v1, v2)
+        vert.acceleration = 0
       }
     })
 
@@ -148,17 +168,11 @@ const Scroller = ({ Canvas }) => {
     x: 1,
     y: 1,
     onFrame: frame => {
-      const vals = BackgroundDirections["downRight"]([
-        frame.velocity,
-        frame.velocity,
-      ])
-      console.log(genPaths(60, 5))
+      const vals = BackgroundDirections["downRight"]([frame.z, frame.y])
 
-      // genPaths(60, 5)
-      // Canvas.scrollEvent(genPaths(60, 5))
-      // Canvas.setCamera([frame.x, frame.y, frame.z])
+      Canvas.scrollEvent(vals)
     },
-    // config: { mass: 1, tension: 510, friction: 1000 },
+    config: { mass: 1, tension: 510, friction: 800 },
   }))
 
   const Chance = chance()
@@ -173,15 +187,10 @@ const Scroller = ({ Canvas }) => {
   }
   const bind = useScroll(
     e => {
-      console.log({
-        z: e.velocity,
-        x: e.xy[1] + Chance.integer({ min: 0, max: 10 }),
-        y: window.scrollY,
-      })
       setAnim({
         z: e.velocity,
         x: e.xy[1] + Chance.integer({ min: 0, max: 10 }),
-        y: window.scrollY,
+        y: e.direction[1],
       })
       // setPort()
     },

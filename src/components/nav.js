@@ -62,11 +62,16 @@ const Nav = params => {
   })
   return (
     <NavStyles style={onLoad}>
-      <button>
+      <button
+        onClick={() =>
+          (window.location =
+            "https://www.linkedin.com/in/ryan-breaux-4603396a/")
+        }
+      >
         <Icon type="linkedin" />
       </button>
 
-      <button>
+      <button onClick={() => (window.location = "https://github.com/pogojam/")}>
         <Icon type="git" />
       </button>
     </NavStyles>

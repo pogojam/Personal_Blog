@@ -94,7 +94,6 @@ const Background = () => {
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
   const browser = detect()
-  const detectMobile = useMobileDetect()
   const isIOS = browser.name === "ios"
   const isSafari = browser.name === "safari" || browser.name === "ios"
   const bgRef = useRef()

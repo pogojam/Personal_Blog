@@ -60,29 +60,29 @@ const Styles = styled.div`
 `
 
 const Scean1 = () => {
-  console.log("Scean 1 Update")
   const captions = [...Array(4)]
   const [location, setLocation] = useState()
   const calc = (transform, index, p, tieY) => {
-    const polarity = index % 2 === 1 ? -1 : 1
-    switch (transform) {
-      case "r":
-        return 0
-      case "y":
-        if (location && index === 1) return
-        return p * window.innerHeight * 0.7
-      case "x":
-        if (index == 3) {
+    if (window) {
+      switch (transform) {
+        case "r":
           return 0
-        } else {
-          return index * p * window.innerWidth * 0.3
-        }
-      case "o":
-        if (index === 1) {
-          return 1 - p
-        } else {
-          return 1
-        }
+        case "y":
+          if (location && index === 1) return
+          return p * window.innerHeight * 0.7
+        case "x":
+          if (index == 3) {
+            return 0
+          } else {
+            return index * p * window.innerWidth * 0.3
+          }
+        case "o":
+          if (index === 1) {
+            return 1 - p
+          } else {
+            return 1
+          }
+      }
     }
   }
 
@@ -400,6 +400,9 @@ const Background2 = ({ show }) => {
   )
 }
 const Scean3_Styles = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100%;
   /* margin-top: -26vh; */
@@ -422,6 +425,16 @@ const Scean3 = props => {
   }, [entries])
   return (
     <Scean3_Styles ref={ref} style={props.style}>
+      <div style={{ zIndex: 1, fontFamily: "Heebo", color: "white" }}>
+        <span>
+          <Icon type="mail" />
+          rlb278@icloud.com
+        </span>
+        <span>
+          <Icon type="phoen" />
+          928-660-1142
+        </span>
+      </div>
       <Background2 show={show} />
     </Scean3_Styles>
   )
@@ -553,39 +566,37 @@ const IndexPage = ({ data }) => {
   }, [State])
 
   return (
-    <RecoilRoot>
-      <Layout style={{ Background: "black" }}>
-        <PageState_Context.Provider value={[store, dispatch]}>
-          <Logo
-            invert={invertList.includes(store.active) ? true : true}
-            style={{
-              position: "fixed",
-              transition: "fill .4s linear",
-              width: "40px",
-              height: "40px",
-              top: "10px",
-              left: "10px",
-              zIndex: 9999,
-              fontFamily: "PoiretOne-Regular, Poiret One !important",
-            }}
-            store={store}
-          />
+    <Layout style={{ Background: "black" }}>
+      <PageState_Context.Provider value={[store, dispatch]}>
+        <Logo
+          invert={invertList.includes(store.active) ? true : true}
+          style={{
+            position: "fixed",
+            transition: "fill .4s linear",
+            width: "40px",
+            height: "40px",
+            top: "10px",
+            left: "10px",
+            zIndex: 9999,
+            fontFamily: "PoiretOne-Regular, Poiret One !important",
+          }}
+          store={store}
+        />
 
-          <Hero />
+        <Hero />
 
-          <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
-            {sceans.map((e, i) => (
-              <Scean_Interface
-                Component={sceans[i]}
-                key={i}
-                index={i}
-                html={html}
-              />
-            ))}
-          </animated.div>
-        </PageState_Context.Provider>
-      </Layout>
-    </RecoilRoot>
+        <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
+          {sceans.map((e, i) => (
+            <Scean_Interface
+              Component={sceans[i]}
+              key={i}
+              index={i}
+              html={html}
+            />
+          ))}
+        </animated.div>
+      </PageState_Context.Provider>
+    </Layout>
   )
 }
 

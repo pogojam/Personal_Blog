@@ -99,6 +99,7 @@ const Scean1 = () => {
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   })
+  const scrollTarget = typeof window !== "undefined" ? <div></div> : window
   const bind = useScroll(
     e => {
       if (window) {
@@ -126,7 +127,7 @@ const Scean1 = () => {
       }
     },
     {
-      domTarget: window,
+      domTarget: scrollTarget,
     }
   )
   useEffect(bind, [bind])
@@ -425,13 +426,13 @@ const Scean3 = props => {
   }, [entries])
   return (
     <Scean3_Styles ref={ref} style={props.style}>
-      <div style={{ zIndex: 1, fontFamily: "Heebo", color: "white" }}>
-        <span>
+      <div style={{ zIndex: 1, color: "white" }}>
+        <span style={{ fontFamily: "Heebo" }}>
           <Icon type="mail" />
           rlb278@icloud.com
         </span>
-        <span>
-          <Icon type="phoen" />
+        <span style={{ fontFamily: "Heebo" }}>
+          <Icon type="phone" />
           928-660-1142
         </span>
       </div>

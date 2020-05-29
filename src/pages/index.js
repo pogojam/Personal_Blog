@@ -99,7 +99,7 @@ const Scean1 = () => {
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   })
-  const scrollTarget = typeof window !== "undefined" ? <div></div> : window
+  const scrollTarget = typeof window !== "undefined" ? window : <div></div>
   const bind = useScroll(
     e => {
       if (window) {

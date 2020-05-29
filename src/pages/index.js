@@ -19,7 +19,13 @@ import Container from "../components/container"
 import Layout from "../components/layout"
 import styled, { keyframes } from "styled-components"
 import _ from "lodash"
-import { useTransition, animated, useSpring, useSprings } from "react-spring"
+import {
+  useTransition,
+  animated,
+  useSpring,
+  useSprings,
+  config,
+} from "react-spring"
 import {
   generateKey,
   useObserver,
@@ -87,11 +93,10 @@ const Scean1 = () => {
   }
 
   const [anims, setAnim] = useSprings(captions.length, () => ({
-    immediate: true,
     x: [0, 0, 0],
     opacity: [1],
     color: "#ffffff",
-    config: { tension: 200, friction: 10 },
+    config: config.molasses,
   }))
 
   const transitionHeading = useTransition(location, null, {

@@ -154,16 +154,20 @@ const BackButton = props => (
 
 const SlantView = styled(Container)`
   will-change: transform;
-  transition: transform 1.2s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 1.2s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+    opacity 0.4s;
   z-index: 1;
 
   ${({ isActive, side }) =>
     isActive
       ? css`
           transform: translateX(${side === "left" ? "0%" : "0%"});
+
+          opacity: 1;
         `
       : css`
           transform: translateX(${side === "left" ? "-150%" : "150%"});
+          opacity: 0;
         `}
   &:after {
     content: "";
@@ -189,16 +193,6 @@ const Content = ({
   const [message, setMessage] = useState()
 
   const desktopAnim = [`translateX(0%)  `, `translateX(40%) `]
-
-  const backgroundSlide = useSpring({
-    from: {
-      transform: desktopAnim[0],
-    },
-    to: {
-      transform: desktopAnim[1],
-    },
-    config: { tension: 10, mass: 4 },
-  })
 
   const slideCalcY = (val, pol) => `translateY(${val * pol}%)`
   const playVideo = (p, ref) => {
@@ -294,7 +288,7 @@ const Content = ({
           display: "flex",
           // zIndex: containerIndex(isActive),
           zIndex: 0,
-          transform: inAnimation.slide.interpolate(e => slideCalcY(e, -1)),
+          // transform: inAnimation.slide.interpolate(e => slideCalcY(e, -1)),
         }}
         type="Flex"
         flexBasis="100%"
@@ -353,7 +347,7 @@ const Content = ({
       />
       <ViewHeading
         width={["inherit"]}
-        fontSize={["4vh", "9vh"]}
+        fontSize={["3em"]}
         fontWeight="900"
         textAlign={["left", "center"]}
         isActive={isActive}
@@ -422,7 +416,8 @@ const Content = ({
             }}
             p="1em"
             bg="rgb(64,64,64)"
-            color="#ffffff7a"
+            fontFamily={"Heebo"}
+            color="white"
           >
             {message && (
               <Box
@@ -431,7 +426,7 @@ const Content = ({
                   top: "-25px",
                   right: 0,
                   height: "25px",
-                  background: "rgb(25, 20, 20)",
+                  background: "rgb(45, 45, 45)",
                   borderTopRightRadius: "3px",
                   borderTopLeftRadius: "3px",
                   color: "#ffffff7a",

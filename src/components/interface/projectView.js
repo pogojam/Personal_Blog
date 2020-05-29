@@ -128,7 +128,7 @@ const ProjectCard = ({ containerRef, data, color }) => {
     const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
     const tx = window.innerWidth / 2 - (rect.width / 2 + rect.left)
-    const ty = isMobile
+    const ty = true
       ? window.innerHeight / 2 - (rect.bottom - rect.height / 2)
       : window.innerHeight - rect.bottom + -(window.innerHeight / 5)
     return { xy: [tx, ty] }
@@ -160,6 +160,7 @@ const ProjectCard = ({ containerRef, data, color }) => {
   useEffect(() => {
     const backgroundNode = document.querySelector(".scean2_Background")
     if (showState === 2) {
+      console.log(backgroundNode)
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {
@@ -179,7 +180,19 @@ const ProjectCard = ({ containerRef, data, color }) => {
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         onClick={e => {
           e.preventDefault()
-          console.log("hi")
+          const wrapperRec = document
+            .getElementsByClassName("Apps_Wrapper")[0]
+            .getBoundingClientRect()
+          const windowCenter = window.innerHeight / 2
+          window.scrollTo({
+            top:
+              wrapperRec.top +
+              wrapperRec.height / 2 -
+              windowCenter +
+              window.scrollY,
+            behavior: "smooth",
+          })
+          // console.log(wrapperRec.top - windowCenter + window.scrollY,dd)
           dispatch({ type: "SET_VIEW", input: data })
         }}
         alignItems="center"
@@ -286,7 +299,7 @@ const Projects = ({ key, setHeading }) => {
             color={""}
             containerRef={ref}
             // handleClick={setView}
-            key={generateKey(i)}
+            key={i}
             data={{ index: i, ...data }}
           />
         )

@@ -137,7 +137,7 @@ const Scean1 = () => {
         style={{
           position: "absolute",
           top: "0",
-          left: "6em",
+          left: "1em",
           height: "89vh",
           display: "flex",
           flexDirection: "column",
@@ -156,7 +156,7 @@ const Scean1 = () => {
         >
           <Heading
             style={{
-              fontSize: "13.7em",
+              fontSize: "20vw",
               lineHeight: ".8em",
               textAlign: "left",
               margin: ["1em", "-7px"],
@@ -178,12 +178,12 @@ const Scean1 = () => {
             color: anims[3].color.interpolate(c => c),
           }}
         >
-          <Icon size="3.7em" type="tie" />
+          <Icon size="3.7em" style={{ color: "bisque" }} type="tie" />
           {transitionHeading.map(({ item, key, props }) => {
             return (
               item && (
                 <animated.div key={generateKey(key)} style={props}>
-                  <Heading>For Hire</Heading>
+                  <Heading style={{ color: "bisque" }}>For Hire</Heading>
                 </animated.div>
               )
             )
@@ -221,7 +221,10 @@ const Scean1 = () => {
                     <Heading>Tempe AZ</Heading>
                   </animated.span>
                 ) : (
-                  <animated.span key={key} style={props}>
+                  <animated.span
+                    key={key}
+                    style={{ color: "bisque", ...props }}
+                  >
                     Curious and humble , full stack developer, entrepreneur.
                   </animated.span>
                 )
@@ -243,7 +246,7 @@ ${height}
 ${transform}
 will-change:transform;
 min-height: 100vh;
-background: #7d4800;
+background: #ff0000;
 position: absolute;
 transition: opacity 0.3s;
 
@@ -303,6 +306,7 @@ const Scean2 = ({ animation, ...props }) => {
         flexDirection: "column",
         justifyContent: "center",
         position: "relative",
+        zIndex: 1,
         ...props.style,
       }}
     >
@@ -355,6 +359,7 @@ const Scean2 = ({ animation, ...props }) => {
         </Heading>
       </HeadingContainer>
       <animated.div
+        className={"Apps_Wrapper"}
         style={{
           marginLeft: "5vw",
           marginRight: "5vw",
@@ -370,7 +375,7 @@ const Scean2 = ({ animation, ...props }) => {
 }
 
 const Background2_Styles = styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1589916967/Backgrounds/1.jpg");
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
   background-size: cover;
   will-change: opacity filter;
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
@@ -383,165 +388,42 @@ const Background2_Styles = styled.div`
   bottom: 0;
   background-position: center;
 `
-const Background2 = () => {
+const Background2 = ({ show }) => {
   // const [store, dispatch] = useContext(PageState_Context)
   const globalID = "about"
   const browser = detect()
   return (
     <Background2_Styles
+      show={show}
       isSafari={browser.name === "safari" || browser.name === "ios"}
-      // show={store.active === globalID}
     ></Background2_Styles>
   )
 }
-const Scean3 = () => {
-  const choices = [
-    {
-      text: "Desktop",
-    },
-    {
-      text: "Mobile",
-    },
-    {
-      text: "DevOps",
-    },
-  ]
-  const [form, showForm] = useState()
-  const [isActive, setButton] = useState([false, false, false])
-  const [phone, setPhone] = useState(null)
-  const [message, setMessage] = useState(null)
-
-  const formatPhone = val => {
-    const entry = val.split("")
-    const filteredArray = entry.filter(e => e !== ")" && e !== "(" && e !== "-")
-
-    if (!Number(filteredArray[filteredArray.length - 1])) return
-    if (filteredArray.length > 10) return
-
-    const phonenumber = filteredArray.reduce((acc, num, i) => {
-      if (i === 0) {
-        return (acc = acc + "(" + num)
+const Scean3_Styles = styled.div`
+  height: 100vh;
+  width: 100%;
+  margin-top: -26vh;
+  position: relative;
+`
+const Scean3 = props => {
+  const [show, setShow] = useState(false)
+  const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
+  useEffect(() => {
+    console.log(entries)
+    if (entries.intersectionRatio) {
+      const ir = entries.intersectionRatio
+      if (ir > 0.4) {
+        setShow(true)
       }
-      if (i === 2) return (acc = acc + num + ")-")
-      if (i === 5) {
-        return (acc = acc + num + "-")
-      } else {
-        acc = acc + num
+      if (ir < 0.4 && show) {
+        setShow(false)
       }
-      return acc
-    }, "")
-
-    setPhone(phonenumber)
-  }
-
-  const transition = useTransition(form, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  })
-
-  const handleClick = i => e => {
-    setButton(prevArr => {
-      prevArr[i] = !prevArr[i]
-      return [...prevArr]
-    })
-    showForm(true)
-  }
-
-  const handleSubmit = async () => {
-    const val = JSON.stringify({ phone, message })
-    const data = await axios.post(
-      "http://localhost:57339/.netlify/functions/server",
-      val
-    )
-  }
-
+    }
+  }, [entries])
   return (
-    <Container
-      type="Flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      p="5em"
-      style={{
-        position: "relative",
-        willChange: "transform",
-        color: "white",
-        background: "black",
-      }}
-      animate
-    >
-      <animated.div>
-        <h1>let me build you something.</h1>
-      </animated.div>
-      {/* <Background2 /> */}
-      <Container type="Flex">
-        {choices.map((data, i) => (
-          <animated.div key={i}>
-            <Button
-              style={{
-                border: "1px solid",
-                transition: "background .3s",
-                borderRadius: "3px",
-                cursor: "pointer",
-                color: isActive[i] ? "red" : "black",
-              }}
-              onClick={handleClick(i)}
-              bg={isActive[i] ? "#0000009e" : "transparent"}
-              p=".7em"
-              m=".2em"
-              {...data}
-            />
-          </animated.div>
-        ))}
-      </Container>
-      {transition.map(({ item, key, props }) =>
-        item ? (
-          <Container key={key} animate style={{ ...props }}>
-            <form
-              mt="1em"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              method="post"
-              onSubmit={e => {
-                e.preventDefault()
-                handleSubmit(e.target.value)
-              }}
-            >
-              <NumberFormat
-                maxWidth="60%"
-                placeholder="Phone"
-                style={{ cursor: "1em" }}
-                m=".5em"
-                name="Phone"
-                format="+1 (###) ###-####"
-                mask="_"
-              />
-              <Textarea
-                m=".5em"
-                name="Message"
-                placeholder="About your project"
-                cols="50"
-                rows="5"
-                onChange={({ target }) => setMessage(target.value)}
-              ></Textarea>
-              <input
-                style={{
-                  border: "1px solid black",
-                }}
-                m="1em"
-                p=".3em"
-                text="Submit"
-                type="submit"
-              />
-            </form>
-          </Container>
-        ) : null
-      )}
-    </Container>
+    <Scean3_Styles ref={ref} style={props.style}>
+      <Background2 show={show} />
+    </Scean3_Styles>
   )
 }
 const sceans = [

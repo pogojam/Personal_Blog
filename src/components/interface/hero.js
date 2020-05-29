@@ -70,7 +70,7 @@ const BackgroundStyle = animated(styled.video`
   background-position: center;
   background-size: cover;
   object-fit: cover;
-  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
+  filter: ${({ isUnsupported }) => (isUnsupported ? "" : 'url("#water")')};
   /* z-index: 1; */
   position: absolute;
   width: 100%;
@@ -96,6 +96,8 @@ const Background = () => {
   const browser = detect()
   const isIOS = browser.name === "ios"
   const isSafari = browser.name === "safari" || browser.name === "ios"
+  const isMobile =
+    typeof window === "undefined" ? true : window.innerWidth < 600
   const bgRef = useRef()
 
   useEffect(() => {
@@ -125,7 +127,7 @@ const Background = () => {
     <>
       <BackgroundStyle
         ref={bgRef}
-        isSafari={isSafari}
+        isUnsupported={isSafari || isIOS || isMobile}
         autoPlay
         muted
         loop

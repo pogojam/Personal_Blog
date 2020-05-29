@@ -157,7 +157,7 @@ const Scean1 = () => {
         >
           <Heading
             style={{
-              fontSize: "20vw",
+              fontSize: "7vw",
               lineHeight: ".8em",
               textAlign: "left",
               margin: ["1em", "-7px"],
@@ -426,13 +426,24 @@ const Scean3 = props => {
   }, [entries])
   return (
     <Scean3_Styles ref={ref} style={props.style}>
-      <div style={{ zIndex: 1, color: "white" }}>
-        <span style={{ fontFamily: "Heebo" }}>
-          <Icon type="mail" />
+      <div
+        style={{
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          color: "white",
+        }}
+      >
+        <span
+          style={{ display: "flex", alignItems: "center", fontFamily: "Heebo" }}
+        >
+          <Icon style={{ marginRight: "10px" }} type="mail" />
           rlb278@icloud.com
         </span>
-        <span style={{ fontFamily: "Heebo" }}>
-          <Icon type="phone" />
+        <span
+          style={{ fontFamily: "Heebo", display: "flex", alignItems: "center" }}
+        >
+          <Icon style={{ marginRight: "10px" }} type="phone" />
           928-660-1142
         </span>
       </div>

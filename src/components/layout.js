@@ -1,4 +1,3 @@
-import { scrollState } from "./atoms/atoms"
 import { RecoilRoot, useRecoilValue, useRecoilState } from "recoil"
 import { animated, useSpring } from "react-spring"
 import React from "react"
@@ -35,18 +34,20 @@ const BackgroundDirections = {
 
 function Layout({ children, navAnim = true, ...props }) {
   return (
-    <Box style={{ overflow: "hidden" }}>
-      <Flex
-        id="MainContainer"
-        flexDirection="column"
-        {...props}
-        style={{ ...props.style }}
-      >
-        <Background />
-        <Nav />
-        <Box>{children}</Box>
-      </Flex>
-    </Box>
+    <RecoilRoot>
+      <Box style={{ overflow: "hidden" }}>
+        <Flex
+          id="MainContainer"
+          flexDirection="column"
+          {...props}
+          style={{ ...props.style }}
+        >
+          <Background />
+          <Nav />
+          <Box>{children}</Box>
+        </Flex>
+      </Box>
+    </RecoilRoot>
   )
 }
 

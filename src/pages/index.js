@@ -381,7 +381,7 @@ const Background2_Styles = styled.div`
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
   position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 140vh;
   position: absolute;
   transition: opacity 1s linear;
   opacity: ${({ show }) => (show ? 1 : 0)};
@@ -402,7 +402,7 @@ const Background2 = ({ show }) => {
 const Scean3_Styles = styled.div`
   height: 100vh;
   width: 100%;
-  margin-top: -26vh;
+  /* margin-top: -26vh; */
   position: relative;
 `
 const Scean3 = props => {

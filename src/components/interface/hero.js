@@ -109,7 +109,7 @@ const Background = () => {
       // const scaleVal = _.clamp(1 * ir, 0.5, 1)
       const scaleVal = 1
       // const opacityVal = ir < 0.38 ? 0 : 1
-      const opacityVal = ir > 0.7 ? ir : 0
+      const opacityVal = ir
       setAnim({ scale: [scaleVal, yVal + offset, 0], opacity: opacityVal })
 
       if (ir > 0.2 && store.active !== globalID) {

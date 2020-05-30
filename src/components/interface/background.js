@@ -56,9 +56,6 @@ function CanvasBackground() {
         velocity
       )
     })
-    // SceanStars.animate()
-    // camera.rotation.y += 0.001
-    // camera.rotation.x -= 0.001
   }
   this.setCamera = input => {
     this.acceleration = input
@@ -68,10 +65,8 @@ function CanvasBackground() {
   const SceanStars = new Stars(scene, 8000)
 
   const update = () => {
-    // this.scrollEvent()
-
+    // SceanStars.animate([0.00005, 0])
     renderer.render(scene, camera)
-    SceanStars.animate([0.00005, 0])
 
     requestAnimationFrame(update)
   }
@@ -82,6 +77,8 @@ function CanvasBackground() {
 
 function Stars(scean, count) {
   const starGeo = new THREE.Geometry()
+  starGeo.dynamic = true
+  starGeo.__dirtyVertices = true
   const sprite = new THREE.TextureLoader().load(
     "https://res.cloudinary.com/dxjse9tsv/image/upload/v1590557472/General_Icons/Oval_White_BlackBackground.png"
   )
@@ -95,12 +92,26 @@ function Stars(scean, count) {
   const stars = new THREE.Points(starGeo, starMaterial)
   const v1 = -1000
   const v2 = 1000
+  const spread = 200
+
+  const getLocation = (r1, r2, s) => {
+    const polarity = Math.random() - 0.5
+    // console.log(polarity)
+    if (polarity < 0) {
+      return getRandomInt(r1, -s)
+    }
+    if (polarity > 0) {
+      return getRandomInt(s, r2)
+    }
+  }
+
   for (let i = 0; i < count; i++) {
     const vector = new THREE.Vector3(
       getRandomInt(v1, v2),
       getRandomInt(v1, v2),
       getRandomInt(v1, v2)
     )
+    console.log()
     vector.velocity = {}
     vector.velocity.y = 0.03
     vector.velocity.x = 0.03
@@ -114,6 +125,12 @@ function Stars(scean, count) {
       vert.velocity.x += acceleration[1]
       vert.y -= vert.velocity.y
       vert.x -= vert.velocity.x
+
+      if (getRandomInt(v1, v2) < 800) {
+        vert.y = getRandomInt(v1, v2)
+        vert.x = getRandomInt(v1, v2)
+        vert.z = getRandomInt(v1, v2)
+      }
 
       if (vert.y < v1) {
         vert.velocity.y = getRandomInt(v1, v2)

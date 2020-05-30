@@ -65,7 +65,7 @@ function CanvasBackground() {
   const SceanStars = new Stars(scene, 8000)
 
   const update = () => {
-    // SceanStars.animate([0.00005, 0])
+    SceanStars.animate([0.00005, 0])
     renderer.render(scene, camera)
 
     requestAnimationFrame(update)
@@ -94,24 +94,13 @@ function Stars(scean, count) {
   const v2 = 1000
   const spread = 200
 
-  const getLocation = (r1, r2, s) => {
-    const polarity = Math.random() - 0.5
-    // console.log(polarity)
-    if (polarity < 0) {
-      return getRandomInt(r1, -s)
-    }
-    if (polarity > 0) {
-      return getRandomInt(s, r2)
-    }
-  }
-
   for (let i = 0; i < count; i++) {
     const vector = new THREE.Vector3(
       getRandomInt(v1, v2),
       getRandomInt(v1, v2),
       getRandomInt(v1, v2)
     )
-    console.log()
+    console.log(vector.distanceTo({ x: 0, y: 0, z: 2 }) < 800)
     vector.velocity = {}
     vector.velocity.y = 0.03
     vector.velocity.x = 0.03
@@ -126,30 +115,30 @@ function Stars(scean, count) {
       vert.y -= vert.velocity.y
       vert.x -= vert.velocity.x
 
-      if (getRandomInt(v1, v2) < 800) {
+      if (vert.distanceTo({ x: 0, y: 0, z: 2 }) < 600) {
         vert.y = getRandomInt(v1, v2)
         vert.x = getRandomInt(v1, v2)
         vert.z = getRandomInt(v1, v2)
       }
 
       if (vert.y < v1) {
-        vert.velocity.y = getRandomInt(v1, v2)
-        vert.velocity.x = getRandomInt(v1, v2)
-        vert.velocity.z = getRandomInt(v1, v2)
+        vert.y = getRandomInt(v1, v2)
+        vert.x = getRandomInt(v1, v2)
+        vert.z = getRandomInt(v1, v2)
         vert.acceleration = 0
       }
 
       if (vert.x < v1) {
-        vert.velocity.y = getRandomInt(v1, v2)
-        vert.velocity.x = getRandomInt(v1, v2)
-        vert.velocity.z = getRandomInt(v1, v2)
+        vert.y = getRandomInt(v1, v2)
+        vert.x = getRandomInt(v1, v2)
+        vert.z = getRandomInt(v1, v2)
         vert.acceleration = 0
       }
 
       if (vert.z < v1) {
-        vert.velocity.y = getRandomInt(v1, v2)
-        vert.velocity.x = getRandomInt(v1, v2)
-        vert.velocity.z = getRandomInt(v1, v2)
+        vert.y = getRandomInt(v1, v2)
+        vert.x = getRandomInt(v1, v2)
+        vert.z = getRandomInt(v1, v2)
         vert.acceleration = 0
       }
     })

@@ -280,7 +280,10 @@ const Scean2 = ({ animation, ...props }) => {
 
   useEffect(() => {
     if (entries.intersectionRatio) {
-      setAppAnim({ rotate: entries.intersectionRatio })
+      setAppAnim({
+        rotate: entries.intersectionRatio,
+        slide: (entries.intersectionRatio * 200) / 200,
+      })
       if (entries.intersectionRatio > 0.6 && !isActive) {
         setActive(true)
       }

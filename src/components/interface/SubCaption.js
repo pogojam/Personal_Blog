@@ -86,16 +86,16 @@ export const SubCaption = () => {
   const transition = useTransition(showBackground, null, {
     from: {
       opacity: 0,
-      transform: 0.7,
+      transform: [0.7, 30],
     },
     enter: {
       opacity: 1,
 
-      transform: 1,
+      transform: [1, 0],
     },
     leave: {
       opacity: 0,
-      transform: 0,
+      transform: [0, -30],
     },
   })
   const [anim, setAnim] = useSprings(3, () => {
@@ -107,6 +107,7 @@ export const SubCaption = () => {
   })
 
   useEffect(() => {
+    const breakPoint = 0.6
     if (entries.intersectionRatio) {
       const ir = entries.intersectionRatio
       setAnim({
@@ -114,10 +115,10 @@ export const SubCaption = () => {
         slide: 200 * ir,
         scale: [ir + 4.5, 0, 0],
       })
-      if (ir > 0.8 && !showBackground) {
+      if (ir > breakPoint && !showBackground) {
         setBackground(true)
       }
-      if (ir < 0.8 && showBackground) {
+      if (ir < breakPoint && showBackground) {
         setBackground(false)
       }
     }
@@ -154,7 +155,9 @@ export const SubCaption = () => {
                 <animated.div
                   style={{
                     ...props,
-                    transform: props.transform.interpolate(s => `scale(${s})`),
+                    transform: props.transform.interpolate(
+                      (s, r) => `scale(${s}) rotate(${r}deg)`
+                    ),
                     position: "absolute",
                     width: "100%",
                     height: "100%",

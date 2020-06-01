@@ -102,7 +102,7 @@ const Background = () => {
 
   useEffect(() => {
     if (entries.intersectionRatio && window) {
-      const offset = isIOS ? -200 : 0
+      const offset = isIOS ? 0 : 0
       const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
       // const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
@@ -188,7 +188,6 @@ export const Hero = () => {
   return (
     <Styles>
       <Background />
-      {/* <Background2 /> */}
       <div id="BackgroundCanvas" />
       <Ripple />
     </Styles>

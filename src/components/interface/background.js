@@ -38,7 +38,9 @@ function CanvasBackground() {
   document.getElementById("BackgroundCanvas").appendChild(canvas)
 
   window.addEventListener("resize", () => {
+    if (window.innerWidth < 600) return
     renderer.setSize(window.innerWidth, window.innerHeight)
+
     camera.aspect = (window.innerWidth * 2) / (window.innerHeight * 4.5)
     camera.updateProjectionMatrix()
   })

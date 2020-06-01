@@ -72,18 +72,21 @@ const Scean1 = () => {
     if (window) {
       switch (transform) {
         case "r":
+          if (index === 2) return p * -10
           return 0
         case "y":
+          if (index === 2) return p * 200
           if (location && index === 1) return
           return p * window.innerHeight * 0.7
         case "x":
-          if (index == 3) {
+          if (index == 3 || index === 2) {
             return 0
           } else {
-            return index * p * window.innerWidth * 0.3
+            return 0
           }
         case "o":
-          if (index === 1) {
+          if (index === 2 || index === 1) {
+            console.log(index)
             return 1 - p
           } else {
             return 1
@@ -122,11 +125,11 @@ const Scean1 = () => {
             opacity: calc("o", i, percentAnimated),
           }))
         }
-        if (!location && percentAnimated > 1.4) {
+        if (!location && percentAnimated > 1.6) {
           setLocation(true)
         }
 
-        if (location && percentAnimated < 1.4) {
+        if (location && percentAnimated < 1.6) {
           setLocation(false)
         }
       }
@@ -143,7 +146,7 @@ const Scean1 = () => {
         style={{
           position: "absolute",
           top: "0",
-          left: "1em",
+          left: "7em",
           height: "89vh",
           display: "flex",
           flexDirection: "column",
@@ -155,9 +158,10 @@ const Scean1 = () => {
         {" "}
         <animated.div
           style={{
-            transform: anims[3].x.interpolate(
+            transform: anims[2].x.interpolate(
               (x, y, r) => `translate(${x}px,${y}px) rotate3d(0,0,1,${r}deg)`
             ),
+            opacity: anims[2].opacity.interpolate(e => e),
           }}
         >
           <Heading
@@ -189,7 +193,7 @@ const Scean1 = () => {
             return (
               item && (
                 <animated.div key={generateKey(key)} style={props}>
-                  <Heading style={{ color: "bisque" }}>For Hire</Heading>
+                  {/* <Heading style={{ color: "bisque" }}>For Hire</Heading> */}
                 </animated.div>
               )
             )
@@ -440,6 +444,9 @@ const Scean3 = props => {
           display: "flex",
           flexDirection: "column",
           color: "white",
+          borderRadius: "8px",
+          background: "#0000006e",
+          padding: "1em",
         }}
       >
         <span

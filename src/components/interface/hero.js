@@ -74,8 +74,8 @@ const BackgroundStyle = animated(styled.video`
   /* z-index: 1; */
   position: absolute;
   width: 100%;
-  height: 40%;
-  top: -5%;
+  height: 100vh;
+  top: 0;
   border-radius: 11%;
   z-index: 10;
 `)
@@ -84,7 +84,7 @@ const Background = () => {
   const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
     scale: [1, 0, 0],
     opacity: [1],
-    config: { tension: 500 },
+    config: { tension: 500, friction: 100 },
   }))
 
   const [ref, entries] = useObserver({
@@ -105,9 +105,11 @@ const Background = () => {
       const offset = isIOS ? -200 : 0
       const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
+      // const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
+
       const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
-      // const scaleVal = _.clamp(1 * ir, 0.5, 1)
-      const scaleVal = 1
+      const scaleVal = _.clamp(1 * ir, 0.5, 1)
+      // const scaleVal = 1
       // const opacityVal = ir < 0.38 ? 0 : 1
       const opacityVal = ir
       setAnim({ scale: [scaleVal, yVal + offset, 0], opacity: opacityVal })
@@ -139,7 +141,7 @@ const Background = () => {
         style={{
           willChange: "transform opacity",
           transform: scale.interpolate(
-            (s, y, x) => `scale(${s}) translate(${x}px,0px) `
+            (s, y, x) => `scale(${s}) translate(${x}px,${y}px) `
           ),
           opacity,
         }}

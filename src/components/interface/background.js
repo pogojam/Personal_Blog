@@ -104,6 +104,7 @@ function Stars(scean, count) {
     vector.velocity = {}
     vector.velocity.y = 0.03
     vector.velocity.x = 0.03
+    vector.velocity.z = 0.07
     vector.acceleration = 0.0
     starGeo.vertices.push(vector)
   }
@@ -112,8 +113,10 @@ function Stars(scean, count) {
     starGeo.vertices.forEach(vert => {
       vert.velocity.y += acceleration[0]
       vert.velocity.x += acceleration[1]
+      vert.velocity.z += acceleration[1]
       vert.y -= vert.velocity.y
       vert.x -= vert.velocity.x
+      vert.z -= vert.velocity.z
 
       if (vert.distanceTo({ x: 0, y: 0, z: 2 }) < 600) {
         vert.y = getRandomInt(v1, v2)

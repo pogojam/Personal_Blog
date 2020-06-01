@@ -1,14 +1,14 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { position } from "styled-system"
 import Arizona from "../../static/arizona"
 import { useObserver, buildThresholdList } from "../util"
-import { useSprings, animated } from "react-spring"
+import { useSprings, useTransition, animated } from "react-spring"
 
 const Styles = animated(styled.div`
-  color: black;
+  color: white;
   position: absolute;
-  top: 130vh;
+  top: 150vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,9 +17,10 @@ const Styles = animated(styled.div`
 
   p {
     margin: 0;
-    max-width: 500px;
     flex-basis: 60%;
     align-self: center;
+    font-size: 2em;
+    line-height: 42px;
     @media (max-width: 600px) {
       flex-basis: 100%;
       height: 100%;
@@ -27,7 +28,7 @@ const Styles = animated(styled.div`
       text-align: center;
       justify-content: center;
       align-items: center;
-      background-color: #faebd7bf;
+      /* background-color: #faebd7bf; */
       backdrop-filter: blur(3px);
     }
   }
@@ -41,7 +42,9 @@ const Styles = animated(styled.div`
     width: 100%;
     display: flex;
     height: 50%;
+    align-self: center;
     justify-content: center;
+    position: relative;
   }
 `)
 const Portrait = styled.div`
@@ -57,9 +60,44 @@ const Portrait = styled.div`
     z-index: -1;
   }
 `
+const AzBackground = () => {
+  return (
+    <div
+      style={{
+        background: ` linear-gradient(
+          rgba(0, 0, 0, 0.6),
+          rgba(0, 0, 0, 0.6)
+        ),url(https://res.cloudinary.com/dxjse9tsv/image/upload/v1537298666/Portfolio/glen-canyon.jpg)`,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundSize: "cover",
+      }}
+    />
+  )
+}
+
 export const SubCaption = () => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
+  const [showBackground, setBackground] = useState(false)
 
+  const transition = useTransition(showBackground, null, {
+    from: {
+      opacity: 0,
+      transform: 0.7,
+    },
+    enter: {
+      opacity: 1,
+
+      transform: 1,
+    },
+    leave: {
+      opacity: 0,
+      transform: 0,
+    },
+  })
   const [anim, setAnim] = useSprings(3, () => {
     return {
       opacity: [0],
@@ -76,6 +114,12 @@ export const SubCaption = () => {
         slide: 200 * ir,
         scale: [ir + 4.5, 0, 0],
       })
+      if (ir > 0.8 && !showBackground) {
+        setBackground(true)
+      }
+      if (ir < 0.8 && showBackground) {
+        setBackground(false)
+      }
     }
   }, [entries])
 
@@ -103,11 +147,36 @@ export const SubCaption = () => {
           >
             <Arizona />
           </animated.div>
-          <animated.div className="Work_Caption">
+          <div className="Work_Caption">
             {/* <Portrait /> */}
+            {transition.map(({ item, key, props }) => {
+              return (
+                <animated.div
+                  style={{
+                    ...props,
+                    transform: props.transform.interpolate(s => `scale(${s})`),
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    zIndex: -1,
+                  }}
+                >
+                  {item && <AzBackground />}
+                </animated.div>
+              )
+            })}
 
-            <p>Currently building digital products in Tempe Arizona.</p>
-          </animated.div>
+            <animated.div
+              style={{
+                display: "flex",
+                transform: anim[0].slide.interpolate(x => `translate(${x})`),
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p>Building digital products in Tempe Arizona.</p>
+            </animated.div>
+          </div>
         </div>
       </Styles>
     </>

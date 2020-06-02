@@ -102,13 +102,13 @@ const Background = () => {
 
   useEffect(() => {
     if (entries.intersectionRatio && window) {
-      const offset = isIOS ? 0 : 0
+      const offset = 0
       const skew = window.innerHeight * 0.7
       const ir = entries.intersectionRatio
       // const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
 
-      const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
-      const scaleVal = _.clamp(1 * ir, 0.5, 1)
+      const yVal = isMobile ? 0 : _.clamp(skew / ir - skew, 0, skew)
+      const scaleVal = isMobile ? 1 : _.clamp(1 * ir, 0.5, 1)
       // const scaleVal = 1
       // const opacityVal = ir < 0.38 ? 0 : 1
       const opacityVal = ir

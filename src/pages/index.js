@@ -85,8 +85,8 @@ const Scean1 = () => {
             return 0
           }
         case "o":
+          if (window.innerWidth < 600) return 1 - p
           if (index === 2 || index === 1) {
-            console.log(index)
             return 1 - p
           } else {
             return 1
@@ -95,8 +95,10 @@ const Scean1 = () => {
     }
   }
 
+  const isMobile =
+    typeof window === "undefined" ? true : window.innerWidth < 600
   const [anims, setAnim] = useSprings(captions.length, () => ({
-    x: [0, 0, 0],
+    x: isMobile ? [0, -200, 0] : [0, 0, 0],
     opacity: [1],
     color: "#ffffff",
     config: config.molasses,
@@ -118,7 +120,9 @@ const Scean1 = () => {
           setAnim(i => ({
             x: [
               calc("x", i, percentAnimated),
-              calc("y", i, percentAnimated, tieY),
+              window.innerWidth < 600
+                ? calc("y", i, percentAnimated, tieY) - 200
+                : calc("y", i, percentAnimated, tieY),
               calc("r", i, percentAnimated),
             ],
             color: percentAnimated > 0.3 ? "#ffffff" : "#ffffff",
@@ -146,7 +150,7 @@ const Scean1 = () => {
         style={{
           position: "absolute",
           top: "0",
-          left: "7em",
+          left: "10vw",
           height: "89vh",
           display: "flex",
           flexDirection: "column",

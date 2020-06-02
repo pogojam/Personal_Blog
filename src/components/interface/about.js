@@ -60,7 +60,16 @@ const Line = animated(styled.div`
 `)
 
 const TechIcons = React.memo(({ show }) => {
-  const iconList = ["react", "rust", "docker", "node", "vim", "git"]
+  const iconList = [
+    "react",
+    "rust",
+    "docker",
+    "node",
+    "vim",
+    "git",
+    "mongo",
+    "terminal",
+  ]
 
   const colors = [
     "#85DCBE",

@@ -97,6 +97,7 @@ export const SubCaption = () => {
       opacity: 0,
       transform: [0, -30],
     },
+    config: { tension: 500, friction: 30 },
   })
   const [anim, setAnim] = useSprings(3, () => {
     return {
@@ -156,7 +157,7 @@ export const SubCaption = () => {
                   style={{
                     ...props,
                     transform: props.transform.interpolate(
-                      (s, r) => `scale(${s}) rotate(${r}deg)`
+                      (s, r) => `scale(${s}) rotate3d(0,3,1,${r}deg)`
                     ),
                     position: "absolute",
                     width: "100%",

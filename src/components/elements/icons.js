@@ -41,6 +41,8 @@ import {
   DiRust,
   DiReact,
   DiNodejsSmall,
+  DiTerminal,
+  DiMongodb,
 } from "react-icons/di"
 import {
   FaCashRegister,
@@ -104,6 +106,10 @@ const Shirt = ({ size }) => {
 
 const Icon = ({ type, ...props }) => {
   switch (type) {
+    case "terminal":
+      return withProps(DiTerminal, props)
+    case "mongo":
+      return withProps(DiMongodb, props)
     case "tie":
       return withProps(FaBlackTie, props)
     case "linkedin":

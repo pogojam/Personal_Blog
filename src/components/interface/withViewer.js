@@ -119,7 +119,7 @@ const BackButton_Styles = styled(Button)`
   --icon-color: white;
   --icon-pos-top: 25%;
 
-  position: fixed;
+  position: absolute;
   z-index: 9999;
   width: 55px;
   height: 55px;
@@ -279,7 +279,7 @@ const Content = ({
         animate
         flexDirection={["column", "row"]}
         style={{
-          position: "fixed",
+          position: "absolute",
           left: 0,
           top: 0,
           height: "100%",
@@ -360,7 +360,7 @@ const Content = ({
           transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
           background: "rgba(126, 124, 127, 0.47)",
-          position: "fixed",
+          position: "absolute",
           left: 0,
           top: 0,
           willChange: "transform opacity",
@@ -376,7 +376,7 @@ const Content = ({
       <DiscriptionContainer
         style={{
           willChange: "transform opacity",
-          position: "fixed",
+          position: "absolute",
           zIndex: 0,
           right: 0,
           bottom: 0,

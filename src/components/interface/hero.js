@@ -130,7 +130,7 @@ const Background = () => {
     <>
       <BackgroundStyle
         ref={bgRef}
-        isUnsupported={isSafari || isIOS || isMobile}
+        isUnsupported={browser.name === "safari" || browser.name === "ios"}
         // autoPlay
         // muted
         // loop

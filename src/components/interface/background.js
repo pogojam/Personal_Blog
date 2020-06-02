@@ -102,7 +102,6 @@ function Stars(scean, count) {
       getRandomInt(v1, v2),
       getRandomInt(v1, v2)
     )
-    console.log(vector.distanceTo({ x: 0, y: 0, z: 2 }) < 800)
     vector.velocity = {}
     vector.velocity.y = 0.03
     vector.velocity.x = 0.03

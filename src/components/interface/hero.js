@@ -64,7 +64,7 @@ const Ripple = () => {
   )
 }
 
-const BackgroundStyle = animated(styled.video`
+const BackgroundStyle = animated(styled.div`
   background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
   background-color: black;
   background-position: center;
@@ -122,8 +122,8 @@ const Background = () => {
   }, [entries])
 
   useEffect(() => {
-    bgRef.current.setAttribute("playsinline", true)
-    bgRef.current.play()
+    // bgRef.current.setAttribute("playsinline", true)
+    // bgRef.current.play()
   }, [])
 
   return (
@@ -131,9 +131,9 @@ const Background = () => {
       <BackgroundStyle
         ref={bgRef}
         isUnsupported={isSafari || isIOS || isMobile}
-        autoPlay
-        muted
-        loop
+        // autoPlay
+        // muted
+        // loop
         // src={
         //   isSafari || detectMobile.isMobile()
         //     ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"

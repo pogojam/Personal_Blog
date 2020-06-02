@@ -123,7 +123,6 @@ const ProjectCard = ({ containerRef, data, color }) => {
       1.1,
     ]
   }
-  console.log(showState)
   const calcCenter = () => {
     const isMobile = window.innerWidth < 900
     const rect = boxRef.current.getBoundingClientRect()
@@ -154,13 +153,13 @@ const ProjectCard = ({ containerRef, data, color }) => {
     }
     if (Object.keys(store.view).length === 0) {
       setState(1)
+      setClick({ xy: [0, 0] })
     }
   }, [store.view, showState])
 
   useEffect(() => {
     const backgroundNode = document.querySelector(".scean2_Background")
     if (showState === 2) {
-      console.log(backgroundNode)
       backgroundNode.style.opacity = 0
     } else {
       if (backgroundNode.style.opacity < 0.1) {

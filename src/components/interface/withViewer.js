@@ -416,8 +416,8 @@ const Content = ({
             }}
             p="1em"
             bg="rgb(64,64,64)"
-            fontFamily={"Heebo"}
-            color="white"
+            fontFamily={"sans-serif"}
+            color="#dcc2c2"
           >
             {message && (
               <Box
@@ -580,10 +580,10 @@ export const Viewer = ({ store, dispatch }) => {
   useEffect(() => {
     if (enterView) {
       set({ slide: [0], opacity: [1] })
-      document.body.style.overflow = "hidden"
+      // document.body.style.overflow = "hidden"
       stop()
     } else {
-      document.body.style.overflow = "scroll"
+      // document.body.style.overflow = "scroll"
       const icon = view.ref
       if (icon) {
         if (icon.current) {

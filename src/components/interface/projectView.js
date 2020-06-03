@@ -191,7 +191,7 @@ const ProjectCard = ({ containerRef, data, color }) => {
               window.scrollY,
             behavior: "smooth",
           })
-          // console.log(wrapperRec.top - windowCenter + window.scrollY,dd)
+          //
           dispatch({ type: "SET_VIEW", input: data })
         }}
         alignItems="center"

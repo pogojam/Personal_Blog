@@ -429,7 +429,6 @@ const Scean3 = props => {
   const [show, setShow] = useState(false)
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   useEffect(() => {
-    console.log(entries)
     if (entries.intersectionRatio) {
       const ir = entries.intersectionRatio
       if (ir > 0.4) {

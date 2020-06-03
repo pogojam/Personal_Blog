@@ -99,8 +99,7 @@ const Background = () => {
   const isMobile =
     typeof window === "undefined" ? true : window.innerWidth < 600
   const bgRef = useRef()
-  console.log(isMobile, isIOS, isMobile, browser.name, browser.type)
-  console.log(isSafari || isIOS || isMobile)
+
   useEffect(() => {
     if (entries.intersectionRatio && window) {
       const offset = 0

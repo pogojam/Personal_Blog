@@ -127,25 +127,27 @@ const Background = () => {
 
   return (
     <>
-      <BackgroundStyle
-        ref={bgRef}
-        isUnsupported={browser.name === "safari" || browser.name === "ios"}
-        // autoPlay
-        // muted
-        // loop
-        // src={
-        //   isSafari || detectMobile.isMobile()
-        //     ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
-        //     : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
-        // }
-        style={{
-          willChange: "transform opacity",
-          transform: scale.interpolate(
-            (s, y, x) => `scale(${s}) translate(${x}px,${y}px) `
-          ),
-          opacity,
-        }}
-      />
+      {browser.name && (
+        <BackgroundStyle
+          ref={bgRef}
+          isUnsupported={browser.name === "safari" || browser.name === "ios"}
+          // autoPlay
+          // muted
+          // loop
+          // src={
+          //   isSafari || detectMobile.isMobile()
+          //     ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
+          //     : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
+          // }
+          style={{
+            willChange: "transform opacity",
+            transform: scale.interpolate(
+              (s, y, x) => `scale(${s}) translate(${x}px,${y}px) `
+            ),
+            opacity,
+          }}
+        />
+      )}
       <div
         ref={ref}
         style={{

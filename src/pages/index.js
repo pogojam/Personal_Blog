@@ -409,7 +409,8 @@ const Background2 = ({ show }) => {
   // const [store, dispatch] = useContext(PageState_Context)
   const globalID = "about"
   const browser = detect()
-  return window ? (
+  const canShow = typeof window !== "undefined" ? true : false
+  return canShow ? (
     <Background2_Styles
       show={show}
       isSafari={browser.name === "safari" || browser.name === "ios"}

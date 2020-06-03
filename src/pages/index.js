@@ -409,11 +409,13 @@ const Background2 = ({ show }) => {
   // const [store, dispatch] = useContext(PageState_Context)
   const globalID = "about"
   const browser = detect()
-  return (
+  return window ? (
     <Background2_Styles
       show={show}
       isSafari={browser.name === "safari" || browser.name === "ios"}
-    ></Background2_Styles>
+    />
+  ) : (
+    <div />
   )
 }
 const Scean3_Styles = styled.div`
@@ -582,9 +584,9 @@ const IndexPage = ({ data }) => {
   //     setActive(true)
   //   }
   // }, [loadProgress])
-  useEffect(()=>{
+  useEffect(() => {
     setActive(true)
-  },[])
+  }, [])
 
   return (
     <Layout style={{ Background: "black" }}>

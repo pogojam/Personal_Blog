@@ -576,12 +576,15 @@ const IndexPage = ({ data }) => {
   const incrementLoad = () => {
     setProgress(1 + loadProgress)
   }
-  useEffect(() => {
-    const progress = assets / loadProgress
-    if (progress === 1) {
-      setActive(true)
-    }
-  }, [loadProgress])
+  // useEffect(() => {
+  //   const progress = assets / loadProgress
+  //   if (progress === 1) {
+  //     setActive(true)
+  //   }
+  // }, [loadProgress])
+  useEffect(()=>{
+    setActive(true)
+  },[])
 
   return (
     <Layout style={{ Background: "black" }}>

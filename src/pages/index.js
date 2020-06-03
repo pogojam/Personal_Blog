@@ -1,6 +1,6 @@
 import { RecoilRoot } from "recoil"
 import { useWheel, useScroll } from "react-use-gesture"
-
+import { LoadingScreen } from "../components/loadingScreen"
 import { detect } from "detect-browser"
 import React, {
   useContext,
@@ -563,69 +563,62 @@ const Scean_Interface = ({ index, Component, ...props }) => {
 const invertList = ["about"]
 
 const IndexPage = ({ data }) => {
+  const assets = 1
+  const [loadProgress, setProgress] = useState(0)
+  const [isActive, setActive] = useState(false)
   const [store, dispatch] = useReducer(PageState, { active: "hero", view: {} })
   const { markdownRemark } = data // data.markdownRemark holds our post data
   const { html } = markdownRemark
-  const [State, setState] = useState("loading")
-  const [Anim, setAnim] = useSpring(() => ({
-    body: [0],
-  }))
+  const Anim = useSpring({
+    opacity: isActive ? 1 : 0,
+  })
 
+  const incrementLoad = () => {
+    setProgress(1 + loadProgress)
+  }
   useEffect(() => {
-    setTimeout(() => {
-      setState("active")
-    }, 500)
-  }, [])
-
-  useEffect(() => {
-    switch (State) {
-      case "active":
-        setAnim({
-          body: [1],
-        })
-        break
-      case "loading":
-        setAnim({
-          body: [0],
-        })
-        break
-
-      default:
-        break
+    const progress = assets / loadProgress
+    if (progress === 1) {
+      setActive(true)
     }
-  }, [State])
+  }, [loadProgress])
 
   return (
     <Layout style={{ Background: "black" }}>
-      <PageState_Context.Provider value={[store, dispatch]}>
-        <Logo
-          invert={invertList.includes(store.active) ? true : true}
-          style={{
-            position: "fixed",
-            transition: "fill .4s linear",
-            width: "40px",
-            height: "40px",
-            top: "10px",
-            left: "10px",
-            zIndex: 9999,
-            fontFamily: "PoiretOne-Regular, Poiret One !important",
-          }}
-          store={store}
-        />
+      {/* {loadProgress !== assets && (
+        <LoadingScreen progress={assets / loadProgress} />
+      )} */}
+      <animated.div style={Anim}>
+        <PageState_Context.Provider value={[store, dispatch]}>
+          <Logo
+            invert={invertList.includes(store.active) ? true : true}
+            style={{
+              position: "fixed",
+              transition: "fill .4s linear",
+              width: "40px",
+              height: "40px",
+              top: "10px",
+              left: "10px",
+              zIndex: 9999,
+              fontFamily: "PoiretOne-Regular, Poiret One !important",
+            }}
+            store={store}
+          />
 
-        <Hero />
+          <Hero incrementLoad={incrementLoad} />
 
-        <animated.div style={{ opacity: Anim.body.interpolate(e => e) }}>
-          {sceans.map((e, i) => (
-            <Scean_Interface
-              Component={sceans[i]}
-              key={i}
-              index={i}
-              html={html}
-            />
-          ))}
-        </animated.div>
-      </PageState_Context.Provider>
+          <div>
+            {sceans.map((e, i) => (
+              <Scean_Interface
+                Component={sceans[i]}
+                key={i}
+                index={i}
+                html={html}
+              />
+            ))}
+          </div>
+        </PageState_Context.Provider>
+      </animated.div>
     </Layout>
   )
 }

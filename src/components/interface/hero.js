@@ -64,8 +64,8 @@ const Ripple = () => {
   )
 }
 
-const BackgroundStyle = animated(styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg");
+const BackgroundStyle = animated(styled.img`
+  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"); */
   background-color: black;
   background-position: center;
   background-size: cover;
@@ -80,9 +80,9 @@ const BackgroundStyle = animated(styled.div`
   z-index: 10;
 `)
 
-const Background = () => {
+const Background = ({ incrementLoad }) => {
   const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
-    scale: [1, 0, 0],
+    scale: [0.5, 0, 0],
     opacity: [1],
     config: { tension: 500, friction: 100 },
   }))
@@ -108,7 +108,7 @@ const Background = () => {
       // const yVal = isIOS ? 0 : _.clamp(skew / ir - skew, 0, skew)
 
       const yVal = isMobile ? 0 : _.clamp(skew / ir - skew, 0, skew)
-      const scaleVal = isMobile ? 1 : _.clamp(1 * ir, 0.5, 1)
+      const scaleVal = _.clamp(1 * ir, 0, 0.5)
       // const scaleVal = 1
       // const opacityVal = ir < 0.38 ? 0 : 1
       const opacityVal = ir
@@ -129,7 +129,11 @@ const Background = () => {
     <>
       {browser.name && (
         <BackgroundStyle
+          src={
+            "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"
+          }
           ref={bgRef}
+          onLoad={() => incrementLoad()}
           isUnsupported={browser.name === "safari" || browser.name === "ios"}
           // autoPlay
           // muted
@@ -186,10 +190,10 @@ const Styles = styled.div`
   }
 `
 
-export const Hero = () => {
+export const Hero = props => {
   return (
     <Styles>
-      <Background />
+      <Background {...props} />
       <div id="BackgroundCanvas" />
       <Ripple />
     </Styles>

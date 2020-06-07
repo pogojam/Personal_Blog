@@ -134,7 +134,9 @@ const Background = ({ incrementLoad }) => {
           }
           ref={bgRef}
           onLoad={() => incrementLoad()}
-          isUnsupported={browser.name === "safari" || browser.name === "ios"}
+          isUnsupported={
+            browser.name === "safari" || browser.name === "ios" || isMobile
+          }
           // autoPlay
           // muted
           // loop

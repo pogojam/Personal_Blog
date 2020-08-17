@@ -22,7 +22,7 @@ const NavStyles = animated(styled.div`
   padding-bottom: 10px;
   font-size: 1.7em;
   backdrop-filter: blur(10px);
-  background-color: #ffffff85;
+  background-color: #bf303017;
   border-bottom-left-radius: 3px;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@ const NavStyles = animated(styled.div`
     border-radius: 5px;
     transition: 0.2s linear;
     &:hover {
-      background-color: #48cc7d54;
+      background-color: #bcbdd0c4;
       border: 1px solid #6e8e9c;
     }
   }

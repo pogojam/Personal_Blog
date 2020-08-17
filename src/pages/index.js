@@ -110,6 +110,7 @@ const Scean1 = () => {
     leave: { opacity: 0 },
   })
   const scrollTarget = typeof window !== "undefined" ? window : <div></div>
+  const [showStroke,setStroke] = useState(false)
   const bind = useScroll(
     e => {
       if (window) {
@@ -130,10 +131,13 @@ const Scean1 = () => {
           }))
         }
         if (!location && percentAnimated > 1.6) {
+        console.log(percentAnimated)
+        setStroke(true)
           setLocation(true)
         }
 
         if (location && percentAnimated < 1.6) {
+        setStroke(false)
           setLocation(false)
         }
       }
@@ -144,13 +148,15 @@ const Scean1 = () => {
   )
   useEffect(bind, [bind])
 
+  const strokeAnim = useSpring(showStroke ?{offset:0}:{offset:300})
+
   return (
     <Styles>
       <animated.div
         style={{
           position: "absolute",
           top: "0",
-          left: "10vw",
+          left: "15vw",
           height: "89vh",
           display: "flex",
           flexDirection: "column",
@@ -185,6 +191,7 @@ const Scean1 = () => {
         </animated.div>
         <animated.div
           style={{
+            display:'flex',
             willChange: "transform",
             transform: anims[3].x.interpolate((x, y, r) => {
               return `translate(${x}px,${y}px) rotate3d(0,0,1,${r}deg)`
@@ -192,7 +199,16 @@ const Scean1 = () => {
             color: anims[3].color.interpolate(c => c),
           }}
         >
+<div style={{position:'relative'}} >
+<animated.svg style={{position:'absolute',top:0,left:'100%',strokeDasharray:300,strokeDashoffset:strokeAnim.offset}} width="500"  height="150px"fill="transparent" stroke="white" strokeWidth="1">
+ <path   d="M 0 20 L 50 20 L 50 100 L 200 100" fill="none" /> 
+ <text x={100} y={50} > 
+Building digital products </text>
+ <text x={100} y={70} > Tempe AZ
+In Tempe Arizona.</text>
+</animated.svg>
           <Icon size="3.7em" style={{ color: "bisque" }} type="tie" />
+</div>
           {transitionHeading.map(({ item, key, props }) => {
             return (
               item && (
@@ -247,7 +263,7 @@ const Scean1 = () => {
           </animated.div>
         </div>
       </animated.div>
-      <SubCaption />
+      <SubCaption  isMobile={isMobile} />
       <About />
     </Styles>
   )

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { position } from "styled-system"
 import Arizona from "../../static/arizona"
-import { useObserver, buildThresholdList } from "../util"
+import { useObserver, buildThresholdList} from "../util"
 import { useSprings, useTransition, animated } from "react-spring"
 
 const Styles = animated(styled.div`
@@ -36,7 +36,7 @@ const Styles = animated(styled.div`
   .AZ_Wrapper {
     position: absolute;
     top: 40%;
-    left: 77vw;
+    left: 16vw;
   }
   .Work_Caption {
     width: 100%;
@@ -60,9 +60,11 @@ const Portrait = styled.div`
     z-index: -1;
   }
 `
-const AzBackground = () => {
+const AzBackground = ({isMobile}) => {
   return (
-    <div
+<>
+{ 
+!isMobile &&    <div
       style={{
         background: ` linear-gradient(
           rgba(0, 0, 0, 0.6),
@@ -76,16 +78,18 @@ const AzBackground = () => {
         backgroundSize: "cover",
       }}
     />
+ }
+</>
   )
 }
 
-export const SubCaption = () => {
+export const SubCaption = ({isMobile}) => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [showBackground, setBackground] = useState(false)
 
   const transition = useTransition(showBackground, null, {
     from: {
-      opacity: 0,
+      opacity: .3,
       transform: [0.7, 30],
     },
     enter: {
@@ -94,7 +98,7 @@ export const SubCaption = () => {
       transform: [1, 0],
     },
     leave: {
-      opacity: 0,
+      opacity: .3,
       transform: [0, -30],
     },
     config: { tension: 500, friction: 30 },
@@ -109,12 +113,15 @@ export const SubCaption = () => {
 
   useEffect(() => {
     const breakPoint = 0.6
+    const maxScale = isMobile ?2.4:4
+    const xMax =  isMobile ? 20 :0
+
     if (entries.intersectionRatio) {
       const ir = entries.intersectionRatio
       setAnim({
         opacity: ir,
         slide: 200 * ir,
-        scale: [ir + 4.5, 0, 0],
+        scale: [ir + maxScale, xMax, 0],
       })
       if (ir > breakPoint && !showBackground) {
         setBackground(true)
@@ -143,7 +150,7 @@ export const SubCaption = () => {
             className="AZ_Wrapper"
             style={{
               transform: anim[1].scale.interpolate(
-                (s, x, y) => `scale(${s}) translate(${x}px,${y}px)`
+                (s, x, y) => `scale(${s}) translate(${x}%,${y}px)`
               ),
             }}
           >
@@ -156,21 +163,18 @@ export const SubCaption = () => {
                 <animated.div
                   style={{
                     ...props,
-                    transform: props.transform.interpolate(
-                      (s, r) => `scale(${s}) rotate3d(0,3,1,${r}deg)`
-                    ),
                     position: "absolute",
                     width: "100%",
                     height: "100%",
                     zIndex: -1,
                   }}
                 >
-                  {item && <AzBackground />}
+                  {item && <AzBackground isMobile={isMobile}  />}
                 </animated.div>
               )
             })}
 
-            <animated.div
+            {/* <animated.div
               style={{
                 display: "flex",
                 transform: anim[0].slide.interpolate(x => `translate(${x})`),
@@ -179,7 +183,7 @@ export const SubCaption = () => {
               }}
             >
               <p>Building digital products in Tempe Arizona.</p>
-            </animated.div>
+            </animated.div> */}
           </div>
         </div>
       </Styles>

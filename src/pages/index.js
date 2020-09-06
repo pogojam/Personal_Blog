@@ -412,10 +412,9 @@ const [windowWidth,windowHeight] = useWindowSize()
 }
 
 const Background2_Styles = styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
   background-size: cover;
   will-change: opacity filter;
-  filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
+  /* filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')}; */
   position: absolute;
   width: 100%;
   height: ${({windowHeight})=>windowHeight * 1.4 + "px"};

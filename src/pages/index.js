@@ -148,6 +148,13 @@ const Scean1 = () => {
   )
   useEffect(bind, [bind])
 
+  useEffect(()=>{
+    if(typeof window !== "undefined"){
+
+    window.dispatchEvent(new Event('resize'));
+    }
+  },[])
+
   const strokeAnim = useSpring(showStroke ?{offset:0}:{offset:300})
 
   return (
@@ -412,6 +419,7 @@ const [windowWidth,windowHeight] = useWindowSize()
 }
 
 const Background2_Styles = styled.div`
+  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
   background-size: cover;
   will-change: opacity filter;
   /* filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')}; */

@@ -14,12 +14,14 @@ import React, {
 } from "react"
 import { PageState_Context } from "./context"
 import { useScroll, useWheel } from "react-use-gesture"
+import { useWindowSize } from "@react-hook/window-size"
+
 const AboutStyles = styled.div`
   position: absolute;
-  bottom: 30vh;
+  bottom:${({windowHeight})=>windowHeight*.3+"px"} ;
   left: 0;
   width: 100%;
-  height: 120vh;
+  height: ${({windowHeight})=>windowHeight*1.2+"px"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,9 +127,10 @@ const TechIcons = React.memo(({ show }) => {
   ))
 })
 
-export const About = React.memo(() => {
+export const About = () => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [show, toggle] = useToggle(false)
+  const [windowWidth,windowHeight] = useWindowSize()
   // const [store, dispatch] = useContext(PageState_Context)
 
   const { transform, opacity } = useSpring(
@@ -163,7 +166,7 @@ export const About = React.memo(() => {
   }, [show])
 
   return (
-    <AboutStyles ref={ref}>
+    <AboutStyles windowHeight={windowHeight} ref={ref}>
       <animated.div
         style={{
           opacity,
@@ -187,4 +190,4 @@ export const About = React.memo(() => {
       </animated.div>
     </AboutStyles>
   )
-})
+}

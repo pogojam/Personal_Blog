@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Ryan Breaux <rlb278@icloud.com>",
   "dependencies": {
+    "@react-hook/window-size": "^3.0.7",
     "@rebass/forms": "^4.0.6",
     "animate.css": "^3.7.2",
     "axios": "^0.19.2",

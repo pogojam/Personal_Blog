@@ -4,16 +4,17 @@ import { position } from "styled-system"
 import Arizona from "../../static/arizona"
 import { useObserver, buildThresholdList} from "../util"
 import { useSprings, useTransition, animated } from "react-spring"
+import { useWindowSize } from "@react-hook/window-size"
 
 const Styles = animated(styled.div`
   color: white;
   position: absolute;
-  top: 150vh;
+  top: ${({windowHeight})=>windowHeight * 1.5 +"px"};
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: ${({windowHeight})=>windowHeight * 1 +"px"};
 
   p {
     margin: 0;
@@ -86,6 +87,7 @@ const AzBackground = ({isMobile}) => {
 export const SubCaption = ({isMobile}) => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [showBackground, setBackground] = useState(false)
+  const [windowWidth,windowHeight] = useWindowSize()
 
   const transition = useTransition(showBackground, null, {
     from: {
@@ -135,6 +137,7 @@ export const SubCaption = ({isMobile}) => {
   return (
     <>
       <Styles
+      windowHeight={windowHeight}
         style={{ opacity: anim[0].opacity.interpolate(o => o) }}
         ref={ref}
       >

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext, useRef } from "react"
 import { PageState_Context } from "./context"
 import styled from "styled-components"
 import { animated, useSpring } from "react-spring"
-import { useObserver, buildThresholdList } from "../util"
+import { useObserver, buildThresholdList} from "../util"
+import { useWindowSize } from '@react-hook/window-size'
 import { useScroll, useHover } from "react-use-gesture"
 import _ from "lodash"
 import { detect } from "detect-browser"
@@ -65,7 +66,6 @@ const Ripple = () => {
 }
 
 const BackgroundStyle = animated(styled.img`
-  /* background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"); */
   background-color: black;
   background-position: center;
   background-size: cover;
@@ -74,7 +74,7 @@ const BackgroundStyle = animated(styled.img`
   /* z-index: 1; */
   position: absolute;
   width: 100%;
-  height: 100vh;
+  height:${({height})=>height+'px'};
   top: 0;
   border-radius: 11%;
   z-index: 10;
@@ -91,6 +91,7 @@ const Background = ({ incrementLoad }) => {
     threshold: buildThresholdList(40),
     rootMargin: "0px 0px 0px 0px",
   })
+  const [windowWidth,windowHeight]= useWindowSize()
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
   const browser = detect()
@@ -124,11 +125,11 @@ const Background = ({ incrementLoad }) => {
     // bgRef.current.setAttribute("playsinline", true)
     // bgRef.current.play()
   }, [])
-
   return (
     <>
       {browser.name && (
         <BackgroundStyle
+        height={windowHeight}
           src={
             "https://res.cloudinary.com/dxjse9tsv/image/upload/v1554688348/pexels-photo-29642.jpg"
           }
@@ -158,7 +159,7 @@ const Background = ({ incrementLoad }) => {
         ref={ref}
         style={{
           width: "100%",
-          height: "100vh",
+          height: windowHeight,
           top: 0,
           position: "absolute",
         }}
@@ -171,7 +172,6 @@ const Styles = styled.div`
   position: absolute;
   overflow: hidden;
   color: white;
-  height: 550vh;
   width: 100%;
   display: flex;
   align-items: center;

@@ -1,6 +1,5 @@
 import { RecoilRoot } from "recoil"
 import { useWheel, useScroll } from "react-use-gesture"
-import { LoadingScreen } from "../components/loadingScreen"
 import { detect } from "detect-browser"
 import React, {
   useContext,
@@ -10,6 +9,7 @@ import React, {
   forwardRef,
   useReducer,
 } from "react"
+import {useWindowSize} from '@react-hook/window-size'
 import { SubCaption } from "../components/interface/SubCaption"
 import { PageState_Context } from "../components/interface/context"
 import { PageState } from "../components/interface/reducers"
@@ -50,7 +50,7 @@ import useSpace from "../components/spacer"
 
 const Styles = styled.div`
   color: white;
-  height: 370vh;
+  height:${({windowHeight})=>windowHeight * 3.7 + "px"};
   width: 100%;
   display: flex;
   align-items: center;
@@ -68,6 +68,7 @@ const Styles = styled.div`
 const Scean1 = () => {
   const captions = [...Array(4)]
   const [location, setLocation] = useState()
+  const [windowWidth, windowHeight] = useWindowSize()
   const calc = (transform, index, p, tieY) => {
     if (window) {
       switch (transform) {
@@ -88,8 +89,7 @@ const Scean1 = () => {
           if (window.innerWidth < 600) return 1 - p
           if (index === 2 || index === 1) {
             return 1 - p
-          } else {
-            return 1
+          } else { return 1
           }
       }
     }
@@ -151,13 +151,13 @@ const Scean1 = () => {
   const strokeAnim = useSpring(showStroke ?{offset:0}:{offset:300})
 
   return (
-    <Styles>
+    <Styles windowHeight={windowHeight} >
       <animated.div
         style={{
           position: "absolute",
           top: "0",
           left: "15vw",
-          height: "89vh",
+          height: windowHeight * .9 +"px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
@@ -275,7 +275,7 @@ ${width}
 ${height}
 ${transform}
 will-change:transform;
-min-height: 100vh;
+min-height:${({windowHeight})=>windowHeight};
 background: #ff0000;
 position: absolute;
 transition: opacity 0.3s;
@@ -287,6 +287,7 @@ z-index: 0;
 const HeadingContainer = styled(Container)``
 
 const Scean2 = ({ animation, ...props }) => {
+
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [isActive, setActive] = useState(false)
   const animateProjects = useSpring(
@@ -300,6 +301,8 @@ const Scean2 = ({ animation, ...props }) => {
     slide: [0],
   }))
 
+
+const [windowWidth,windowHeight] = useWindowSize()
   const [headingState, setHeading] = useState(true)
 
   useEffect(() => {
@@ -345,8 +348,9 @@ const Scean2 = ({ animation, ...props }) => {
     >
       <Background
         className="scean2_Background"
-        width={["80vh", "100%"]}
-        height={["150vh"]}
+        windowHeight={windowHeight}
+        width={[windowHeight * .8+"px", "100%"]}
+        height={[windowHeight * 1.5 + "px"]}
         transform={[
           "matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
           "matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)",
@@ -414,7 +418,7 @@ const Background2_Styles = styled.div`
   filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')};
   position: absolute;
   width: 100%;
-  height: 140vh;
+  height: ${({windowHeight})=>windowHeight * 1.4 + "px"};
   position: absolute;
   transition: opacity 1s linear;
   opacity: ${({ show }) => (show ? 1 : 0)};
@@ -422,12 +426,13 @@ const Background2_Styles = styled.div`
   background-position: center;
 `
 const Background2 = ({ show }) => {
-  // const [store, dispatch] = useContext(PageState_Context)
+  const [windowWidth, windowHeight] = useWindowSize()
   const globalID = "about"
   const browser = detect()
   const canShow = typeof window !== "undefined" ? true : false
   return canShow ? (
     <Background2_Styles
+    windowHeight={windowHeight}
       show={show}
       isSafari={browser.name === "safari" || browser.name === "ios"}
     />
@@ -439,12 +444,12 @@ const Scean3_Styles = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: ${({windowHeight})=>windowHeight + 'px'};
   width: 100%;
-  /* margin-top: -26vh; */
   position: relative;
 `
 const Scean3 = props => {
+  const [windowWidth, windowHeight] = useWindowSize()
   const [show, setShow] = useState(false)
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   useEffect(() => {
@@ -459,7 +464,7 @@ const Scean3 = props => {
     }
   }, [entries])
   return (
-    <Scean3_Styles ref={ref} style={props.style}>
+    <Scean3_Styles windowHeight={windowHeight} ref={ref} style={props.style}>
       <div
         style={{
           zIndex: 1,

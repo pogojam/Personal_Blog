@@ -68,7 +68,7 @@ const Styles = styled.div`
 const Scean1 = () => {
   const captions = [...Array(4)]
   const [location, setLocation] = useState()
-  const [windowWidth, windowHeight] = useWindowSize()
+  const [windowWidth, windowHeight] = useWindowSize({initialHeight:'1000'})
   const calc = (transform, index, p, tieY) => {
     if (window) {
       switch (transform) {

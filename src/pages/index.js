@@ -477,13 +477,13 @@ const Scean3 = props => {
         }}
       >
         <span
-          style={{ display: "flex", alignItems: "center", fontFamily: "Heebo" }}
+          style={{ display: "flex", alignItems: "center",  }}
         >
           <Icon style={{ marginRight: "10px" }} type="mail" />
           rlb278@icloud.com
         </span>
         <span
-          style={{ fontFamily: "Heebo", display: "flex", alignItems: "center" }}
+          style={{ display: "flex", alignItems: "center" }}
         >
           <Icon style={{ marginRight: "10px" }} type="phone" />
           928-660-1142

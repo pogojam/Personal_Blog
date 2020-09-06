@@ -50,7 +50,7 @@ import useSpace from "../components/spacer"
 
 const Styles = styled.div`
   color: white;
-  height:${({windowHeight})=>windowHeight * 3.7 + "px"};
+  height: 370vh;
   width: 100%;
   display: flex;
   align-items: center;

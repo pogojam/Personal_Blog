@@ -188,6 +188,7 @@ const Content = ({
   inAnimation,
   setView,
 }) => {
+
   const [isSubmit, setSubmit] = useState(false)
   const [showModle, toggleModle] = useState(false)
   const [message, setMessage] = useState()
@@ -306,7 +307,7 @@ const Content = ({
         >
           {ProjectData.map((d, i) => (
             <Container
-              key={i}
+              key={d.title}
               as="video"
               animate
               className="prjImg"
@@ -318,7 +319,7 @@ const Content = ({
                 backgroundSize: "cover",
                 top: "0",
                 height: "100%",
-                opacity: d.poster === poster ? 1 : 0,
+                opacity: d.title=== title? 1 : 0,
               }}
             >
               <source src={d.video} type="video/mp4" />
@@ -359,12 +360,13 @@ const Content = ({
           display: "flex",
           transition: "opacity 1s .3s , transform 1s ",
           opacity: isActive ? 1 : 0,
-          background: "rgba(126, 124, 127, 0.47)",
+          background: "rgba(126, 124, 127, 0.67)",
           position: "absolute",
           left: 0,
           top: 0,
           willChange: "transform opacity",
           backdropFilter: "blur(5px)",
+          color:'white'
         }}
         fontWeight="900"
         px="1em"

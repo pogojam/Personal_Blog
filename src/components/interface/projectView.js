@@ -281,7 +281,7 @@ const Projects = ({ key, setHeading }) => {
       ref={ref}
       key={key}
       animate
-      pt={["1em", "5%"]}
+      p={"10%"}
       type="Grid"
       gridTemplateAreas={[`"1fr 1fr"`, `"1fr 1fr 1fr"`]}
       style={{

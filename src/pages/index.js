@@ -407,6 +407,8 @@ const [windowWidth,windowHeight] = useWindowSize()
         style={{
           marginLeft: "5vw",
           marginRight: "5vw",
+          borderRadius:'26px',
+          overflow:'hidden',
 
           maxHeight: "100%",
           ...animateProjects,
@@ -419,7 +421,7 @@ const [windowWidth,windowHeight] = useWindowSize()
 }
 
 const Background2_Styles = styled.div`
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1590117242/michael-benz-IgWNxx7paz4-unsplash.jpg");
+background-color:white;
   background-size: cover;
   will-change: opacity filter;
   /* filter: ${({ isSafari }) => (isSafari ? "" : 'url("#water")')}; */
@@ -477,22 +479,21 @@ const Scean3 = props => {
           zIndex: 1,
           display: "flex",
           flexDirection: "column",
-          color: "white",
+          color: "black",
           borderRadius: "8px",
-          background: "#0000006e",
           padding: "1em",
         }}
       >
         <span
-          style={{ display: "flex", alignItems: "center",  }}
+          style={{ marginBottom:'16px ',display: "flex", flexDirection:'column',alignItems: "center",  }}
         >
-          <Icon style={{ marginRight: "10px" }} type="mail" />
+          <Icon style={{ marginBottom: "8px" }} type="mail" />
           rlb278@icloud.com
         </span>
         <span
-          style={{ display: "flex", alignItems: "center" }}
+          style={{ display: "flex",  flexDirection:'column',alignItems: "center" }}
         >
-          <Icon style={{ marginRight: "10px" }} type="phone" />
+          <Icon style={{ marginBottom: "8px" }} type="phone" />
           928-660-1142
         </span>
       </div>

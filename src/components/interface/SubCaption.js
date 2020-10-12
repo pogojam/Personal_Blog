@@ -46,6 +46,8 @@ const Styles = animated(styled.div`
     align-self: center;
     justify-content: center;
     position: relative;
+    border-radius:56px;
+    overflow:hidden;
   }
 `)
 const Portrait = styled.div`

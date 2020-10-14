@@ -29,7 +29,6 @@ const Styles = styled.div`
       text-align: center;
       justify-content: center;
       align-items: center;
-      /* background-color: #faebd7bf; */
       backdrop-filter: blur(3px);
     }
   }
@@ -48,19 +47,6 @@ const Styles = styled.div`
     position: relative;
     border-radius:56px;
     overflow:hidden;
-  }
-`
-const Portrait = styled.div`
-  width: 100%;
-  height: 100%;
-  background: url("https://res.cloudinary.com/dxjse9tsv/image/upload/v1573081599/ryansWebsite/ryansWebsite_Selfi_B_W_Center-removebg-preview.png");
-  background-size: cover;
-  background-position: center;
-  max-width: 30vw;
-
-  @media (max-width: 600px) {
-    position: absolute;
-    z-index: -1;
   }
 `
 const AzBackground = ({isMobile}) => {
@@ -89,7 +75,13 @@ const AzBackground = ({isMobile}) => {
 export const SubCaption = ({isMobile}) => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [showBackground, setBackground] = useState(false)
-  const [windowWidth,windowHeight] = useWindowSize()
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
 
   const transition = useTransition(showBackground, null, {
     from: {
@@ -137,7 +129,7 @@ export const SubCaption = ({isMobile}) => {
     }
   }, [entries])
 
-if(typeof window === 'undefined') return[] 
+if(!windowHeight) return[] 
 
   return (
     <>
@@ -165,7 +157,6 @@ if(typeof window === 'undefined') return[]
             <Arizona />
           </animated.div>
           <div className="Work_Caption">
-            {/* <Portrait /> */}
             {transition.map(({ item, key, props }) => {
               return (
                 <animated.div

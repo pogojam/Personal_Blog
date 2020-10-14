@@ -495,7 +495,7 @@ const Scean3 = props => {
           style={{ display: "flex",  flexDirection:'column',alignItems: "center" }}
         >
           <Icon style={{ marginBottom: "8px" }} type="phone" />
-          928-660-1142
+          928-600-4952
         </span>
       </div>
       <Background2 show={show} />

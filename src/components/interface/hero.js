@@ -80,6 +80,9 @@ const BackgroundStyle = animated(styled.img`
 `)
 
 const Background = ({ incrementLoad }) => {
+  const [isMobile,setIsMobile] = useState(false)
+  const [browser,setBrowser] = useState(null)
+
   const [{ x, scale, opacity }, setAnim] = useSpring(() => ({
     scale: [0.5, 0, 0],
     opacity: [1],
@@ -94,8 +97,16 @@ const Background = ({ incrementLoad }) => {
 
   const [windowHeight,setWindowHeight] = useState(null)
 
+  const bgRef = useRef()
 useEffect(()=>{
 if(typeof window !== "undefined"){
+  const newBrowser = detect()
+setBrowser(newBrowser)
+debugger
+if(window.innerWidth < 600 || browser){
+setIsMobile(true)
+}  
+
    setWindowHeight(window.innerHeight) 
 }
 },[])
@@ -105,12 +116,6 @@ if(typeof window !== "undefined"){
 
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
-  const browser = detect()
-  const isIOS = browser.name === "ios"
-  const isSafari = browser.name === "safari" || browser.name === "ios"
-  const isMobile =
-    typeof window === "undefined" ? true : window.innerWidth < 600
-  const bgRef = useRef()
 
   useEffect(() => {
     if (entries.intersectionRatio && window) {
@@ -134,7 +139,7 @@ if(typeof window !== "undefined"){
 
   return (
     <>
-      {browser.name && (
+      {browser&& (
         <BackgroundStyle
         height={windowHeight}
           src={
@@ -145,14 +150,6 @@ if(typeof window !== "undefined"){
           isUnsupported={
             browser.name === "safari" || browser.name === "ios" || isMobile
           }
-          // autoPlay
-          // muted
-          // loop
-          // src={
-          //   isSafari || detectMobile.isMobile()
-          //     ? "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
-          //     : "https://res.cloudinary.com/dxjse9tsv/video/upload/v1590188966/video/Pexels_Videos_2792370.mp4"
-          // }
           style={{
             willChange: "transform opacity",
             transform: scale.interpolate(

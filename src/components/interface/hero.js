@@ -71,10 +71,9 @@ const BackgroundStyle = animated(styled.img`
   background-size: cover;
   object-fit: cover;
   filter: ${({ isUnsupported }) => (isUnsupported ? "" : 'url("#water")')};
-  /* z-index: 1; */
   position: absolute;
   width: 100%;
-  height:${({height})=>height+'px'};
+  height:16%;
   top: 0;
   border-radius: 11%;
   z-index: 10;

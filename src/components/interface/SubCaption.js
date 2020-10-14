@@ -6,7 +6,7 @@ import { useObserver, buildThresholdList} from "../util"
 import { useSprings, useTransition, animated } from "react-spring"
 import { useWindowSize } from "@react-hook/window-size"
 
-const Styles = animated(styled.div`
+const Styles = styled.div`
   color: white;
   position: absolute;
   top: ${({windowHeight})=>windowHeight * 1.5 +"px"};
@@ -49,7 +49,7 @@ const Styles = animated(styled.div`
     border-radius:56px;
     overflow:hidden;
   }
-`)
+`
 const Portrait = styled.div`
   width: 100%;
   height: 100%;
@@ -143,15 +143,15 @@ if(typeof window === 'undefined') return[]
     <>
       <Styles
       windowHeight={windowHeight}
-        style={{ opacity: anim[0].opacity.interpolate(o => o) }}
         ref={ref}
       >
-        <div
+        <animated.div
           style={{
             position: "relative",
             width: "100%",
             height: "100%",
             display: "flex",
+ opacity: anim[0].opacity.interpolate(o => o) 
           }}
         >
           <animated.div
@@ -181,19 +181,8 @@ if(typeof window === 'undefined') return[]
                 </animated.div>
               )
             })}
-
-            {/* <animated.div
-              style={{
-                display: "flex",
-                transform: anim[0].slide.interpolate(x => `translate(${x})`),
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <p>Building digital products in Tempe Arizona.</p>
-            </animated.div> */}
           </div>
-        </div>
+        </animated.div>
       </Styles>
     </>
   )

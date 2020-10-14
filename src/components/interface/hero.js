@@ -151,7 +151,7 @@ setIsMobile(true)
             browser.name === "safari" || browser.name === "ios" || isMobile
           }
           style={{
-            willChange: "transform opacity",
+            willChange: "transform,opacity",
             transform: scale.interpolate(
               (s, y, x) => `scale(${s}) translate(${x}px,${y}px) `
             ),

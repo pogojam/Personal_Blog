@@ -4,7 +4,6 @@ import { position } from "styled-system"
 import Arizona from "../../static/arizona"
 import { useObserver, buildThresholdList} from "../util"
 import { useSprings, useTransition, animated } from "react-spring"
-import { useWindowSize } from "@react-hook/window-size"
 
 const Styles = styled.div`
   color: white;

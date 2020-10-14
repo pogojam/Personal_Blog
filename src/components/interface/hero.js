@@ -90,7 +90,19 @@ const Background = ({ incrementLoad }) => {
     threshold: buildThresholdList(40),
     rootMargin: "0px 0px 0px 0px",
   })
-  const [windowWidth,windowHeight]= useWindowSize()
+
+
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
+
+
+
+
   const [store, dispatch] = useContext(PageState_Context)
   const globalID = "hero"
   const browser = detect()
@@ -120,10 +132,6 @@ const Background = ({ incrementLoad }) => {
     }
   }, [entries])
 
-  useEffect(() => {
-    // bgRef.current.setAttribute("playsinline", true)
-    // bgRef.current.play()
-  }, [])
   return (
     <>
       {browser.name && (

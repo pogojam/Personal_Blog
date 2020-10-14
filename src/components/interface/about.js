@@ -14,7 +14,6 @@ import React, {
 } from "react"
 import { PageState_Context } from "./context"
 import { useScroll, useWheel } from "react-use-gesture"
-import { useWindowSize } from "@react-hook/window-size"
 
 const AboutStyles = styled.div`
   position: absolute;
@@ -130,7 +129,17 @@ const TechIcons = React.memo(({ show }) => {
 export const About = () => {
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   const [show, toggle] = useToggle(false)
-  const [windowWidth,windowHeight] = useWindowSize()
+
+
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
+
+
   // const [store, dispatch] = useContext(PageState_Context)
 
   const { transform, opacity } = useSpring(

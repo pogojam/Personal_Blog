@@ -9,7 +9,6 @@ import React, {
   forwardRef,
   useReducer,
 } from "react"
-import {useWindowSize} from '@react-hook/window-size'
 import { SubCaption } from "../components/interface/SubCaption"
 import { PageState_Context } from "../components/interface/context"
 import { PageState } from "../components/interface/reducers"
@@ -68,7 +67,16 @@ const Styles = styled.div`
 const Scean1 = () => {
   const captions = [...Array(4)]
   const [location, setLocation] = useState()
-  const [windowWidth, windowHeight] = useWindowSize({initialHeight:'1000'})
+
+
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
+
   const calc = (transform, index, p, tieY) => {
     if (window) {
       switch (transform) {
@@ -314,9 +322,15 @@ const Scean2 = ({ animation, ...props }) => {
   }))
 
 
-const [windowWidth,windowHeight] = useWindowSize()
   const [headingState, setHeading] = useState(true)
 
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
   useEffect(() => {
     if (entries.intersectionRatio) {
       setAppAnim({
@@ -436,7 +450,17 @@ background-color:white;
   background-position: center;
 `
 const Background2 = ({ show }) => {
-  const [windowWidth, windowHeight] = useWindowSize()
+
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
+
+
+
   const globalID = "about"
   const browser = detect()
   const canShow = typeof window !== "undefined" ? true : false
@@ -459,7 +483,16 @@ const Scean3_Styles = styled.div`
   position: relative;
 `
 const Scean3 = props => {
-  const [windowWidth, windowHeight] = useWindowSize()
+
+
+  const [windowHeight,setWindowHeight] = useState(null)
+
+useEffect(()=>{
+if(typeof window !== "undefined"){
+   setWindowHeight(window.innerHeight) 
+}
+},[])
+
   const [show, setShow] = useState(false)
   const [ref, entries] = useObserver({ threshold: buildThresholdList(40) })
   useEffect(() => {

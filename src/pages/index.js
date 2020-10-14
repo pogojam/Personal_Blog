@@ -38,7 +38,7 @@ import Icon from "../components/elements/icons"
 import { setAnimation } from "../components/animations"
 import { Viewer } from "../components/interface/withViewer"
 import Projects from "../components/interface/projectView"
-import { width, height, transform } from "styled-system"
+import { width, height} from "styled-system"
 import axios from "axios"
 import { default as NumberFormat } from "react-number-format"
 import "animate.css"
@@ -280,7 +280,6 @@ const Background = animated(styled(Box)`
 left: 0;
 ${width}
 ${height}
-${transform}
 will-change:transform;
 min-height:${({windowHeight})=>windowHeight};
 background: #ff0000;
@@ -289,6 +288,12 @@ transition: opacity 0.3s;
 
 z-index: 0;
 /* transform: matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); */
+
+transform:matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+@media(max-width:600px){
+transform:matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+}
+
 `)
 
 const HeadingContainer = styled(Container)``
@@ -358,10 +363,6 @@ const [windowWidth,windowHeight] = useWindowSize()
         windowHeight={windowHeight}
         width={[windowHeight * .8+"px", "100%"]}
         height={[windowHeight * 1.5 + "px"]}
-        transform={[
-          "matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
-          "matrix3d(1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)",
-        ]}
         style={{
           transform: appsAnim[0].rotate.interpolate(
             e =>

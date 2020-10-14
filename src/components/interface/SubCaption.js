@@ -122,6 +122,7 @@ export const SubCaption = ({isMobile}) => {
 
     if (entries.intersectionRatio) {
       const ir = entries.intersectionRatio
+      
       setAnim({
         opacity: ir,
         slide: 200 * ir,
@@ -136,7 +137,7 @@ export const SubCaption = ({isMobile}) => {
     }
   }, [entries])
 
-if(typeof window === "undefined") return
+if(typeof window === 'undefined') return[] 
 
   return (
     <>

@@ -136,6 +136,8 @@ export const SubCaption = ({isMobile}) => {
     }
   }, [entries])
 
+if(typeof window === "undefined") return
+
   return (
     <>
       <Styles

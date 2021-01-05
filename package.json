@@ -8,7 +8,7 @@
     "@react-hook/window-size": "^3.0.7",
     "@rebass/forms": "^4.0.6",
     "animate.css": "^3.7.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chance": "^1.1.6",
     "detect-browser": "^5.1.1",
     "dotenv": "^8.2.0",

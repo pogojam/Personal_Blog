@@ -12,7 +12,7 @@
     "chance": "^1.1.6",
     "detect-browser": "^5.1.1",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.24.47",
+    "gatsby": "^4.0.0",
     "gatsby-image": "^2.4.16",
     "gatsby-plugin-manifest": "^2.4.23",
     "gatsby-plugin-offline": "^2.2.10",
@@ -40,7 +40,7 @@
     "styled-system": "^5.1.5",
     "three": "^0.110.0",
     "three-orbitcontrols": "^2.110.3",
-    "twilio": "^3.48.2",
+    "twilio": "^4.6.0",
     "use-mobile-detect-hook": "^1.0.3"
   },
   "devDependencies": {

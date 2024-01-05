@@ -8,11 +8,11 @@
     "@react-hook/window-size": "^3.0.7",
     "@rebass/forms": "^4.0.6",
     "animate.css": "^3.7.2",
-    "axios": "^0.19.2",
+    "axios": "^1.6.4",
     "chance": "^1.1.6",
     "detect-browser": "^5.1.1",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.24.47",
+    "gatsby": "^4.0.0",
     "gatsby-image": "^2.4.16",
     "gatsby-plugin-manifest": "^2.4.23",
     "gatsby-plugin-offline": "^2.2.10",
@@ -40,7 +40,7 @@
     "styled-system": "^5.1.5",
     "three": "^0.110.0",
     "three-orbitcontrols": "^2.110.3",
-    "twilio": "^3.48.2",
+    "twilio": "^4.19.3",
     "use-mobile-detect-hook": "^1.0.3"
   },
   "devDependencies": {
